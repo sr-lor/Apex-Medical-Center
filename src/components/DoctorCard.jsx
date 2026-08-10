@@ -43,7 +43,7 @@ export default function DoctorCard({ doctor, onBook }) {
         {/* Availability */}
         <div className="bg-white/5 p-2.5 rounded-xl text-xs text-slate-300 flex items-center gap-2 mb-4 border border-white/10">
           <Clock className="w-4 h-4 text-apex-gold flex-shrink-0" />
-          <span>{doctor.availableDaysAr}</span>
+          <span>دوام المركز: السبت - الخميس (09:00 ص - 09:00 م)</span>
         </div>
       </div>
 
