@@ -35,30 +35,27 @@ export default function DoctorCard({ doctor, onBook }) {
             </div>
           </div>
 
-          {/* Doctor Details */}
+          {/* Doctor Details - Specialty Title first, then Doctor Name matching original site screenshot */}
+          <p className="text-slate-300 text-sm font-medium mb-1.5 min-h-[28px]">
+            {doctor.titleAr}
+          </p>
+          
           <h3 
-            className="text-xl font-extrabold text-white mb-1 group-hover:text-apex-gold transition-colors cursor-pointer"
+            className="text-xl font-extrabold text-white mb-4 group-hover:text-apex-gold transition-colors cursor-pointer"
             onClick={() => setDetailsOpen(true)}
           >
             {doctor.nameAr}
           </h3>
-          <p className="text-apex-gold text-xs font-semibold mb-3 min-h-[32px]">
-            {doctor.titleAr}
-          </p>
-
-          <p className="text-slate-300 text-xs leading-relaxed mb-4 line-clamp-3 font-light">
-            {doctor.experienceAr}
-          </p>
         </div>
 
-        {/* Action Buttons: معرفة المزيد + حجز موعد */}
+        {/* Action Buttons: اقرأ المزيد + حجز موعد */}
         <div className="flex items-center gap-2 pt-2">
           <button
             onClick={() => setDetailsOpen(true)}
             className="flex-1 py-2.5 bg-white/10 hover:bg-white/20 text-slate-200 rounded-xl font-bold text-xs transition-colors flex items-center justify-center gap-1.5 border border-white/15"
           >
             <Info className="w-4 h-4 text-apex-gold" />
-            <span>معرفة المزيد</span>
+            <span>اقرأ المزيد</span>
           </button>
 
           <button
