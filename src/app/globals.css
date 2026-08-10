@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --apex-gold: #E9CD7E;
+  --apex-gold-dark: #DDC57A;
+  --apex-gold-deep: #C5A059;
+  --apex-navy: #151112;
+  --apex-charcoal: #0B0A0C;
+  --apex-bg: #0B0A0C;
+}
+
+html, body {
+  font-family: 'Cairo', 'Outfit', sans-serif;
+  background-color: #0B0A0C;
+  color: #F8FAFC;
+  overflow-x: hidden;
+  direction: rtl;
+  margin: 0;
+  padding: 0;
+}
+
+/* Glassmorphism Effects */
+.glass-nav {
+  background: rgba(21, 17, 18, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(233, 205, 126, 0.3);
+}
+
+.glass-card {
+  background: rgba(21, 17, 18, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(233, 205, 126, 0.2);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+}
+
+.glass-card:hover {
+  background: rgba(30, 25, 27, 0.9);
+  border-color: rgba(233, 205, 126, 0.45);
+}
+
+.glass-card-dark {
+  background: rgba(15, 12, 13, 0.92);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(233, 205, 126, 0.25);
+}
+
+/* Gradient Backgrounds */
+.bg-gradient-apex {
+  background: linear-gradient(135deg, #0B0A0C 0%, #151112 50%, #1E1B1C 100%);
+}
+
+.bg-gradient-gold {
+  background: linear-gradient(135deg, #E9CD7E 0%, #DDC57A 50%, #C5A856 100%);
+}
+
+/* Custom Text Gradients */
+.text-gradient-apex {
+  background: linear-gradient(135deg, #F5DF9E 0%, #E9CD7E 50%, #C5A059 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0B0A0C;
+}
+::-webkit-scrollbar-thumb {
+  background: #E9CD7E;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #DDC57A;
+}
+
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spinSlow 14s linear infinite;
+}
+
+/* Gold Glow */
+.shadow-gold {
+  box-shadow: 0 8px 25px -5px rgba(233, 205, 126, 0.35);
+}

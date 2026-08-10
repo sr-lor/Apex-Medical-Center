@@ -1,0 +1,101 @@
+HTTrack3.49-2+htsswf+htsjava launched on Sat, 08 Aug 2026 01:56:36 at https://apexmedicaloman.com +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar +*apexmedicaloman.com*
+(winhttrack -qwr10C2%Ps0u1%s%uN0%I0p3DaK0H0%kf2A25000%f#f -F "Mozilla/4.5 (compatible; HTTrack 3.0x; Windows 98)" -%F "<!-- Mirrored from %s%s by HTTrack Website Copier/3.x [XR&CO'2014], %s -->" -%l "en, *" https://apexmedicaloman.com -O1 "C:\My Web Sites\Apex Medical Center" +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar +*apexmedicaloman.com* )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+02:00:05	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/dr-arij/ (from https://apexmedicaloman.com/)
+02:00:05	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/dr-alaa-2/ (from https://apexmedicaloman.com/)
+02:00:05	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/extremaatechnologies.com/ (from https://apexmedicaloman.com/)
+02:00:07	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=2365
+02:00:07	Warning: 	File has moved from https://apexmedicaloman.com/?p=2365 to https://apexmedicaloman.com/about-us/
+02:00:07	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/about-us/extremaatechnologies.com/ (from https://apexmedicaloman.com/about-us/)
+02:00:07	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=4895
+02:00:07	Warning: 	File has moved from https://apexmedicaloman.com/?p=4895 to https://apexmedicaloman.com/dermatology-cosmetology/
+02:00:07	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/dermatology-cosmetology/extremaatechnologies.com/ (from https://apexmedicaloman.com/dermatology-cosmetology/)
+02:00:07	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=4980
+02:00:07	Warning: 	File has moved from https://apexmedicaloman.com/?p=4980 to https://apexmedicaloman.com/plastic-surgery/
+02:00:07	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/plastic-surgery/extremaatechnologies.com/ (from https://apexmedicaloman.com/plastic-surgery/)
+02:00:07	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=5007
+02:00:07	Warning: 	File has moved from https://apexmedicaloman.com/?p=5007 to https://apexmedicaloman.com/weight-management/
+02:00:07	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/weight-management/extremaatechnologies.com/ (from https://apexmedicaloman.com/weight-management/)
+02:00:08	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=5458
+02:00:08	Warning: 	File has moved from https://apexmedicaloman.com/?p=5458 to https://apexmedicaloman.com/medical-weight-loss-injections/
+02:00:08	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/medical-weight-loss-injections/extremaatechnologies.com/ (from https://apexmedicaloman.com/medical-weight-loss-injections/)
+02:00:08	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=5459
+02:00:08	Warning: 	File has moved from https://apexmedicaloman.com/?p=5459 to https://apexmedicaloman.com/gastric-balloon/
+02:00:08	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/gastric-balloon/extremaatechnologies.com/ (from https://apexmedicaloman.com/gastric-balloon/)
+02:00:08	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=5487
+02:00:08	Warning: 	File has moved from https://apexmedicaloman.com/?p=5487 to https://apexmedicaloman.com/gastric-sleeve-surgery/
+02:00:08	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/gastric-sleeve-surgery/extremaatechnologies.com/ (from https://apexmedicaloman.com/gastric-sleeve-surgery/)
+02:00:09	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=5456
+02:00:09	Warning: 	File has moved from https://apexmedicaloman.com/?p=5456 to https://apexmedicaloman.com/gastric-bypass-surgery/
+02:00:09	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/gastric-bypass-surgery/extremaatechnologies.com/ (from https://apexmedicaloman.com/gastric-bypass-surgery/)
+02:00:09	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=5012
+02:00:09	Warning: 	File has moved from https://apexmedicaloman.com/?p=5012 to https://apexmedicaloman.com/skin-care-laser-treatments/
+02:00:09	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/skin-care-laser-treatments/extremaatechnologies.com/ (from https://apexmedicaloman.com/skin-care-laser-treatments/)
+02:00:09	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=5041
+02:00:09	Warning: 	File has moved from https://apexmedicaloman.com/?p=5041 to https://apexmedicaloman.com/aesthetic-gynecology/
+02:00:09	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/aesthetic-gynecology/extremaatechnologies.com/ (from https://apexmedicaloman.com/aesthetic-gynecology/)
+02:00:09	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=5040
+02:00:09	Warning: 	File has moved from https://apexmedicaloman.com/?p=5040 to https://apexmedicaloman.com/cosmetic-dentistry-2/
+02:00:09	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/cosmetic-dentistry-2/extremaatechnologies.com/ (from https://apexmedicaloman.com/cosmetic-dentistry-2/)
+02:00:09	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=5055
+02:00:09	Warning: 	File has moved from https://apexmedicaloman.com/?p=5055 to https://apexmedicaloman.com/orthopedic-surgery/
+02:00:09	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/orthopedic-surgery/extremaatechnologies.com/ (from https://apexmedicaloman.com/orthopedic-surgery/)
+02:00:09	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=5375
+02:00:09	Warning: 	File has moved from https://apexmedicaloman.com/?p=5375 to https://apexmedicaloman.com/cosmetic-dentistry-3/
+02:00:09	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/cosmetic-dentistry-3/extremaatechnologies.com/ (from https://apexmedicaloman.com/cosmetic-dentistry-3/)
+02:00:09	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=5401
+02:00:09	Warning: 	File has moved from https://apexmedicaloman.com/?p=5401 to https://apexmedicaloman.com/elementor-page-5401/
+02:00:09	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/elementor-page-5401/extremaatechnologies.com/ (from https://apexmedicaloman.com/elementor-page-5401/)
+02:00:10	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=5419
+02:00:10	Warning: 	File has moved from https://apexmedicaloman.com/?p=5419 to https://apexmedicaloman.com/endodontics/
+02:00:10	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/endodontics/extremaatechnologies.com/ (from https://apexmedicaloman.com/endodontics/)
+02:00:10	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=5427
+02:00:10	Warning: 	File has moved from https://apexmedicaloman.com/?p=5427 to https://apexmedicaloman.com/dental-implants/
+02:00:10	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/dental-implants/extremaatechnologies.com/ (from https://apexmedicaloman.com/dental-implants/)
+02:00:10	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=3302
+02:00:10	Warning: 	File has moved from https://apexmedicaloman.com/?p=3302 to https://apexmedicaloman.com/dr-belal-haj-hamed/
+02:00:10	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/dr-belal-haj-hamed/extremaatechnologies.com/ (from https://apexmedicaloman.com/dr-belal-haj-hamed/)
+02:00:10	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=4534
+02:00:10	Warning: 	File has moved from https://apexmedicaloman.com/?p=4534 to https://apexmedicaloman.com/dr-hosam/
+02:00:10	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/dr-hosam/extremaatechnologies.com/ (from https://apexmedicaloman.com/dr-hosam/)
+02:00:10	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=4494
+02:00:10	Warning: 	File has moved from https://apexmedicaloman.com/?p=4494 to https://apexmedicaloman.com/dr-bharti-khanna/
+02:00:10	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/dr-bharti-khanna/extremaatechnologies.com/ (from https://apexmedicaloman.com/dr-bharti-khanna/)
+02:00:10	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=4513
+02:00:10	Warning: 	File has moved from https://apexmedicaloman.com/?p=4513 to https://apexmedicaloman.com/dr-marwa-jbara/
+02:00:10	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/dr-marwa-jbara/extremaatechnologies.com/ (from https://apexmedicaloman.com/dr-marwa-jbara/)
+02:00:10	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=3638
+02:00:10	Warning: 	File has moved from https://apexmedicaloman.com/?p=3638 to https://apexmedicaloman.com/dr-anil-dalal/
+02:00:10	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/dr-anil-dalal/extremaatechnologies.com/ (from https://apexmedicaloman.com/dr-anil-dalal/)
+02:00:10	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=3599
+02:00:10	Warning: 	File has moved from https://apexmedicaloman.com/?p=3599 to https://apexmedicaloman.com/dr-zainab-al-mamari/
+02:00:10	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/dr-zainab-al-mamari/extremaatechnologies.com/ (from https://apexmedicaloman.com/dr-zainab-al-mamari/)
+02:00:10	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=3543
+02:00:10	Warning: 	File has moved from https://apexmedicaloman.com/?p=3543 to https://apexmedicaloman.com/dr-thura-hatem-mahmood-alquaizi/
+02:00:10	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/dr-thura-hatem-mahmood-alquaizi/extremaatechnologies.com/ (from https://apexmedicaloman.com/dr-thura-hatem-mahmood-alquaizi/)
+02:00:10	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=4470
+02:00:10	Warning: 	File has moved from https://apexmedicaloman.com/?p=4470 to https://apexmedicaloman.com/alaa/
+02:00:10	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/alaa/extremaatechnologies.com/ (from https://apexmedicaloman.com/alaa/)
+02:00:10	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=5879
+02:00:10	Warning: 	File has moved from https://apexmedicaloman.com/?p=5879 to https://apexmedicaloman.com/aliaa-aldara/
+02:00:10	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/aliaa-aldara/extremaatechnologies.com/ (from https://apexmedicaloman.com/aliaa-aldara/)
+02:00:10	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=5895
+02:00:10	Warning: 	File has moved from https://apexmedicaloman.com/?p=5895 to https://apexmedicaloman.com/arij/
+02:00:10	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/arij/extremaatechnologies.com/ (from https://apexmedicaloman.com/arij/)
+02:00:11	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=3024
+02:00:11	Warning: 	File has moved from https://apexmedicaloman.com/?p=3024 to https://apexmedicaloman.com/why-choose-us/
+02:00:11	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/why-choose-us/extremaatechnologies.com/ (from https://apexmedicaloman.com/why-choose-us/)
+02:00:13	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=3853
+02:00:13	Warning: 	File has moved from https://apexmedicaloman.com/?p=3853 to https://apexmedicaloman.com/gallery/
+02:00:13	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/gallery/extremaatechnologies.com/ (from https://apexmedicaloman.com/gallery/)
+02:00:13	Warning: 	Moved Permanently for https://apexmedicaloman.com/?p=956
+02:00:13	Warning: 	File has moved from https://apexmedicaloman.com/?p=956 to https://apexmedicaloman.com/contact-us/
+02:00:13	Error: 	"Not Found" (404) at link https://apexmedicaloman.com/contact-us/extremaatechnologies.com/ (from https://apexmedicaloman.com/contact-us/)
+
+HTTrack Website Copier/3.49-2 mirror complete in 3 minutes 44 seconds : 337 links scanned, 276 files written (18673030 bytes overall) [23299205 bytes received at 104014 bytes/sec], 52.4 requests per connection
+(32 errors, 58 warnings, 0 messages)
