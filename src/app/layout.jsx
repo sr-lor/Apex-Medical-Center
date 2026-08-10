@@ -22,10 +22,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ar" dir="rtl">
       <head>
-        <title>مركز القمة الطبي - سلطنة عمان | Apex Medical Center Oman</title>
+        <title>مجمع القمة الطبي - سلطنة عمان | Apex Medical Center Oman</title>
         <meta
           name="description"
-          content="مركز القمة الطبي في مسقط سلطنة عمان - الرائد في طب وتجميل الأسنان، الجراحة التجميلية، الجلدية والليزر، وجراحات إدارة السمنة والوزن."
+          content="مجمع القمة الطبي في مسقط سلطنة عمان - الرائد في طب وتجميل الأسنان، الجراحة التجميلية، الجلدية والليزر، وجراحات إدارة السمنة والوزن."
         />
         <link rel="icon" href="/wp-content/uploads/2026/06/Apex_Log.png" />
       </head>

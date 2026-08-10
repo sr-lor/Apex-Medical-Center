@@ -28,7 +28,7 @@ export default function ContactPage() {
           </div>
 
           <h1 className="text-4xl sm:text-5xl font-extrabold text-white">
-            يسعدنا تواصلكم في <span className="text-gradient-apex">مركز القمة الطبي</span>
+            يسعدنا تواصلكم في <span className="text-gradient-apex">مجمع القمة الطبي</span>
           </h1>
 
           <p className="text-slate-300 text-base leading-relaxed font-light">
@@ -144,7 +144,7 @@ export default function ContactPage() {
               <div className="py-12 text-center space-y-4">
                 <h3 className="text-2xl font-bold text-white">تم إرسال رسالتك بنجاح!</h3>
                 <p className="text-slate-300 text-sm">
-                  شكراً لتواصلك مع مركز القمة الطبي. سيتواصل بك أحد ممثلي الخدمة في أقرب وقت.
+                  شكراً لتواصلك مع مجمع القمة الطبي. سيتواصل بك أحد ممثلي الخدمة في أقرب وقت.
                 </p>
                 <button
                   onClick={() => setSubmitted(false)}

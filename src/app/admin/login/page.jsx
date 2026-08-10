@@ -33,7 +33,7 @@ export default function AdminLoginPage() {
           <div className="w-16 h-16 rounded-2xl bg-apex-gold/20 flex items-center justify-center mx-auto text-apex-gold border border-apex-gold/30">
             <Shield className="w-8 h-8" />
           </div>
-          <h1 className="text-2xl font-bold text-white">لوحة تحكم مركز القمة الطبي</h1>
+          <h1 className="text-2xl font-bold text-white">لوحة تحكم مجمع القمة الطبي</h1>
           <p className="text-xs text-slate-300">تسجيل الدخول للنظام الإداري الخاص</p>
         </div>
 

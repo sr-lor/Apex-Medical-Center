@@ -31,7 +31,7 @@ export default function AdminDashboard() {
           <div>
             <h1 className="text-2xl font-bold text-slate-900">إدارة حجوزات المواعيد</h1>
             <p className="text-xs text-slate-500 mt-1">
-              متابعة جميع طلبات حجز المواعيد القادمة من موقع مركز القمة الطبي وتأكيدها.
+              متابعة جميع طلبات حجز المواعيد القادمة من موقع مجمع القمة الطبي وتأكيدها.
             </p>
           </div>
 

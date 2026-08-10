@@ -48,11 +48,11 @@ export default function GalleryPage() {
           </div>
 
           <h1 className="text-4xl sm:text-5xl font-extrabold text-white">
-            صور ومرافق <span className="text-gradient-apex">مركز القمة الطبي</span>
+            صور ومرافق <span className="text-gradient-apex">مجمع القمة الطبي</span>
           </h1>
 
           <p className="text-slate-300 text-base leading-relaxed font-light">
-            جولة مصورة في عيادات ومرافق مركز القمة الطبي في سلطنة عمان.
+            جولة مصورة في عيادات ومرافق مجمع القمة الطبي في سلطنة عمان.
           </p>
         </div>
 

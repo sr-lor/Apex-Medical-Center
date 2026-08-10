@@ -14,7 +14,7 @@ export default function ReenAIChat({ onOpenBooking }) {
     {
       id: 1,
       sender: "bot",
-      text: "أهلاً بك في مركز القمة الطبي! 👋\nأنا **رين AI**، مساعدك الطبي الذكي. يسعدني إجابة استفساراتك حول الفروع (العذيبة والعامرات)، الخدمات الطبية والتجميلية، وحجز المواعيد.",
+      text: "أهلاً بك في مجمع القمة الطبي! 👋\nأنا **رين AI**، مساعدك الطبي الذكي. يسعدني إجابة استفساراتك حول الفروع (العذيبة والعامرات)، الخدمات الطبية والتجميلية، وحجز المواعيد.",
       quickReplies: [
         { label: "📍 عيادات فرع العامرات", action: "amerat_services" },
         { label: "🏢 عيادات فرع العذيبة", action: "azaiba_services" },
@@ -74,7 +74,7 @@ export default function ReenAIChat({ onOpenBooking }) {
 
     if (actionKey === "amerat_services" || q.includes("عامرات") || q.includes("العامرات")) {
       responseText =
-        "✨ **خدمات وعيادات فرع العامرات لمركز القمة الطبي:**\n\n" +
+        "✨ **خدمات وعيادات فرع العامرات لمجمع القمة الطبي:**\n\n" +
         "1. **عيادة سمنة (إدارة الوزن):** حلول متقدمة لتخسيس الوزن، متابعة التغذية، وحقن التخسيس المعتمدة (مونجارو وأوزمبيك).\n" +
         "2. **عيادة ليزر والبشرة:** أحدث جلسات إزالة الشعر بالليزر المزدوج وتجديد نضارة البشرة.\n" +
         "3. **عيادة طب عام:** فحوصات روتينية، تشخيص دقيق، ورعاية متكاملة لجميع الفئات العمرية.\n\n" +
@@ -94,7 +94,7 @@ export default function ReenAIChat({ onOpenBooking }) {
     } else if (actionKey === "weight_injections" || q.includes("سمنة") || q.includes("حقن") || q.includes("مونجارو") || q.includes("اوزمبيك") || q.includes("تخسيس")) {
       responseText =
         "💉 **قسم إدارة السمنة وحقن إنقاص الوزن الطبية:**\n\n" +
-        "نوفر في مركز القمة الطبي برامج متكاملة لإنقاص الوزن تحت إشراف أطباء واستشاريين متخصصين:\n" +
+        "نوفر في مجمع القمة الطبي برامج متكاملة لإنقاص الوزن تحت إشراف أطباء واستشاريين متخصصين:\n" +
         "• حقن **Mounjaro® (مونجارو)** المعتمدة عالمياً\n" +
         "• حقن **Ozempic® (أوزمبيك)** و **Saxenda®**\n" +
         "• تقييم طبي كامل ومتابعة غذائية دورية مع أخصائي التغذية\n" +
@@ -102,7 +102,7 @@ export default function ReenAIChat({ onOpenBooking }) {
       ctaAction = { type: "book", text: "حجز استشارة عيادة السمنة" };
     } else if (actionKey === "dentistry_info" || q.includes("اسنان") || q.includes("أسنان") || q.includes("هوليود") || q.includes("زراعة") || q.includes("تقويم")) {
       responseText =
-        "🦷 **قسم طب وتجميل الأسنان بمركز القمة الطبي:**\n\n" +
+        "🦷 **قسم طب وتجميل الأسنان بمجمع القمة الطبي:**\n\n" +
         "• تصميم ابتسامة هوليود الرقمية (Veneers & E-max)\n" +
         "• زراعة الأسنان الفورية بأحدث التقنيات الرقمية الموجهة\n" +
         "• التقويم الشفاف غير المرئي (Clear Aligners)\n" +
@@ -111,7 +111,7 @@ export default function ReenAIChat({ onOpenBooking }) {
       ctaAction = { type: "book", text: "حجز موعد عيادة الأسنان" };
     } else if (actionKey === "contact_info" || q.includes("تواصل") || q.includes("رقم") || q.includes("وقت") || q.includes("عنوان") || q.includes("موقع")) {
       responseText =
-        "📞 **معلومات التواصل وأوقات العمل بمركز القمة الطبي:**\n\n" +
+        "📞 **معلومات التواصل وأوقات العمل بمجمع القمة الطبي:**\n\n" +
         "• **الهاتف والواتساب المباشر:** `+968 97031500`\n" +
         "• **البريد الإلكتروني:** `info@apexmedicaloman.com`\n" +
         "• **ساعات العمل:** من السبت إلى الخميس: 09:00 صباحاً - 09:00 مساءً (الجمعة عطلة أسبوعية)\n" +
@@ -120,7 +120,7 @@ export default function ReenAIChat({ onOpenBooking }) {
       ctaAction = { type: "link", href: "/contact", text: "الانتقال لصفحة اتصل بنا ومواقع الفروع" };
     } else if (actionKey === "book_now" || q.includes("حجز") || q.includes("موعد") || q.includes("استشارة")) {
       responseText =
-        "📅 **حجز موعد أونلاين في مركز القمة الطبي:**\n\n" +
+        "📅 **حجز موعد أونلاين في مجمع القمة الطبي:**\n\n" +
         "يمكنك اختيار الفرع والتخصص والتاريخ المناسب لزيارتك بسهولة. اضغط على الزر أدناه للبدء بالحجز المباشر فوراً.";
       ctaAction = { type: "book", text: "فتح نافذة الحجز المباشر الآن ⚡" };
     } else {
@@ -189,7 +189,7 @@ export default function ReenAIChat({ onOpenBooking }) {
                     ذكاء طبي
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-300">مركز القمة الطبي (العذيبة & العامرات)</p>
+                <p className="text-[11px] text-slate-300">مجمع القمة الطبي (العذيبة & العامرات)</p>
               </div>
             </div>
 

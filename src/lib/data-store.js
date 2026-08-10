@@ -1,4 +1,4 @@
-// Centralized Data Store for Apex Medical Center (مركز القمة الطبي)
+// Centralized Data Store for Apex Medical Center (مجمع القمة الطبي)
 // Mirrored with FULL text content and sub-procedure pages from original apexmedicaloman.com HTML pages
 
 export const initialBranches = [
@@ -43,10 +43,10 @@ export const initialServices = [
     categoryAr: "التجميل والجلدية",
     iconName: "Sparkles",
     image: "/wp-content/uploads/2026/04/laser_New.jpg",
-    shortDescriptionAr: "نقدم في مركز القمة الطبي علاجات متطورة للجلدية والتجميل لمساعدتك على تحقيق بشرة صحية ومشرقة.",
+    shortDescriptionAr: "نقدم في مجمع القمة الطبي علاجات متطورة للجلدية والتجميل لمساعدتك على تحقيق بشرة صحية ومشرقة.",
     shortDescriptionEn: "Advanced skin and cosmetology treatments to help you achieve healthy, glowing skin.",
     fullParagraphsAr: [
-      "في مركز القمة الطبي (Apex Medical Center)، نقدم علاجات متطورة للجلدية والتجميل لمساعدتك على تحقيق بشرة صحية ومشرقة. من علاج حب الشباب والتصبغات إلى حلول مكافحة الشيخوخة والتجاعيد، يقدم خبراؤنا رعاية مخصصة ومصممة خصيصاً لنوع بشرتك وااحتياجاتك الفردية.",
+      "في مجمع القمة الطبي (Apex Medical Center)، نقدم علاجات متطورة للجلدية والتجميل لمساعدتك على تحقيق بشرة صحية ومشرقة. من علاج حب الشباب والتصبغات إلى حلول مكافحة الشيخوخة والتجاعيد، يقدم خبراؤنا رعاية مخصصة ومصممة خصيصاً لنوع بشرتك وااحتياجاتك الفردية.",
       "سواء كنت تعاني من حب الشباب، التصبغات، الندبات، الشيخوخة المبكرة، أو عدم توحد لون البشرة، يبتكر أخصائيونا خطط علاجية مخصصة لتقديم نتائج آمنة وفعالة، مع التركيز على فهم الاحتياجات الفريدة لبشرتك وتحسين صحتها ومظهرها الجمالي.",
       "تتضمن باقة خدماتنا: علاج حب الشباب وآثاره، علاجات تجديد الشباب ومكافحة الشيخوخة، التقشير الكيميائي، تفتيح النضارة، علاج الندبات، إجراءات الليزر، وبرامج العناية بالبشرة المخصصة. يتم تنفيذ كل إجراء بدقة وعناية فائقة لضمان أعلى درجات الراحة والنتائج الملحوظة."
     ],
@@ -71,7 +71,7 @@ export const initialServices = [
     shortDescriptionAr: "يتخصص جراحونا ذوو الخبرة في الإجراءات التجميلية والترميمية، حيث يقدمون نتائج آمنة ودقيقة وطبيعية.",
     shortDescriptionEn: "Our experienced surgeons specialize in both reconstructive and cosmetic procedures, delivering safe and natural-looking results.",
     fullParagraphsAr: [
-      "يتخصص جراحونا ذوو الخبرة في مركز القمة الطبي (Apex Medical Center) في الإجراءات الجراحية التجميلية والترميمية، حيث يقدمون نتائج آمنة ودقيقة ذات مظهر طبيعي تعزز الثقة بالنفس والمظهر العام.",
+      "يتخصص جراحونا ذوو الخبرة في مجمع القمة الطبي (Apex Medical Center) في الإجراءات الجراحية التجميلية والترميمية، حيث يقدمون نتائج آمنة ودقيقة ذات مظهر طبيعي تعزز الثقة بالنفس والمظهر العام.",
       "نقدم مجموعة واسعة من علاجات الجراحة التجميلية المصممة لتحسين الشكل والوظيفة والجماليات. بدءاً من تحسين الوجه وتنسيق القوام إلى العمليات الترميمية بعد الإصابات أو الحالات الطبية، يتم تخصيص كل خطة علاجية بعناية لتلبية الاحتياجات الفريدة لكل مريض.",
       "تعتبر سلامة المريض وراحته ورضاه في قلب منهجيتنا العلاجية. باستخدام التقنيات الجراحية المتقدمة والتكنولوجيا الطبية الحديثة، يضمن فريقنا إجراء كل عملية بأعلى معايير الرعاية والدقة والاحترافية."
     ],
@@ -93,10 +93,10 @@ export const initialServices = [
     categoryAr: "جراحات السمنة",
     iconName: "Activity",
     image: "/wp-content/uploads/2026/04/Weight.jpg",
-    shortDescriptionAr: "حلول شاملة لحياة أكثر صحة في مركز القمة الطبي لمساعدة المرضى على تحقيق فقدان وزن مستدام.",
+    shortDescriptionAr: "حلول شاملة لحياة أكثر صحة في مجمع القمة الطبي لمساعدة المرضى على تحقيق فقدان وزن مستدام.",
     shortDescriptionEn: "Comprehensive solutions for a healthier you at Apex Medical Center for sustainable weight loss.",
     fullParagraphsAr: [
-      "في مركز القمة الطبي (Apex Medical Center)، نقدم حلولاً متقدمة ومخصصة لإدارة السمنة والوزن لمساعدة المرضى على تحقيق فقدان وزن مستدام وتحسين صحتهم العامة. يقدم فريقنا متعدد التخصصات علاجات طبية وجراحية مصممة خصيصاً لجسمك ونمط حياتك وأهدافك الصحية.",
+      "في مجمع القمة الطبي (Apex Medical Center)، نقدم حلولاً متقدمة ومخصصة لإدارة السمنة والوزن لمساعدة المرضى على تحقيق فقدان وزن مستدام وتحسين صحتهم العامة. يقدم فريقنا متعدد التخصصات علاجات طبية وجراحية مصممة خصيصاً لجسمك ونمط حياتك وأهدافك الصحية.",
       "نركز على إدارة الوزن بشكل آمن وفعال وطويل الأجل تحت إشراف طبي متخصص. وتشمل حلولنا برامج متعددة تناسب مختلف الحالات والدرجات من زيادة الوزن."
     ],
     fullParagraphsEn: [
@@ -216,7 +216,7 @@ export const initialServices = [
     shortDescriptionAr: "باستخدام تكنولوجيا الليزر الحديثة، نوفر علاجات لإزالة الشعر والتصبغات والندبات وتجديد حيوية البشرة.",
     shortDescriptionEn: "Using modern laser technology, we provide treatments for hair removal, pigmentation, scars, and skin rejuvenation.",
     fullParagraphsAr: [
-      "باستخدام تكنولوجيا الليزر الحديثة في مركز القمة الطبي (Apex Medical Center)، نوفر علاجات متقدمة لإزالة الشعر، التصبغات، الندبات، وتجديد شباب وحيوية البشرة لضمان نتائج ملحوظة وطويلة الأمد.",
+      "باستخدام تكنولوجيا الليزر الحديثة في مجمع القمة الطبي (Apex Medical Center)، نوفر علاجات متقدمة لإزالة الشعر، التصبغات، الندبات، وتجديد شباب وحيوية البشرة لضمان نتائج ملحوظة وطويلة الأمد.",
       "تم تصميم حلول العناية بالبشرة المتقدمة لدينا لمعالجة مجموعة متنوعة من المشاكل مثل آثار حب الشباب، الأضرار الناجمة عن الشمس، عدم توحد لون البشرة، الخطوط الدقيقة، والبشرة المجهدة."
     ],
     fullParagraphsEn: [
@@ -239,7 +239,7 @@ export const initialServices = [
     shortDescriptionAr: "علاجات تخصصية في التجميل النسائي مصممة لتحسين صحة المرأة وراحتها وثقتها بالنفس.",
     shortDescriptionEn: "Specialized aesthetic gynecology treatments designed to improve feminine wellness, comfort, and confidence.",
     fullParagraphsAr: [
-      "في مركز القمة الطبي (Apex Medical Center)، نقدم علاجات تخصصية في التجميل النسائي مصممة لتحسين صحة المرأة وراحتها وثقتها بالنفس. تركز خدماتنا على معالجة المخاوف الوظيفية والتجميلية من خلال إجراءات حديثة وآمنة وغير جراحية تقريباً.",
+      "في مجمع القمة الطبي (Apex Medical Center)، نقدم علاجات تخصصية في التجميل النسائي مصممة لتحسين صحة المرأة وراحتها وثقتها بالنفس. تركز خدماتنا على معالجة المخاوف الوظيفية والتجميلية من خلال إجراءات حديثة وآمنة وغير جراحية تقريباً.",
       "نفهم أهمية الخصوصية والحساسية والرعاية المخصصة، مما يضمن شعور كل مريضة بالراحة طوال رحلة العلاج."
     ],
     fullParagraphsEn: [
@@ -262,7 +262,7 @@ export const initialServices = [
     shortDescriptionAr: "ابتسامة هوليود، زراعة الأسنان، تقويم الأسنان الشفاف، وعلاج الجذور الدقيق بأحدث التقنيات الرقمية.",
     shortDescriptionEn: "Hollywood Smile, Cosmetic Dentistry, Orthodontics, Endodontics, and Dental Implants with digital precision.",
     fullParagraphsAr: [
-      "يقدم قسم طب وتجميل الأسنان في مركز القمة الطبي (Apex Medical Center) رعاية شاملة للأسنان تجمع بين العلم والجمال والتكنولوجيا الحديثة لضمان حصولك على ابتسامة صحية وجذابة.",
+      "يقدم قسم طب وتجميل الأسنان في مجمع القمة الطبي (Apex Medical Center) رعاية شاملة للأسنان تجمع بين العلم والجمال والتكنولوجيا الحديثة لضمان حصولك على ابتسامة صحية وجذابة.",
       "فريقنا من أطباء الأسنان المؤهلين تأهيلاً عالياً يمتلك خبرة سريرية واسعة في تصميم الابتسامة الرقمية (Digital Smile Design)، الفينير، تبييض الأسنان بالليزر، تقويم الأسنان الشفاف، علاج العصب تحت المجهر، وزراعة الأسنان بدون ألم."
     ],
     fullParagraphsEn: [
@@ -290,7 +290,7 @@ export const initialServices = [
     shortDescriptionAr: "علاجات تجميلية متطورة تمنحك ابتسامة طبيعية وجذابة باستخدام الفينير وتبييض الليزر.",
     shortDescriptionEn: "Advanced cosmetic treatments to give you a naturally beautiful smile using veneers and laser whitening.",
     fullParagraphsAr: [
-      "تم تصميم علاجات طب الأسنان التجميلي في مركز القمة الطبي لتحسين مظهر أسنانك وإعطائك ابتسامة طبيعية وجذابة تعزز ثقتك بالنفس.",
+      "تم تصميم علاجات طب الأسنان التجميلي في مجمع القمة الطبي لتحسين مظهر أسنانك وإعطائك ابتسامة طبيعية وجذابة تعزز ثقتك بالنفس.",
       "نستخدم أفضل خامات عدسات الأسنان (الفينير واللومينير) وتركيبات الزيركون الرقمية عالية الشفافية، بالإضافة لجلسات تبييض الأسنان بالليزر السريعة والآمنة على اللثة والطبقات السطحية للسن."
     ],
     fullParagraphsEn: [
@@ -383,7 +383,7 @@ export const initialServices = [
     shortDescriptionAr: "علاج متقدم لجراحة العظام لتشخيص وعلاج الحالات التي تؤثر على العظام والمفاصل والعضلات والعمود الفقري.",
     shortDescriptionEn: "Advanced orthopedic surgery to diagnose and treat conditions affecting bones, joints, muscles, and spine.",
     fullParagraphsAr: [
-      "في مركز القمة الطبي (Apex Medical Center)، نقدم خدمات جراحة العظام المتقدمة لتشخيص وعلاج الحالات التي تؤثر على العظام والمفاصل والعضلات والأربطة والعمود الفقري.",
+      "في مجمع القمة الطبي (Apex Medical Center)، نقدم خدمات جراحة العظام المتقدمة لتشخيص وعلاج الحالات التي تؤثر على العظام والمفاصل والعضلات والأربطة والعمود الفقري.",
       "يركز أخصائيو العظام الماهرون لدينا على تخفيف الألم واستعادة الحركة وتحسين جودة الحياة العامة من خلال الرعاية الجراحية الآمنة والفعالة."
     ],
     fullParagraphsEn: [
@@ -406,7 +406,7 @@ export const initialServices = [
     shortDescriptionAr: "تقديم الرعاية الصحية الأولية، التشخيص الدقيق، ومتابعة الأمراض العامة بأعلى مستويات الجودة في فرع العامرات.",
     shortDescriptionEn: "Primary healthcare, accurate diagnosis, and general medical care at Al Amerat Branch.",
     fullParagraphsAr: [
-      "في فرع العامرات لمركز القمة الطبي (Apex Medical Center)، يوفر قسم الطب العام رعاية صحية أولية متكاملة لجميع الفئات العمرية.",
+      "في فرع العامرات لمجمع القمة الطبي (Apex Medical Center)، يوفر قسم الطب العام رعاية صحية أولية متكاملة لجميع الفئات العمرية.",
       "يقدم خبراؤنا الفحوصات الطبية الدورية، تشخيص وعلاج الأمراض الحادة والمزمنة، واستشارات التغذية والوقاية الصحية لمساعدتك على الحفاظ على صحتك وصحة عائلتك.",
       "تم تجهيز عيادة الطب العام بفرع العامرات بأحدث أجهزة الفحص والتشخيص لضمان تقديم خدمة علاجية سريعة ودقيقة وموثوقة."
     ],
@@ -543,7 +543,7 @@ export const initialDoctors = [
     specialtyAr: "الفيشل والعناية بالبشرة",
     specialtyEn: "Facial & Skincare",
     image: "/wp-content/uploads/2026/07/Aliaa-Aldara-apexmedicaloman.jpg",
-    experienceAr: "أخصائية وفنية الفيشل والعناية بالبشرة والوجه بمركز القمة الطبي (Facial Technician).\n\n• متخصصة في العناية بالبشرة وتنظيف الوجه العميق وجلسات الفيشل العلاجية والتجميلية المتقدمة.",
+    experienceAr: "أخصائية وفنية الفيشل والعناية بالبشرة والوجه بمجمع القمة الطبي (Facial Technician).\n\n• متخصصة في العناية بالبشرة وتنظيف الوجه العميق وجلسات الفيشل العلاجية والتجميلية المتقدمة.",
     experienceEn: "Facial Technician at Apex Medical Center. Specialized in advanced facial skincare treatments and deep skin cleansing.",
   },
   {
@@ -557,7 +557,7 @@ export const initialDoctors = [
     specialtyAr: "الليزر والعناية بالبشرة",
     specialtyEn: "Laser & Skincare",
     image: "/wp-content/uploads/2026/07/Laser-Technician-apexmedicaloman.jpg",
-    experienceAr: "أخصائية وفنية ليزر مرخصة بمركز القمة الطبي (Laser Technician).\n\n• متخصصة في تقديم جلسات إزالة الشعر بالليزر والعناية بالبشرة وفق أحدث المعايير الطبية.",
+    experienceAr: "أخصائية وفنية ليزر مرخصة بمجمع القمة الطبي (Laser Technician).\n\n• متخصصة في تقديم جلسات إزالة الشعر بالليزر والعناية بالبشرة وفق أحدث المعايير الطبية.",
     experienceEn: "Licensed Laser Technician at Apex Medical Center specializing in medical laser hair removal and skincare treatments.",
   },
 ];

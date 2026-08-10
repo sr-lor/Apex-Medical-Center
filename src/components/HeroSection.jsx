@@ -24,7 +24,7 @@ export default function HeroSection({ onOpenBooking }) {
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-white tracking-tight">
               رعاية صحية وتجميلية متكاملة في{" "}
-              <span className="text-gradient-apex">مركز القمة الطبي</span>
+              <span className="text-gradient-apex">مجمع القمة الطبي</span>
             </h1>
 
             {/* Sub-headline / Paragraph */}

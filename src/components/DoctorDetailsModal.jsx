@@ -87,7 +87,7 @@ export default function DoctorDetailsModal({ doctor, isOpen, onClose, onBook }) 
                 <span className="text-slate-400">حالة الاعتماد:</span>
                 <span className="font-bold text-emerald-400 flex items-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  طبيب مرخص ومعتمد لدى مركز القمة الطبي
+                  طبيب مرخص ومعتمد لدى مجمع القمة الطبي
                 </span>
               </div>
             </div>

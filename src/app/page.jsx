@@ -47,7 +47,7 @@ export default function HomePage() {
               عيادات متخصصة تقدم أحدث <span className="text-gradient-apex">الحلول العلاجية والتجميلية</span>
             </h2>
             <p className="text-slate-300 text-sm sm:text-base font-light">
-              تم تجهيز عيادات مركز القمة الطبي (Apex Medical Center) بأحدث التقنيات وأفضل الأجهزة الطبية المعتمدة في الفرعين.
+              تم تجهيز عيادات مجمع القمة الطبي (Apex Medical Center) بأحدث التقنيات وأفضل الأجهزة الطبية المعتمدة في الفرعين.
             </p>
           </div>
 
@@ -102,7 +102,7 @@ export default function HomePage() {
                 أطباء ومستشارون خبرة <span className="text-gradient-apex">عالية ومتميزة</span>
               </h2>
               <p className="text-slate-300 text-sm font-light">
-                نخبة من كبار الجراحين والاستشاريين المعتمدين في مركز القمة الطبي.
+                نخبة من كبار الجراحين والاستشاريين المعتمدين في مجمع القمة الطبي.
               </p>
             </div>
 
@@ -131,7 +131,7 @@ export default function HomePage() {
             <div className="lg:col-span-6 space-y-6">
               <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold text-apex-gold border border-apex-gold/30">
                 <Shield className="w-4 h-4 text-apex-gold" />
-                لماذا مركز القمة الطبي؟
+                لماذا مجمع القمة الطبي؟
               </div>
 
               <h2 className="text-3xl sm:text-4xl font-extrabold leading-tight text-white">
@@ -140,7 +140,7 @@ export default function HomePage() {
               </h2>
 
               <p className="text-slate-300 text-sm leading-relaxed font-light">
-                نسعى دائماً لتكون زيارتكم لـ مركز القمة الطبي (Apex Medical Center) مريحة ومميزة، بدءاً من استقبالكم وحتى اكتمال رحلتكم العلاجية بنجاح.
+                نسعى دائماً لتكون زيارتكم لـ مجمع القمة الطبي (Apex Medical Center) مريحة ومميزة، بدءاً من استقبالكم وحتى اكتمال رحلتكم العلاجية بنجاح.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
@@ -174,7 +174,7 @@ export default function HomePage() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-apex-gold/30">
                 <img
                   src="/wp-content/uploads/2026/03/WHY1.jpg"
-                  alt="Apex Medical Quality Care - مركز القمة الطبي"
+                  alt="Apex Medical Quality Care - مجمع القمة الطبي"
                   className="w-full h-auto object-cover"
                 />
               </div>

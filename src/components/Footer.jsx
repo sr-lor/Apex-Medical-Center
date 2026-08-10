@@ -19,7 +19,7 @@ export default function Footer() {
               />
             </div>
             <p className="text-slate-300 text-xs leading-relaxed">
-              مركز القمة الطبي في سلطنة عمان (Apex Medical Center) - وجهتك الرائدة للرعاية الصحية المتكاملة، طب وتجميل الأسنان، الجراحة التجميلية، الجلدية والليزر، وجراحات إدارة السمنة والوزن بأعلى المعايير العالمية.
+              مجمع القمة الطبي في سلطنة عمان (Apex Medical Center) - وجهتك الرائدة للرعاية الصحية المتكاملة، طب وتجميل الأسنان، الجراحة التجميلية، الجلدية والليزر، وجراحات إدارة السمنة والوزن بأعلى المعايير العالمية.
             </p>
 
             {/* Official Social Media Platform Icons */}
@@ -30,7 +30,7 @@ export default function Footer() {
                   href="https://www.instagram.com/apex_medical_clinics_center?igsh=MWV2a2gyYTRoYnFpYQ%3D%3D&utm_source=qr"
                   target="_blank"
                   rel="noreferrer"
-                  title="إنستغرام مركز القمة الطبي"
+                  title="إنستغرام مجمع القمة الطبي"
                   className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#E1306C] hover:text-white flex items-center justify-center transition-all border border-white/10"
                 >
                   <Instagram className="w-4 h-4" />
@@ -40,7 +40,7 @@ export default function Footer() {
                   href="https://www.youtube.com"
                   target="_blank"
                   rel="noreferrer"
-                  title="قناة اليوتيوب مركز القمة الطبي"
+                  title="قناة اليوتيوب مجمع القمة الطبي"
                   className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#FF0000] hover:text-white flex items-center justify-center transition-all border border-white/10"
                 >
                   <Youtube className="w-4 h-4" />
@@ -50,7 +50,7 @@ export default function Footer() {
                   href="https://www.facebook.com"
                   target="_blank"
                   rel="noreferrer"
-                  title="فيسبوك مركز القمة الطبي"
+                  title="فيسبوك مجمع القمة الطبي"
                   className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#1877F2] hover:text-white flex items-center justify-center transition-all border border-white/10"
                 >
                   <Facebook className="w-4 h-4" />
@@ -60,7 +60,7 @@ export default function Footer() {
                   href="https://wa.me/96897031500"
                   target="_blank"
                   rel="noreferrer"
-                  title="واتساب مركز القمة الطبي"
+                  title="واتساب مجمع القمة الطبي"
                   className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#25D366] hover:text-white flex items-center justify-center transition-all border border-white/10"
                 >
                   <MessageCircle className="w-4 h-4" />
@@ -84,7 +84,7 @@ export default function Footer() {
               <li>
                 <Link href="/about" className="hover:text-apex-gold flex items-center gap-1.5 transition-colors">
                   <ChevronLeft className="w-3.5 h-3.5 text-apex-gold" />
-                  عن مركز القمة الطبي
+                  عن مجمع القمة الطبي
                 </Link>
               </li>
               <li>
@@ -227,7 +227,7 @@ export default function Footer() {
           {/* Copyright & Clean Developer Info */}
           <div className="space-y-1 text-center md:text-right">
             <p className="font-medium text-slate-300">
-              © {new Date().getFullYear()} مركز القمة الطبي (Apex Medical Center Oman). جميع الحقوق محفوظة.
+              © {new Date().getFullYear()} مجمع القمة الطبي (Apex Medical Center Oman). جميع الحقوق محفوظة.
             </p>
             <p className="text-[11px] text-slate-300">
               تطوير المؤسسة رفاه عبد القادر مؤسسة ونائبة الرئيس التنفيذي{" "}

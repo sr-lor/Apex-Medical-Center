@@ -39,11 +39,11 @@ function ServicesContent() {
         </div>
 
         <h1 className="text-4xl sm:text-5xl font-extrabold text-white">
-          خدمات وعيادات <span className="text-gradient-apex">مركز القمة الطبي</span>
+          خدمات وعيادات <span className="text-gradient-apex">مجمع القمة الطبي</span>
         </h1>
 
         <p className="text-slate-300 text-base leading-relaxed font-light">
-          استكشف عيادات مركز القمة الطبي واختر الفرع المناسب للاطلاع على الخدمات والعلاجات المتوفرة.
+          استكشف عيادات مجمع القمة الطبي واختر الفرع المناسب للاطلاع على الخدمات والعلاجات المتوفرة.
         </p>
       </div>
 

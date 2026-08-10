@@ -57,7 +57,7 @@ export default function DoctorsPage() {
           </div>
 
           <h1 className="text-4xl sm:text-5xl font-extrabold text-white">
-            أطباؤنا في <span className="text-gradient-apex">مركز القمة الطبي</span>
+            أطباؤنا في <span className="text-gradient-apex">مجمع القمة الطبي</span>
           </h1>
 
           <p className="text-slate-300 text-base leading-relaxed font-light">

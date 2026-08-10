@@ -5,7 +5,7 @@ export default function TestimonialsSection() {
     {
       id: 1,
       treatment: "ابتسامة هوليود وتجميل الأسنان",
-      content: "تجربة ممتازة جداً وحقيقية في مركز القمة الطبي. التعامل راقٍ للغاية والنتائج طبيعية ومتقنة بدون أي ألم أثناء التركيب.",
+      content: "تجربة ممتازة جداً وحقيقية في مجمع القمة الطبي. التعامل راقٍ للغاية والنتائج طبيعية ومتقنة بدون أي ألم أثناء التركيب.",
       rating: 5,
       location: "فرع العذيبة - سلطنة عمان",
     },
@@ -19,7 +19,7 @@ export default function TestimonialsSection() {
     {
       id: 3,
       treatment: "علاج المفاصل وجراحة العظام",
-      content: "عناية طبية تشخيصية متميزة واستشارة دقيقة أدت إلى زوال الآلام واستعادة الحركة الطبيعية بحمد الله. شكراً لمركز القمة الطبي.",
+      content: "عناية طبية تشخيصية متميزة واستشارة دقيقة أدت إلى زوال الآلام واستعادة الحركة الطبيعية بحمد الله. شكراً لمجمع القمة الطبي.",
       rating: 5,
       location: "سلطنة عمان - صحار",
     },
@@ -34,7 +34,7 @@ export default function TestimonialsSection() {
             آراء وتجارب مراجعي المركز
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-            ماذا يقول مراجعونا عن <span className="text-gradient-apex">مركز القمة الطبي</span>
+            ماذا يقول مراجعونا عن <span className="text-gradient-apex">مجمع القمة الطبي</span>
           </h2>
           <p className="text-slate-300 text-sm font-light">
             نعتز بتجارب مراجعينا الحقيقية وثقتهم الغالية في خدماتنا الطبية والتجميلية في فرعينا.

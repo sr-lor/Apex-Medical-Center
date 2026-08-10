@@ -9,7 +9,7 @@ export default function AboutPage() {
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <div className="inline-flex items-center gap-1.5 bg-white/10 text-apex-gold text-xs font-extrabold px-4 py-1.5 rounded-full border border-apex-gold/30">
             <Sparkles className="w-4 h-4 text-apex-gold" />
-            عن مركز القمة الطبي
+            عن مجمع القمة الطبي
           </div>
 
           <h1 className="text-4xl sm:text-5xl font-extrabold text-white">
@@ -17,7 +17,7 @@ export default function AboutPage() {
           </h1>
 
           <p className="text-slate-300 text-base leading-relaxed font-light">
-            تأسس مركز القمة الطبي (Apex Medical Center) ليكون الصرح الطبي المتكامل المفضل لدى العائلات والمراجعين، مقدماً أفضل الرعايات بالاعتماد على أحدث التقنيات وأفضل الكوادر الطبية الدولية في فرعينا (العذيبة والعامرات).
+            تأسس مجمع القمة الطبي (Apex Medical Center) ليكون الصرح الطبي المتكامل المفضل لدى العائلات والمراجعين، مقدماً أفضل الرعايات بالاعتماد على أحدث التقنيات وأفضل الكوادر الطبية الدولية في فرعينا (العذيبة والعامرات).
           </p>
         </div>
 
@@ -29,7 +29,7 @@ export default function AboutPage() {
             </h2>
 
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-light">
-              في مركز القمة الطبي، نؤمن بأن الصحة والجمال يكتملان بالثقة والأمان. نكرس خبراتنا لتوفير بيئة تخصصية فائقة النظافة والخصوصية، مدعومة بأحدث التقنيات كطب الأسنان الرقمي، وجراحات المناظير، وأجهزة الليزر الطبية الأحدث من أوروبا والولايات المتحدة.
+              في مجمع القمة الطبي، نؤمن بأن الصحة والجمال يكتملان بالثقة والأمان. نكرس خبراتنا لتوفير بيئة تخصصية فائقة النظافة والخصوصية، مدعومة بأحدث التقنيات كطب الأسنان الرقمي، وجراحات المناظير، وأجهزة الليزر الطبية الأحدث من أوروبا والولايات المتحدة.
             </p>
 
             <div className="space-y-3 pt-2">
@@ -51,7 +51,7 @@ export default function AboutPage() {
           <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-apex-gold/30">
             <img
               src="/wp-content/uploads/2026/02/Apex_Medical_center_about_section.jpg"
-              alt="Apex Medical Team - مركز القمة الطبي"
+              alt="Apex Medical Team - مجمع القمة الطبي"
               className="w-full h-auto object-cover"
             />
           </div>

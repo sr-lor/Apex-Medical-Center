@@ -123,7 +123,7 @@ export default function Navbar({ onOpenBooking }) {
             <div className="relative w-44 sm:w-48 h-11 sm:h-12">
               <img
                 src="/wp-content/uploads/2026/02/apex_logo-apexmedicaloman_white-txt.png"
-                alt="Apex Medical Center - مركز القمة الطبي"
+                alt="Apex Medical Center - مجمع القمة الطبي"
                 className="w-full h-full object-contain"
               />
             </div>
@@ -434,7 +434,7 @@ export default function Navbar({ onOpenBooking }) {
                   الرئيسية
                 </Link>
                 <Link href="/about" onClick={() => setMobileMenuOpen(false)} className="p-2.5 font-bold text-slate-200 hover:text-apex-gold">
-                  عن مركز القمة الطبي
+                  عن مجمع القمة الطبي
                 </Link>
 
                 {/* Accordion: إجراءاتنا حسب الفرع */}

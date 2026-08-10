@@ -52,7 +52,7 @@ export default function ServiceDetailPage({ params }) {
             <div className="lg:col-span-7 space-y-4">
               <div className="inline-flex items-center gap-1.5 bg-white/10 text-apex-gold text-xs font-bold px-4 py-1.5 rounded-full border border-apex-gold/30">
                 <Sparkles className="w-4 h-4 text-apex-gold" />
-                تخصصات مركز القمة الطبي
+                تخصصات مجمع القمة الطبي
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-extrabold text-white leading-tight">
@@ -89,7 +89,7 @@ export default function ServiceDetailPage({ params }) {
             <h2 className="text-2xl font-extrabold text-slate-900">
               تفاصيل ورعاية قسم <span className="text-gradient-apex">{service.titleAr}</span>
             </h2>
-            <p className="text-xs text-slate-500 mt-1">النص الكامل والمعتمد من مركز القمة الطبي</p>
+            <p className="text-xs text-slate-500 mt-1">النص الكامل والمعتمد من مجمع القمة الطبي</p>
           </div>
 
           <div className="space-y-4 text-slate-700 text-sm sm:text-base leading-relaxed">

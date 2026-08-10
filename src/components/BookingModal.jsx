@@ -67,7 +67,7 @@ export default function BookingModal({ isOpen, onClose, preselectedDoctorId = ""
               <Calendar className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-xl font-bold">حجز موعد في مركز القمة الطبي</h3>
+              <h3 className="text-xl font-bold">حجز موعد في مجمع القمة الطبي</h3>
               <p className="text-xs text-slate-500">اختر الفرع والطبيب والموعد المناسب لزيارتك</p>
             </div>
           </div>
@@ -86,7 +86,7 @@ export default function BookingModal({ isOpen, onClose, preselectedDoctorId = ""
             </div>
             <h4 className="text-2xl font-bold text-slate-900">تم تسجيل طلب الحجز بنجاح!</h4>
             <p className="text-slate-600 text-sm max-w-md mx-auto">
-              شكراً لتواصلك مع مركز القمة الطبي. تم تسجيل موعدك برقم المرجع{" "}
+              شكراً لتواصلك مع مجمع القمة الطبي. تم تسجيل موعدك برقم المرجع{" "}
               <span className="font-bold text-apex-navy">{successMsg.id}</span>. سيتصل بك فريق خدمة العملاء قريباً لتأكيد التوقيت.
             </p>
             <button
