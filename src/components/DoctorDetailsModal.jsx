@@ -67,7 +67,7 @@ export default function DoctorDetailsModal({ doctor, isOpen, onClose, onBook }) 
               <ShieldCheck className="w-4 h-4 text-apex-gold" />
               <span>النبذة السريرية والمؤهلات العلمية:</span>
             </h4>
-            <p className="text-slate-200 text-sm leading-relaxed font-light bg-white/5 p-4 rounded-2xl border border-white/10">
+            <p className="text-slate-200 text-sm leading-relaxed font-light bg-white/5 p-4 rounded-2xl border border-white/10 whitespace-pre-line">
               {doctor.experienceAr}
             </p>
           </div>

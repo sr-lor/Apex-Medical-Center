@@ -431,7 +431,7 @@ export const initialDoctors = [
     specialtyAr: "طب وتجميل الأسنان",
     specialtyEn: "Cosmetic Dentistry",
     image: "/wp-content/uploads/2026/07/Belal-Haj-Hamed-apexmedicaloman.jpg",
-    experienceAr: "الدكتور بلال حاج حامد طبيب أسنان ذو خبرة تزيد عن ست سنوات في طب الأسنان العام والتجميلي. وهو حاصل على بكالوريوس جراحة الأسنان (BDS)، ومعتمد من المجلس الأمريكي لطب الأسنان (INBDE)، وأكمل زمالة في ساو باولو، البرازيل. ينصب تركيزه المهني على طب الأسنان التجميلي، مدعوماً بتدريب متقدم وتعليم مستمر. وهو عضو في الجمعية الأمريكية لطب الأسنان، ويتقن الإنجليزية والعربية والإسبانية.",
+    experienceAr: "الدكتور بلال حاج حامد طبيب أسنان ذو خبرة تزيد عن ست سنوات في طب الأسنان العام والتجميلي. وهو حاصل على بكالوريوس جراحة الأسنان (BDS)، ومعتمد من المجلس الأمريكي لطب الأسنان (INBDE)، وأكمل زمالة في ساو باولو، البرازيل.\n\nينصب تركيزه المهني على طب الأسنان التجميلي، مدعوماً بتدريب متقدم وتعليم مستمر. وهو عضو في الجمعية الأمريكية لطب الأسنان (ADA)، ويتقن الإنجليزية والعربية والإسبانية.",
     experienceEn: "Dr. Belal Haj-Hamed is an experienced dentist with over six years in general and cosmetic dentistry. He holds a Bachelor of Dental Surgery (BDS), is certified by the American Board INBDE, and completed a fellowship in São Paulo, Brazil. His professional focus is cosmetic dentistry, supported by advanced training and continuous education. He is a member of the American Dental Association and is fluent in English, Arabic, and Spanish.",
   },
   {
@@ -445,7 +445,7 @@ export const initialDoctors = [
     specialtyAr: "الأمراض الباطنية",
     specialtyEn: "Internal Medicine",
     image: "/wp-content/uploads/2026/07/Hosam-Al-Din-Habel-apexmedicaloman.jpg",
-    experienceAr: "الدكتور حسام الدين هابيل أخصائي أمراض باطنية بخبرة سريرية تقارب 15 عاماً (10 سنوات بالعمل في المستشفيات الجامعية السورية وآخر 5 سنوات في عيادات مرموقة بسلطنة عمان). قام بإدارة مجموعة واسعة من الأمراض المزمنة تشمل السكري، ضغط الدم، الربو، التهاب القصبات المزمن، والأمراض المفصلية الروماتيزمية. كما عمل لمدة 5 سنوات في وحدات العناية المركزة بمستشفيات دمشق. حاصل على البورد السوري في الطب الباطني كطبيب أخصائي منذ عام 2011. يتقن العربية والإنجليزية ولديه مستوى متوسط في الألمانية.",
+    experienceAr: "الدكتور حسام الدين هابيل أخصائي أمراض باطنية بخبرة سريرية تقارب 15 عاماً (10 سنوات بالعمل في المستشفيات الجامعية السورية وآخر 5 سنوات في عيادات مرموقة بسلطنة عمان).\n\n• قام بإدارة مجموعة واسعة من الأمراض المزمنة تشمل السكري، ضغط الدم، الربو، التهاب القصبات المزمن، والأمراض المفصلية الروماتيزمية.\n• عمل لمدة 5 سنوات في وحدات العناية المركزة بمستشفيات دمشق.\n• حاصل على البورد السوري في الطب الباطني كطبيب أخصائي منذ عام 2011.\n• يتقن العربية والإنجليزية ولديه مستوى متوسط في الألمانية.",
     experienceEn: "Dr. Hosam Al-Din Habel is an internal medicine specialist with nearly 15 years of clinical experience (10 years working in Syrian university hospitals and last 5 years in reputable clinics in the Sultanate of Oman). Managed a wide range of chronic conditions including diabetes, hypertension, asthma, chronic bronchitis, and rheumatic joint diseases. Served 5 years in ICU units. Syrian Board certified since 2011.",
   },
   {
@@ -459,7 +459,7 @@ export const initialDoctors = [
     specialtyAr: "تقويم الأسنان",
     specialtyEn: "Orthodontics",
     image: "/wp-content/uploads/2026/07/Dr-Bharti-Khanna_apexmedicaloman.jpg",
-    experienceAr: "الدكتورة بهارتي خانا (الحاصلة على الميدالية الذهبية) تمتلك خبرة تزيد عن 13 عاماً كأخصائية تقويم الأسنان. حاصلة على درجة الماجستير في تقويم الأسنان والوجه والفكين من الهند وممارسة معتمدة لتقويم إنفيزالاين (Invisalign) منذ عام 2017. تتخصص في تقويم الأسنان التجميلي باستخدام أحدث التقنيات مع التركيز على الجوانب الهيكلية والوظيفية للعلاج.",
+    experienceAr: "الدكتورة بهارتي خانا (الحاصلة على الميدالية الذهبية) تمتلك خبرة تزيد عن 13 عاماً كأخصائية تقويم الأسنان.\n\n• حاصلة على درجة الماجستير في تقويم الأسنان والوجه والفكين من الهند (Gold Medalist).\n• ممارسة معتمدة لتقويم إنفيزالاين الشفاف (Invisalign Certified Practitioner) منذ عام 2017.\n• تتخصص في تقويم الأسنان التجميلي باستخدام أحدث التقنيات في هذا المجال، ولديها اهتمام دقيق بالتفاصيل مع التركيز على الجوانب الهيكلية والوظيفية للعلاج.",
     experienceEn: "Dr. Bharti Khanna (Gold Medalist) comes in with an experience of over 13 years as an orthodontist. She holds a master's degree in Orthodontics and Dentofacial Orthopedics from India and is a certified Invisalign practitioner since 2017. Dr. Bharti specializes in esthetic orthodontics using latest technology in the field with emphasis on structural and functional aspects of treatment.",
   },
   {
@@ -473,7 +473,7 @@ export const initialDoctors = [
     specialtyAr: "الجلدية والتجميل",
     specialtyEn: "Dermatology & Cosmetology",
     image: "/wp-content/uploads/2026/07/Marwa-jbara-apexmedicaloman.jpg",
-    experienceAr: "ممارسة في الأمراض الجلدية والطب التجميلي بخبرة سريرية تزيد عن 10 سنوات، تقدم إجراءات تجميلية متقدمة تشمل البوتوكس، الفيلر الجلدي، تجديد البشرة وتحفيز الكولاجين، خيوط شد الوجه، الإدارة الشاملة لتساقط الشعر، والأمراض الجلدية الطبية. حاصلة على درجة دكتور في الطب (MD) من جامعة دمشق والبورد السوري في الأمراض الجلدية والطب التجميلي. تتحدث العربية والإنجليزية.",
+    experienceAr: "ممارسة في الأمراض الجلدية والطب التجميلي بخبرة سريرية تزيد عن 10 سنوات.\n\n• تقدم إجراءات تجميلية متقدمة تشمل: البوتوكس، الفيلر الجلدي، تجديد البشرة وتحفيز الكولاجين، خيوط شد الوجه، الإدارة الشاملة لتساقط الشعر، والأمراض الجلدية الطبية.\n• حاصلة على درجة دكتور في الطب (MD) من جامعة دمشق.\n• حاصلة على شهادة البورد السوري في الأمراض الجلدية والطب التجميلي.\n• تتحدث العربية والإنجليزية بطلاقة.",
     experienceEn: "A Dermatology and Aesthetic Medicine practitioner with more than 10 years of clinical experience, offering advanced aesthetic procedures including Botox, dermal fillers, skin rejuvenation and collagen biostimulation treatments, facial thread lifting, comprehensive hair loss management, and medical dermatology. MD degree from Damascus University & Syrian Board Certified.",
   },
   {
@@ -487,7 +487,7 @@ export const initialDoctors = [
     specialtyAr: "علاج عصب الأسنان",
     specialtyEn: "Endodontics",
     image: "/wp-content/uploads/2026/07/Specialist-Endodontist-Anil-Dalal-apexmedicaloman.jpg",
-    experienceAr: "الدكتور أنيل دلال أخصائي علاج عصب وجذور الأسنان (مرخص من وزارة الصحة العمانية MOH Oman) بخبرة 13 عاماً في المستشفيات المرموقة في عمان. حاصل على الماجستير في علاج العصب وطب الأسنان الترميمي. متميز في علاج عصب الأسنان بدون ألم لجميع الأسنان بالحالات البسيطة والمعقدة. يمتلك خبرة في التاج والجسور وخلع الأسنان. يتقن الإنجليزية والهندية ولديه معرفة باللغة العربية. عضو الجمعية الهندية لعلاج الجذور.",
+    experienceAr: "الدكتور أنيل دلال أخصائي علاج عصب وجذور الأسنان (مرخص من وزارة الصحة العمانية MOH Oman) بخبرة 13 عاماً في المستشفيات المرموقة في عمان.\n\n• حاصل على درجة الماجستير في علاج العصب وطب الأسنان الترميمي (MSc Endodontics & Restorative Dentistry).\n• متميز في علاج عصب وجذور الأسنان بدون ألم لجميع الأسنان للحالات البسيطة والمعقدة.\n• يمتلك خبرة في تركيب التاج والجسور وخلع الأسنان.\n• عضو في الجمعية الهندية لعلاج الجذور (Indian Endodontic Society).\n• يتقن الإنجليزية والهندية ولديه معرفة باللغة العربية.",
     experienceEn: "Dr. Anil Dalal is an experienced specialist Endodontist (MOH Oman) with 13 years of experience in reputed hospitals in Oman. He holds Masters in Endodontics and Restorative dentistry. He is skilled in pain free root canals of all the teeth both simple as well as complex ones. Experienced in crowns, bridges and extractions. Member of Indian Endodontic Society.",
   },
   {
@@ -501,7 +501,7 @@ export const initialDoctors = [
     specialtyAr: "طب الأسنان العام",
     specialtyEn: "General Dentistry",
     image: "/wp-content/uploads/2026/07/NO-IMAGE.jpg",
-    experienceAr: "الدكتورة زينب المعمرية طبيبة أسنان عامة تمتلك ست سنوات من الخبرة في تقديم العلاجات السنية الشاملة. تتضمن خبرتها السريرية العناية الروتينية بالأسنان وطب أسنان الأطفال، مع تركيز قوي على راحة المريض والرعاية الوقائية. حاصلة على بكالوريوس جراحة الأسنان (BDS) وتتحدث العربية والإنجليزية بطلاقة.",
+    experienceAr: "الدكتورة زينب المعمرية طبيبة أسنان عامة تمتلك ست سنوات من الخبرة في تقديم العلاجات السنية الشاملة.\n\n• تتضمن خبرتها السريرية العناية الروتينية بالأسنان وطب أسنان الأطفال، مع تركيز قوي على راحة المريض والرعاية الوقائية.\n• حاصلة على بكالوريوس جراحة الأسنان (BDS).\n• تتحدث العربية والإنجليزية بطلاقة.",
     experienceEn: "Dr. Zainab Al Mamari is a general dentist with six years of experience in providing comprehensive dental treatments. Her clinical expertise includes routine dental care and pediatric dentistry, with a strong emphasis on patient comfort and preventive care. Holds a BDS degree and speaks Arabic and English fluently.",
   },
   {
@@ -515,8 +515,8 @@ export const initialDoctors = [
     specialtyAr: "تجميل وترميم الأسنان",
     specialtyEn: "Esthetic Dentistry",
     image: "/wp-content/uploads/2026/07/Thura-Hatem-Mahmood-Alquaizi-apexmedicaloman.jpg",
-    experienceAr: "طبيبة أسنان حاصلة على درجة الماجستير في تجميل وترميم الأسنان من جامعة سابينزا في روما إيطاليا ودبلوم علاج العصب من الأكاديمية البريطانية. تمارس حالياً في مسقط مع التركيز على الترميم، الفينير التجميلي، وعلاج قنوات الجذور. شغوفة بطب الأسنان التدخلي الأدنى وخلق ابتسامات طبيعية وواثقة. الخبرة السريرية: 17 عاماً. المؤهلات: ماجستير تجميل وترميم الأسنان (جامعة سابينزا روما إيطاليا)، دبلوم علاج الجذور (أكاديمية بيرد البريطانية UK)، بكالوريوس جراحة الأسنان (جامعة بغداد العراق). عضو نقابة أطباء الأسنان العراقيين وطبيبة مرخصة من وزارة الصحة العمانية.",
-    experienceEn: "Dentist with a Master's degree in Esthetic and Conservative Dentistry from Sapienza University of Rome Italy and a Diploma in Endodontics from the British Academy. 17 years of clinical experience. BDS from University of Baghdad. Licensed by MOH Oman. Member of Iraqi Dental Association.",
+    experienceAr: "طبيبة أسنان حاصلة على درجة الماجستير في تجميل وترميم الأسنان من جامعة سابينزا في روما إيطاليا ودبلوم في علاج العصب من الأكاديمية البريطانية. تمارس حالياً في مسقط مع التركيز على الترميم، الفينير التجميلي، وعلاجات قنوات الجذور، وشغوفة بطب الأسنان التدخلي الأدنى وخلق ابتسامات طبيعية وواثقة.\n\n• الخبرة السريرية: 17 عاماً من الخبرة السريرية.\n\n• المؤهلات العلمية (Educational Background):\n- ماجستير تجميل وترميم الأسنان – جامعة سابينزا في روما، إيطاليا (MSc Sapienza University of Rome, Italy).\n- دبلوم علاج قنوات الجذور – أكاديمية بيرد البريطانية (Baird British Academy, UK).\n- بكالوريوس جراحة الأسنان – جامعة بغداد، العراق (BDS University of Baghdad).\n\n• الإجراءات والعلاجات الطبية المقدمة (Procedures Performed):\n- التركيبات والجسور الثابتة (Fixed Dental Prostheses / Bridges).\n- الفينير التجميلي وتصميم الابتسامة (Esthetic veneers & Smile Design).\n- التاج والتركيبات (Crown restoration).\n- الأطقم المتحركة الجزئية والكاملة (Removable complete & partial dentures).\n- حشوات الأونلاي والإنلاي والـ Overlay الخلفية.\n- وتد الألياف الفايبر (Fiber post placement).\n- تبييض الأسنان وحشوات الكومبوزيت التجميلية.\n- علاج عصب وقنوات الجذور للأسنان الأمامية والخلفية (Endodontic Treatment).\n\n• الحالات المرضية المعالجة (Conditions Treated):\n- إعادة تأهيل الفم الكامل للحالات المعقدة (Full mouth Rehabilitation).\n- التركيبات وحساسية الأسنان وتصبغات وتكسرات الأسنان.\n\n• العضويات والتراخيص المهنية (Memberships & Licenses):\n- عضو نقابة أطباء الأسنان العراقيين (Iraqi Dental Association).\n- طبيبة مرخصة لدى وزارة الصحة العمانية (Ministry of Health, Sultanate of Oman).\n\n• التطوير المهني والجوائز (Awards & Recognition):\n- تدريب سريري مستمر في تجميل الأسنان المتقدم، زراعة الأسنان، وعلاجات الجذور.\n\n• اللغات المتقنة: الإنجليزية، العربية، الإيطالية.",
+    experienceEn: "Dentist with a Master's degree in Esthetic and Conservative Dentistry from Sapienza University of Rome Italy and a Diploma in Endodontics from the British Academy. 17 years of clinical experience. BDS from University of Baghdad. Licensed by MOH Oman. Member of Iraqi Dental Association. Procedures: Fixed Prostheses, Veneers, Smile Design, Crowns, Endodontic treatment.",
   },
   {
     id: "alaa-laser-tech",
@@ -529,7 +529,7 @@ export const initialDoctors = [
     specialtyAr: "الليزر والعناية بالبشرة",
     specialtyEn: "Laser & Skincare",
     image: "/wp-content/uploads/2026/07/Alaa-apexmedicaloman.jpg",
-    experienceAr: "فنية ليزر مرخصة تمتلك خبرة واسعة في العناية بالبشرة والعلاجات الطبية بالليزر. تمتلك مهارات متقدمة في تقييم الحالات وتقديم العلاجات التجميلية غير الجراحية وتشغيل أجهزة الليزر وفق أعلى معايير الأمان والجودة. الخبرة السريرية: 8 سنوات. المؤهلات العلمية: دبلوم التمريض (أكاديمية أوكسفورد للاستشارات والدراسات التخصصية)، شهادة تقنية (أكاديمية فاي - النمسا Phi Academy)، فنية ليزر (مستشفى العيون وجراحة التجميل، مرخصة من وزارة الصحة العمانية).",
+    experienceAr: "فنية ليزر مرخصة تمتلك خبرة واسعة في العناية بالبشرة والعلاجات الطبية بالليزر. تمتلك مهارات متقدمة في تقييم الحالات وتقديم العلاجات التجميلية غير الجراحية وتشغيل أجهزة الليزر وفق أعلى معايير الأمان والجودة.\n\n• الخبرة السريرية: 8 سنوات.\n• المؤهلات العلمية:\n- دبلوم التمريض (أكاديمية أوكسفورد للاستشارات والدراسات التخصصية).\n- شهادة تقنية (أكاديمية فاي - النمسا Phi Academy Austria).\n- فنية ليزر (مستشفى العيون وجراحة التجميل).\n- ترخيص فني ليزر مرخص من وزارة الصحة العمانية (MOH - Oman).",
     experienceEn: "Licensed laser technician with 8 years of extensive experience in skincare and medical laser treatments. Advanced skills in case assessment, non-surgical cosmetic treatments, and operating laser devices according to highest safety standards. Diploma of Nursing (Oxford Academy), Technical Certificate (Phi Academy, Austria), MOH Oman Licensed.",
   },
   {
@@ -540,10 +540,10 @@ export const initialDoctors = [
     titleAr: "فني فيشل وعناية بالبشرة",
     titleEn: "Facial Technician",
     specialtyId: "skin-care-laser-treatments",
-    specialtyAr: "الفيشل والعناية بالبشرة والوجه",
+    specialtyAr: "الفيشل والعناية بالبشرة",
     specialtyEn: "Facial & Skincare",
     image: "/wp-content/uploads/2026/07/Aliaa-Aldara-apexmedicaloman.jpg",
-    experienceAr: "أخصائية وفنية الفيشل والعناية بالبشرة والوجه بمركز القمة الطبي (Facial Technician). متخصصة في العناية بالبشرة وتنظيف الوجه وجلسات الفيشل المتطورة.",
+    experienceAr: "أخصائية وفنية الفيشل والعناية بالبشرة والوجه بمركز القمة الطبي (Facial Technician).\n\n• متخصصة في العناية بالبشرة وتنظيف الوجه العميق وجلسات الفيشل العلاجية والتجميلية المتقدمة.",
     experienceEn: "Facial Technician at Apex Medical Center. Specialized in advanced facial skincare treatments and deep skin cleansing.",
   },
   {
@@ -557,7 +557,7 @@ export const initialDoctors = [
     specialtyAr: "الليزر والعناية بالبشرة",
     specialtyEn: "Laser & Skincare",
     image: "/wp-content/uploads/2026/07/Laser-Technician-apexmedicaloman.jpg",
-    experienceAr: "أخصائية وفنية ليزر مرخصة بمركز القمة الطبي (Laser Technician). متخصصة في تقديم جلسات إزالة الشعر بالليزر والعناية بالبشرة.",
+    experienceAr: "أخصائية وفنية ليزر مرخصة بمركز القمة الطبي (Laser Technician).\n\n• متخصصة في تقديم جلسات إزالة الشعر بالليزر والعناية بالبشرة وفق أحدث المعايير الطبية.",
     experienceEn: "Licensed Laser Technician at Apex Medical Center specializing in medical laser hair removal and skincare treatments.",
   },
 ];
@@ -565,15 +565,15 @@ export const initialDoctors = [
 export const initialAppointments = [
   {
     id: "APT-1001",
-    patientName: "أحمد بن سالم المعمري",
+    patientName: "أحمد بن عبد الله البوسعيدي",
     phone: "+968 97031500",
     email: "ahmed.m@gmail.com",
-    doctorName: "د. حسام الدين هابيل",
+    doctorName: "د. بلال حاج حامد",
     specialty: "طب وتجميل الأسنان",
     date: "2026-08-10",
     time: "10:30 AM",
     status: "مؤكد",
-    notes: "استشارة لابتسامة هوليود والتركيبات",
+    notes: "استشارة لتركيب قشور الفينير التجميلية",
     createdAt: "2026-08-07T14:20:00Z",
   },
 ];
