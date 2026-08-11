@@ -70,7 +70,7 @@ export default function AdminDashboard() {
               أهلاً بك في لوحة تحكم <span className="text-gradient-apex">مجمع القمة الطبي</span>
             </h1>
             <p className="text-slate-300 text-xs sm:text-sm max-w-2xl font-medium leading-relaxed">
-              يمكنك من هنا التحكم الكامل بالأطباء، التخصصات، تصفية الفروع (العذيبة والعامرات)، وتحديث التخزين السحابي AWS S3 بسهولة وفورية.
+              يمكنك من هنا التحكم الكامل بالأطباء، التخصصات، تصفية الفروع (العذيبة والعامرات)، وتحديث وصور الوسائط بسهولة وفورية.
             </p>
           </div>
         </div>
@@ -161,7 +161,7 @@ export default function AdminDashboard() {
               </div>
               <h3 className="text-lg font-extrabold text-slate-900">إدارة وتعديل الأطباء</h3>
               <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                إضافة أطباء جدد، تعديل السير السريرية والمؤهلات، رفع الصور إلى AWS S3، وفلترة الأطباء حسب فرع العذيبة أو العامرات.
+                إضافة أطباء جدد، تعديل السير السريرية والمؤهلات، رفع الصور والوسائط، وفلترة الأطباء حسب فرع العذيبة أو العامرات.
               </p>
             </div>
 

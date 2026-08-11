@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import AdminLayout from "@/components/AdminLayout";
 import { 
   UserCheck, Plus, Trash2, Edit3, Upload, CheckCircle2, 
-  AlertCircle, Search, Filter, MapPin, Building2, Shield, X, Award
+  AlertCircle, Search, Filter, MapPin, Building2, Shield, X, Award, Eye
 } from "lucide-react";
 import { initialServices } from "@/lib/data-store";
 
@@ -124,14 +124,12 @@ export default function AdminDoctorsPage() {
         setFormData({ ...formData, image: data.url });
         setMsg({
           type: "success",
-          text: data.isMock
-            ? "تم استخدام مسار الصورة بنجاح (وضع العرض)"
-            : "تم رفع الصورة بنجاح وتخزينها سحابياً في AWS S3!",
+          text: "تم رفع الصورة واختيارها بنجاح!",
         });
       }
     } catch (err) {
       console.error(err);
-      setMsg({ type: "error", text: "حدث خطأ أثناء الرفع إلى AWS S3" });
+      setMsg({ type: "error", text: "حدث خطأ أثناء رفع الصورة" });
     } finally {
       setUploadingImage(false);
     }
@@ -204,19 +202,19 @@ export default function AdminDoctorsPage() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
           <div>
             <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-              <UserCheck className="w-6 h-6 text-apex-gold" />
+              <UserCheck className="w-6 h-6 text-amber-500" />
               <span>إدارة الأطباء والكادر السريري</span>
             </h1>
             <p className="text-xs text-slate-500 mt-1">
-              إضافة أطباء جدد، تعديل الملفات والمؤهلات السريرية، وتخصيص الفروع والتخزين السحابي AWS S3.
+              إضافة أطباء جدد، تعديل الملفات والمؤهلات السريرية، وتخصيص الفروع والصور.
             </p>
           </div>
 
           <button
             onClick={openAddModal}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-apex-gold to-apex-gold-dark hover:from-apex-gold-dark hover:to-apex-gold-deep text-slate-950 px-5 py-3 rounded-2xl font-extrabold text-xs shadow-gold hover:scale-105 transition-all"
+            className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-5 py-3 rounded-2xl font-extrabold text-xs shadow-md hover:scale-105 transition-all"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-4 h-4 text-amber-400" />
             <span>إضافة طبيب جديد</span>
           </button>
         </div>
@@ -226,8 +224,8 @@ export default function AdminDoctorsPage() {
           
           {/* Branch Filter Tabs */}
           <div className="flex items-center gap-2 bg-slate-100 p-1.5 rounded-2xl">
-            <span className="text-xs font-bold text-slate-500 px-2 flex items-center gap-1">
-              <Filter className="w-3.5 h-3.5 text-apex-gold" />
+            <span className="text-xs font-bold text-slate-600 px-2 flex items-center gap-1">
+              <Filter className="w-3.5 h-3.5 text-amber-500" />
               <span>فلتر الفرع:</span>
             </span>
 
@@ -235,8 +233,8 @@ export default function AdminDoctorsPage() {
               onClick={() => setActiveBranchFilter("all")}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                 activeBranchFilter === "all"
-                  ? "bg-apex-navy text-white shadow-sm"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "bg-slate-900 text-white shadow-sm"
+                  : "text-slate-700 hover:text-slate-900"
               }`}
             >
               جميع الفروع ({doctors.length})
@@ -246,8 +244,8 @@ export default function AdminDoctorsPage() {
               onClick={() => setActiveBranchFilter("azaiba")}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                 activeBranchFilter === "azaiba"
-                  ? "bg-apex-gold text-slate-950 shadow-sm"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "bg-amber-500 text-slate-950 shadow-sm"
+                  : "text-slate-700 hover:text-slate-900"
               }`}
             >
               فرع العذيبة ({doctors.filter((d) => d.branchIds?.includes("azaiba")).length})
@@ -257,8 +255,8 @@ export default function AdminDoctorsPage() {
               onClick={() => setActiveBranchFilter("amerat")}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                 activeBranchFilter === "amerat"
-                  ? "bg-apex-gold text-slate-950 shadow-sm"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "bg-amber-500 text-slate-950 shadow-sm"
+                  : "text-slate-700 hover:text-slate-900"
               }`}
             >
               فرع العامرات ({doctors.filter((d) => d.branchIds?.includes("amerat")).length})
@@ -273,7 +271,7 @@ export default function AdminDoctorsPage() {
               placeholder="ابحث باسم الطبيب أو التخصص..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-4 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-apex-gold"
+              className="w-full pl-4 pr-10 py-2.5 bg-white border border-slate-300 rounded-2xl text-xs font-bold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500"
             />
           </div>
 
@@ -303,13 +301,13 @@ export default function AdminDoctorsPage() {
                 >
                   <div>
                     {/* Doctor Image */}
-                    <div className="relative w-full h-52 rounded-2xl overflow-hidden bg-slate-100 mb-3 border border-slate-100">
+                    <div className="relative w-full h-52 rounded-2xl overflow-hidden bg-slate-100 mb-3 border border-slate-200">
                       <img
                         src={doc.image}
                         alt={doc.nameAr}
                         className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
                       />
-                      <div className="absolute top-2.5 right-2.5 bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold text-amber-400 flex items-center gap-1 border border-amber-400/30">
+                      <div className="absolute top-2.5 right-2.5 bg-slate-900/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold text-amber-400 flex items-center gap-1 border border-amber-400/30">
                         <Award className="w-3 h-3 text-amber-400" />
                         <span>{doc.specialtyAr}</span>
                       </div>
@@ -318,24 +316,24 @@ export default function AdminDoctorsPage() {
                     {/* Branch Badges */}
                     <div className="flex items-center gap-1.5 mb-2">
                       {isAzaiba && (
-                        <span className="px-2.5 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-extrabold rounded-md flex items-center gap-1 border border-blue-200">
-                          <MapPin className="w-2.5 h-2.5" />
+                        <span className="px-2.5 py-0.5 bg-blue-50 text-blue-800 text-[10px] font-extrabold rounded-md flex items-center gap-1 border border-blue-200">
+                          <MapPin className="w-2.5 h-2.5 text-blue-600" />
                           <span>فرع العذيبة</span>
                         </span>
                       )}
                       {isAmerat && (
-                        <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-extrabold rounded-md flex items-center gap-1 border border-emerald-200">
-                          <MapPin className="w-2.5 h-2.5" />
+                        <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-800 text-[10px] font-extrabold rounded-md flex items-center gap-1 border border-emerald-200">
+                          <MapPin className="w-2.5 h-2.5 text-emerald-600" />
                           <span>فرع العامرات</span>
                         </span>
                       )}
                     </div>
 
                     {/* Doctor Titles */}
-                    <p className="text-slate-400 text-xs font-semibold mb-1 line-clamp-1">
+                    <p className="text-slate-500 text-xs font-bold mb-1 line-clamp-1">
                       {doc.titleAr}
                     </p>
-                    <h3 className="font-extrabold text-slate-900 text-base group-hover:text-apex-navy transition-colors">
+                    <h3 className="font-extrabold text-slate-900 text-base group-hover:text-amber-600 transition-colors">
                       {doc.nameAr}
                     </h3>
                   </div>
@@ -344,7 +342,7 @@ export default function AdminDoctorsPage() {
                   <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
                     <button
                       onClick={() => openEditModal(doc)}
-                      className="flex-1 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-xl font-extrabold text-xs transition-colors flex items-center justify-center gap-1.5 border border-amber-200"
+                      className="flex-1 py-2 bg-amber-50 hover:bg-amber-100 text-amber-900 rounded-xl font-extrabold text-xs transition-colors flex items-center justify-center gap-1.5 border border-amber-200"
                     >
                       <Edit3 className="w-3.5 h-3.5" />
                       <span>تعديل</span>
@@ -352,7 +350,7 @@ export default function AdminDoctorsPage() {
 
                     <button
                       onClick={() => handleDeleteDoctor(doc.id, doc.nameAr)}
-                      className="py-2 px-3 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl font-bold text-xs transition-colors flex items-center justify-center gap-1 border border-rose-200"
+                      className="py-2 px-3 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl font-bold text-xs transition-colors flex items-center justify-center gap-1 border border-rose-200"
                       title="حذف الطبيب"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -366,16 +364,16 @@ export default function AdminDoctorsPage() {
 
         {/* Add / Edit Doctor Modal */}
         {showModal && (
-          <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-            <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 animate-scale-up border border-slate-200 text-right max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+            <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 animate-scale-up border border-slate-200 text-right max-h-[90vh] overflow-y-auto text-slate-900">
               
               {/* Modal Header */}
-              <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <div className="flex items-center justify-between border-b border-slate-200 pb-4">
                 <div>
                   <h3 className="text-xl font-extrabold text-slate-900">
                     {editingDoctor ? `تعديل بيانات: ${editingDoctor.nameAr}` : "إضافة طبيب استشاري جديد"}
                   </h3>
-                  <p className="text-xs text-slate-500 mt-0.5">
+                  <p className="text-xs text-slate-500 font-semibold mt-0.5">
                     قم بإدخال وتحديث المؤهلات والخبرات وتخصيص الفرع والصورة.
                   </p>
                 </div>
@@ -390,10 +388,10 @@ export default function AdminDoctorsPage() {
               {/* Feedback Messages */}
               {msg.text && (
                 <div
-                  className={`p-3.5 rounded-2xl text-xs font-bold flex items-center gap-2 ${
+                  className={`p-3.5 rounded-2xl text-xs font-extrabold flex items-center gap-2 ${
                     msg.type === "success"
-                      ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
-                      : "bg-rose-50 text-rose-800 border border-rose-200"
+                      ? "bg-emerald-50 text-emerald-900 border border-emerald-300"
+                      : "bg-rose-50 text-rose-900 border border-rose-300"
                   }`}
                 >
                   {msg.type === "success" ? (
@@ -411,30 +409,30 @@ export default function AdminDoctorsPage() {
                 {/* Names */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    <label className="block text-xs font-extrabold text-slate-800 mb-1.5">
                       اسم الطبيب بالكامل (بالعربية) *
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="الدكتور بلال حاج حامد"
+                      placeholder="الدكتور حسام الدين هابيل"
                       value={formData.nameAr}
                       onChange={(e) => setFormData({ ...formData, nameAr: e.target.value })}
-                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-apex-gold"
+                      className="w-full p-3 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 shadow-sm"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    <label className="block text-xs font-extrabold text-slate-800 mb-1.5">
                       الاسم باللغة الإنجليزية (English Name) *
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="Dr. Bilal Haj Hamed"
+                      placeholder="Dr. Hosam Al-Din Habel"
                       value={formData.nameEn}
                       onChange={(e) => setFormData({ ...formData, nameEn: e.target.value })}
-                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-apex-gold text-left"
+                      className="w-full p-3 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 shadow-sm text-left"
                       dir="ltr"
                     />
                   </div>
@@ -443,21 +441,21 @@ export default function AdminDoctorsPage() {
                 {/* Title & Specialty */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    <label className="block text-xs font-extrabold text-slate-800 mb-1.5">
                       المسمى الوظيفي والدرجة العلمية *
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="طبيب أسنان ذو خبرة في طب الأسنان العام والتجميلي"
+                      placeholder="أخصائي طب باطني"
                       value={formData.titleAr}
                       onChange={(e) => setFormData({ ...formData, titleAr: e.target.value })}
-                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-apex-gold"
+                      className="w-full p-3 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 shadow-sm"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    <label className="block text-xs font-extrabold text-slate-800 mb-1.5">
                       التخصص الرئيسي *
                     </label>
                     <select
@@ -470,10 +468,10 @@ export default function AdminDoctorsPage() {
                           specialtyAr: selectedServ ? selectedServ.titleAr : formData.specialtyAr,
                         });
                       }}
-                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-apex-gold"
+                      className="w-full p-3 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 shadow-sm"
                     >
                       {initialServices.map((s) => (
-                        <option key={s.id} value={s.id}>
+                        <option key={s.id} value={s.id} className="text-slate-900 font-bold">
                           {s.titleAr}
                         </option>
                       ))}
@@ -483,50 +481,50 @@ export default function AdminDoctorsPage() {
 
                 {/* Branch Selection */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-2">
+                  <label className="block text-xs font-extrabold text-slate-800 mb-2">
                     تحديد فروع عمل الطبيب (يمكن اختيار فرع واحد أو الفرعين معاً) *
                   </label>
-                  <div className="flex items-center gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-200">
-                    <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-800">
+                  <div className="flex items-center gap-6 bg-slate-50 p-3.5 rounded-2xl border border-slate-300">
+                    <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-900">
                       <input
                         type="checkbox"
                         checked={formData.branchIds.includes("azaiba")}
                         onChange={() => handleBranchToggle("azaiba")}
-                        className="w-4 h-4 rounded text-apex-gold focus:ring-apex-gold"
+                        className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500"
                       />
                       <span>📍 فرع العذيبة</span>
                     </label>
 
-                    <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-800">
+                    <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-900">
                       <input
                         type="checkbox"
                         checked={formData.branchIds.includes("amerat")}
                         onChange={() => handleBranchToggle("amerat")}
-                        className="w-4 h-4 rounded text-apex-gold focus:ring-apex-gold"
+                        className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500"
                       />
                       <span>📍 فرع العامرات</span>
                     </label>
                   </div>
                 </div>
 
-                {/* AWS S3 Direct Upload */}
+                {/* Image Upload & Live Preview Box */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    صورة الطبيب (رفع مباشر لـ AWS S3) *
+                  <label className="block text-xs font-extrabold text-slate-800 mb-1.5">
+                    صورة الطبيب الشخصية *
                   </label>
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                     <input
                       type="text"
-                      placeholder="رابط الصورة أو المسار..."
+                      placeholder="رابط الصورة أو مسار الملف..."
                       value={formData.image}
                       onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                      className="flex-grow p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono focus:outline-none focus:ring-2 focus:ring-apex-gold"
+                      className="flex-grow p-3 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-sm"
                       dir="ltr"
                     />
 
-                    <label className="bg-slate-900 hover:bg-slate-800 text-white font-bold px-4 py-3 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-sm">
-                      <Upload className="w-4 h-4 text-apex-gold" />
-                      <span>{uploadingImage ? "جاري الرفع لـ S3..." : "رفع من الجهاز لـ S3"}</span>
+                    <label className="bg-slate-900 hover:bg-slate-800 text-white font-extrabold px-4 py-3 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-sm">
+                      <Upload className="w-4 h-4 text-amber-400" />
+                      <span>{uploadingImage ? "جاري رفع الصورة..." : "رفع صورة من الجهاز"}</span>
                       <input
                         type="file"
                         accept="image/*"
@@ -536,11 +534,34 @@ export default function AdminDoctorsPage() {
                       />
                     </label>
                   </div>
+
+                  {/* Live Image Preview Box */}
+                  {formData.image && (
+                    <div className="mt-3 p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center gap-4">
+                      <div className="w-16 h-16 rounded-xl overflow-hidden bg-slate-200 border border-slate-300 flex-shrink-0">
+                        <img
+                          src={formData.image}
+                          alt="معاينة صورة الطبيب"
+                          className="w-full h-full object-cover object-top"
+                          onError={(e) => { e.target.src = "/wp-content/uploads/2026/07/NO-IMAGE.jpg"; }}
+                        />
+                      </div>
+                      <div className="text-xs space-y-1 overflow-hidden">
+                        <div className="font-extrabold text-slate-900 flex items-center gap-1.5">
+                          <Eye className="w-3.5 h-3.5 text-amber-500" />
+                          <span>معاينة مباشرة لصورة الطبيب</span>
+                        </div>
+                        <p className="text-[11px] text-slate-500 font-mono truncate max-w-sm">
+                          {formData.image}
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Full Qualifications & Bio */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  <label className="block text-xs font-extrabold text-slate-800 mb-1.5">
                     النبذة الشاملة والمؤهلات العلمية والإجراءات العلاجية (نص كامل متصل)
                   </label>
                   <textarea
@@ -548,23 +569,23 @@ export default function AdminDoctorsPage() {
                     placeholder="اكتب كامل مؤهلات الطبيب، التراخيص السريرية، والإجراءات الطبية..."
                     value={formData.experienceAr}
                     onChange={(e) => setFormData({ ...formData, experienceAr: e.target.value })}
-                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium leading-relaxed focus:outline-none focus:ring-2 focus:ring-apex-gold"
+                    className="w-full p-3 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900 placeholder:text-slate-400 leading-relaxed focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-sm"
                   />
                 </div>
 
                 {/* Submit Actions */}
-                <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200">
                   <button
                     type="button"
                     onClick={() => setShowModal(false)}
-                    className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors"
+                    className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-extrabold transition-colors"
                   >
                     إلغاء
                   </button>
 
                   <button
                     type="submit"
-                    className="px-7 py-2.5 bg-gradient-to-r from-apex-gold to-apex-gold-dark hover:from-apex-gold-dark hover:to-apex-gold-deep text-slate-950 rounded-xl font-extrabold text-xs shadow-gold transition-all"
+                    className="px-7 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl font-extrabold text-xs shadow-md transition-all"
                   >
                     {editingDoctor ? "حفظ التعديلات" : "إضافة الطبيب الآن"}
                   </button>

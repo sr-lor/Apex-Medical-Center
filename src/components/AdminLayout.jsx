@@ -40,7 +40,7 @@ export default function AdminLayout({ children }) {
     { href: "/admin/doctors", label: "إدارة الأطباء والكادر", icon: UserCheck },
     { href: "/admin/services", label: "إدارة التخصصات والعيادات", icon: Stethoscope },
     { href: "/admin/dashboard", label: "لوحة التحكم الرئيسية", icon: LayoutDashboard },
-    { href: "/admin/media", label: "مكتبة الوسائط AWS S3", icon: Image },
+    { href: "/admin/media", label: "مكتبة الوسائط والصور", icon: Image },
   ];
 
   return (
