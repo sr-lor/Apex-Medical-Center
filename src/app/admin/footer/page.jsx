@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import AdminLayout from "@/components/AdminLayout";
 import { 
   SlidersHorizontal, Save, CheckCircle2, AlertCircle, Phone, Mail, MapPin, 
-  Clock, Instagram, Youtube, Facebook, MessageCircle, Building2, Globe, FileText, Layout, Info, HelpCircle, Navigation
+  Clock, Instagram, Youtube, Facebook, MessageCircle, Building2, Globe, FileText, Layout, Navigation
 } from "lucide-react";
 
 export default function AdminFooterSettingsPage() {
@@ -13,11 +13,11 @@ export default function AdminFooterSettingsPage() {
     whatsappPhone: "96897031500",
     clinicEmail: "info@apexmedicaloman.com",
     workingHours: "السبت - الخميس: 09:00 ص - 09:00 م",
-    footerBio: "مجمع القمة الطبي في سلطنة عمان (Apex Medical Center) - وجهتك الرائدة للرعاية الصحية المتكاملة، طب وتجميل الأسنان، الجراحة التجميلية، الجلدية والليزر، وجراحات إدارة السمنة والوزن بأعلى المعايير العالمية.",
+    footerBio: "مجمع القمة الطبي في سلطنة عمان (Apex Medical Center) — وجهتكم المعتمدة للرعاية الصحية المتكاملة، طب وتجميل الأسنان، الجراحة التجميلية، الجلدية والليزر، وتخسيس الوزن بأعلى المعايير العالمية.",
     
     // Branch 1: Al Azaiba Dedicated Details
     azaibaAddress: "مسقط - العذيبة - شارع السلطان قابوس",
-    azaibaDesc: "تخصصات متكاملة وجراحات تجميلية وأسنان",
+    azaibaDesc: "المركز الرئيسي للجراحات والتجميل المتكامل والأسنان",
     azaibaMapUrl: "https://maps.app.goo.gl/yWq6D32JjmRpHQtb8",
     azaibaPhone: "968 97031500",
     azaibaWhatsapp: "96897031500",
@@ -28,7 +28,7 @@ export default function AdminFooterSettingsPage() {
 
     // Branch 2: Al Amerat Dedicated Details
     ameratAddress: "مسقط - العامرات - الشارع العام",
-    ameratDesc: "عيادات السمنة والتخسيس • ليزر والبشرة • طب عام",
+    ameratDesc: "عيادات التخسيس، البشرة والتجميل، والطب العام",
     ameratMapUrl: "https://maps.google.com",
     ameratPhone: "968 97031500",
     ameratWhatsapp: "96897031500",
@@ -44,14 +44,13 @@ export default function AdminFooterSettingsPage() {
 
     // Copyright
     copyrightText: "© 2026 مجمع القمة الطبي (Apex Medical Center Oman). جميع الحقوق محفوظة.",
-    developerText: "تطوير المؤسسة رفاه عبد القادر مؤسسة ونائبة الرئيس التنفيذي SR LOR, LLC",
+    developerText: "تطوير المؤسسة رفاه عبد القادر — نائب الرئيس التنفيذي SR LOR, LLC",
   });
 
   const [msg, setMsg] = useState({ type: "", text: "" });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Restore footer settings from localStorage
     const saved = localStorage.getItem("apex_footer_settings_json");
     if (saved) {
       try {
@@ -72,326 +71,296 @@ export default function AdminFooterSettingsPage() {
       setLoading(false);
       setMsg({
         type: "success",
-        text: "تم حفظ وتحديث تخصيصات الفروع وحسابات السوشيال ميديا الجغرافية بنجاح!",
+        text: "تم حفظ الإعدادات الرسمية وتخصيصات الفروع بنجاح.",
       });
-    }, 500);
+    }, 400);
   };
 
   return (
     <AdminLayout>
-      <div className="space-y-8 text-slate-900">
+      <div className="space-y-8 text-slate-900 font-sans text-right">
         
         {/* Header Bar */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
           <div>
-            <h1 className="text-2xl font-extrabold text-slate-900 flex items-center gap-2">
-              <SlidersHorizontal className="w-6 h-6 text-amber-500" />
-              <span>تخصيص الفروع والسوشيال ميديا الجغرافية</span>
+            <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+              <SlidersHorizontal className="w-5 h-5 text-amber-500" />
+              <span>إعدادات التذييل والبيانات الرسمية</span>
             </h1>
-            <p className="text-xs text-slate-500 font-semibold mt-1">
-              تخصيص الحسابات الرسمية، الخرائط، وأرقام الواتساب المستقلة لكل فرع (العذيبة والعامرات).
+            <p className="text-xs text-slate-500 font-medium mt-1">
+              إدارة أرقام الاتصال، الخرائط الجغرافية، وحسابات التواصل لفرعي العذيبة والعامرات.
             </p>
           </div>
 
           <button
             onClick={handleSaveSettings}
             disabled={loading}
-            className="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs rounded-2xl shadow-md transition-all hover:scale-105 disabled:opacity-50 flex items-center gap-2 self-start md:self-auto"
+            className="px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-xl shadow-sm transition-all flex items-center gap-2 self-start md:self-auto"
           >
             <Save className="w-4 h-4 text-slate-950" />
-            <span>{loading ? "جاري الحفظ..." : "حفظ وتخصيص البيانات"}</span>
+            <span>{loading ? "جاري الحفظ..." : "حفظ التغييرات"}</span>
           </button>
-        </div>
-
-        {/* Global Guide Box */}
-        <div className="bg-slate-900 text-white p-5 rounded-3xl border border-amber-500/40 space-y-2 flex items-start gap-4">
-          <div className="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-400/30 flex items-center justify-center flex-shrink-0 mt-0.5">
-            <HelpCircle className="w-6 h-6 text-amber-400" />
-          </div>
-          <div className="text-xs space-y-1 text-right">
-            <h3 className="font-extrabold text-amber-400 text-sm">💡 دليل التخصيص المنفصل لكل فرع:</h3>
-            <p className="text-slate-300 leading-relaxed font-semibold">
-              لكل فرع حسابات سوشيال ميديا وموقع جغرافي ورابط خريطة مستقل. البيانات التي تقوم بتعديلها أدناه تظهر مباشرة داخل **بطاقات الفروع العائمة** بالموقع عند اختيار المريض للفرع.
-            </p>
-          </div>
         </div>
 
         {/* Feedback Message */}
         {msg.text && (
           <div
-            className={`p-4 rounded-2xl text-xs font-extrabold flex items-center gap-2 ${
+            className={`p-4 rounded-2xl text-xs font-bold flex items-center gap-2 ${
               msg.type === "success"
                 ? "bg-emerald-50 text-emerald-900 border border-emerald-300"
                 : "bg-rose-50 text-rose-900 border border-rose-300"
             }`}
           >
             {msg.type === "success" ? (
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
             ) : (
-              <AlertCircle className="w-5 h-5 text-rose-600 flex-shrink-0" />
+              <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
             )}
             <span>{msg.text}</span>
           </div>
         )}
 
-        <form onSubmit={handleSaveSettings} className="space-y-8 text-right">
+        <form onSubmit={handleSaveSettings} className="space-y-8">
           
-          {/* SECTION 1: BRANCH 1 (AL AZAIBA) CUSTOM DEDICATED DATA */}
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-blue-200 shadow-sm space-y-5">
-            <div className="flex items-center justify-between border-b border-blue-100 pb-3">
-              <h2 className="text-base font-extrabold text-blue-900 flex items-center gap-2">
-                <Building2 className="w-5 h-5 text-blue-600" />
-                <span>1. تخصيص الفرع الأول (فرع العذيبة الرئيسي)</span>
+          {/* Section 1: Al Azaiba Branch */}
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <Building2 className="w-5 h-5 text-amber-500" />
+                <span>بيانات فرع العذيبة</span>
               </h2>
-              <span className="text-xs bg-blue-100 text-blue-800 font-extrabold px-3 py-1 rounded-xl">
-                الفرع الرئيسي
-              </span>
+              <span className="text-xs bg-slate-100 text-slate-700 font-bold px-3 py-1 rounded-lg">الفرع الرئيسي</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-extrabold text-slate-700 mb-1">العنوان الجغرافي الشارع *</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">العنوان الجغرافي</label>
                 <input
                   type="text"
                   required
                   value={footerSettings.azaibaAddress}
                   onChange={(e) => setFooterSettings({ ...footerSettings, azaibaAddress: e.target.value })}
-                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900"
                 />
-                <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 عنوان العذيبة بالكامل.</span>
               </div>
 
               <div>
-                <label className="block text-xs font-extrabold text-slate-700 mb-1">رابط الموقع على خرائط جوجل *</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">رابط Google Maps</label>
                 <input
                   type="text"
                   required
                   value={footerSettings.azaibaMapUrl}
                   onChange={(e) => setFooterSettings({ ...footerSettings, azaibaMapUrl: e.target.value })}
-                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 text-left dir-ltr"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900 text-left dir-ltr"
                 />
-                <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 رابط Google Maps فرع العذيبة.</span>
               </div>
 
               <div>
-                <label className="block text-xs font-extrabold text-slate-700 mb-1">هاتف فرع العذيبة *</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">هاتف الفرع المباشر</label>
                 <input
                   type="text"
                   required
                   value={footerSettings.azaibaPhone}
                   onChange={(e) => setFooterSettings({ ...footerSettings, azaibaPhone: e.target.value })}
-                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 text-left dir-ltr"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900 text-left dir-ltr"
                 />
-                <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 هاتف الاستقبال المباشر.</span>
               </div>
             </div>
 
-            {/* Social Accounts for Al Azaiba */}
-            <div className="p-4 bg-blue-50/50 rounded-2xl border border-blue-200 space-y-3">
-              <span className="text-xs font-extrabold text-blue-900 block">حسابات السوشيال ميديا الخاصة بفرع العذيبة:</span>
+            {/* Social Accounts */}
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+              <span className="text-xs font-bold text-slate-800 block">حسابات التواصل الاجتماعي لفرع العذيبة</span>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1 flex items-center gap-1">
-                    <Instagram className="w-3.5 h-3.5 text-pink-600" />
-                    <span>إنستغرام فرع العذيبة</span>
-                  </label>
+                  <label className="block text-[11px] font-medium text-slate-600 mb-1">Instagram</label>
                   <input
                     type="text"
                     value={footerSettings.azaibaInstagramUrl}
                     onChange={(e) => setFooterSettings({ ...footerSettings, azaibaInstagramUrl: e.target.value })}
-                    className="w-full p-2 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900 text-left dir-ltr"
+                    className="w-full p-2 bg-white border border-slate-300 rounded-xl text-xs font-medium text-slate-900 text-left dir-ltr"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1 flex items-center gap-1">
-                    <Youtube className="w-3.5 h-3.5 text-red-600" />
-                    <span>يوتيوب فرع العذيبة</span>
-                  </label>
+                  <label className="block text-[11px] font-medium text-slate-600 mb-1">YouTube</label>
                   <input
                     type="text"
                     value={footerSettings.azaibaYoutubeUrl}
                     onChange={(e) => setFooterSettings({ ...footerSettings, azaibaYoutubeUrl: e.target.value })}
-                    className="w-full p-2 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900 text-left dir-ltr"
+                    className="w-full p-2 bg-white border border-slate-300 rounded-xl text-xs font-medium text-slate-900 text-left dir-ltr"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1 flex items-center gap-1">
-                    <Facebook className="w-3.5 h-3.5 text-blue-600" />
-                    <span>فيسبوك فرع العذيبة</span>
-                  </label>
+                  <label className="block text-[11px] font-medium text-slate-600 mb-1">Facebook</label>
                   <input
                     type="text"
                     value={footerSettings.azaibaFacebookUrl}
                     onChange={(e) => setFooterSettings({ ...footerSettings, azaibaFacebookUrl: e.target.value })}
-                    className="w-full p-2 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900 text-left dir-ltr"
+                    className="w-full p-2 bg-white border border-slate-300 rounded-xl text-xs font-medium text-slate-900 text-left dir-ltr"
                   />
                 </div>
               </div>
             </div>
           </div>
 
-          {/* SECTION 2: BRANCH 2 (AL AMERAT) CUSTOM DEDICATED DATA */}
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-emerald-200 shadow-sm space-y-5">
-            <div className="flex items-center justify-between border-b border-emerald-100 pb-3">
-              <h2 className="text-base font-extrabold text-emerald-900 flex items-center gap-2">
+          {/* Section 2: Al Amerat Branch */}
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
                 <Building2 className="w-5 h-5 text-emerald-600" />
-                <span>2. تخصيص الفرع الثاني (فرع العامرات التخصصي)</span>
+                <span>بيانات فرع العامرات</span>
               </h2>
-              <span className="text-xs bg-emerald-100 text-emerald-800 font-extrabold px-3 py-1 rounded-xl">
-                الفرع التخصصي
-              </span>
+              <span className="text-xs bg-emerald-50 text-emerald-800 font-bold px-3 py-1 rounded-lg">الفرع التخصصي</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-extrabold text-slate-700 mb-1">العنوان الجغرافي الشارع *</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">العنوان الجغرافي</label>
                 <input
                   type="text"
                   required
                   value={footerSettings.ameratAddress}
                   onChange={(e) => setFooterSettings({ ...footerSettings, ameratAddress: e.target.value })}
-                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900"
                 />
-                <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 عنوان العامرات بالكامل.</span>
               </div>
 
               <div>
-                <label className="block text-xs font-extrabold text-slate-700 mb-1">رابط الموقع على خرائط جوجل *</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">رابط Google Maps</label>
                 <input
                   type="text"
                   required
                   value={footerSettings.ameratMapUrl}
                   onChange={(e) => setFooterSettings({ ...footerSettings, ameratMapUrl: e.target.value })}
-                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 text-left dir-ltr"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900 text-left dir-ltr"
                 />
-                <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 رابط Google Maps فرع العامرات.</span>
               </div>
 
               <div>
-                <label className="block text-xs font-extrabold text-slate-700 mb-1">هاتف فرع العامرات *</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">هاتف الفرع المباشر</label>
                 <input
                   type="text"
                   required
                   value={footerSettings.ameratPhone}
                   onChange={(e) => setFooterSettings({ ...footerSettings, ameratPhone: e.target.value })}
-                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 text-left dir-ltr"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900 text-left dir-ltr"
                 />
-                <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 هاتف فرع العامرات المباشر.</span>
               </div>
             </div>
 
-            {/* Social Accounts for Al Amerat */}
-            <div className="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-200 space-y-3">
-              <span className="text-xs font-extrabold text-emerald-900 block">حسابات السوشيال ميديا الخاصة بفرع العامرات:</span>
+            {/* Social Accounts */}
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+              <span className="text-xs font-bold text-slate-800 block">حسابات التواصل الاجتماعي لفرع العامرات</span>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1 flex items-center gap-1">
-                    <Instagram className="w-3.5 h-3.5 text-pink-600" />
-                    <span>إنستغرام فرع العامرات</span>
-                  </label>
+                  <label className="block text-[11px] font-medium text-slate-600 mb-1">Instagram</label>
                   <input
                     type="text"
                     value={footerSettings.ameratInstagramUrl}
                     onChange={(e) => setFooterSettings({ ...footerSettings, ameratInstagramUrl: e.target.value })}
-                    className="w-full p-2 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900 text-left dir-ltr"
+                    className="w-full p-2 bg-white border border-slate-300 rounded-xl text-xs font-medium text-slate-900 text-left dir-ltr"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1 flex items-center gap-1">
-                    <Youtube className="w-3.5 h-3.5 text-red-600" />
-                    <span>يوتيوب فرع العامرات</span>
-                  </label>
+                  <label className="block text-[11px] font-medium text-slate-600 mb-1">YouTube</label>
                   <input
                     type="text"
                     value={footerSettings.ameratYoutubeUrl}
                     onChange={(e) => setFooterSettings({ ...footerSettings, ameratYoutubeUrl: e.target.value })}
-                    className="w-full p-2 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900 text-left dir-ltr"
+                    className="w-full p-2 bg-white border border-slate-300 rounded-xl text-xs font-medium text-slate-900 text-left dir-ltr"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1 flex items-center gap-1">
-                    <Facebook className="w-3.5 h-3.5 text-blue-600" />
-                    <span>فيسبوك فرع العامرات</span>
-                  </label>
+                  <label className="block text-[11px] font-medium text-slate-600 mb-1">Facebook</label>
                   <input
                     type="text"
                     value={footerSettings.ameratFacebookUrl}
                     onChange={(e) => setFooterSettings({ ...footerSettings, ameratFacebookUrl: e.target.value })}
-                    className="w-full p-2 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900 text-left dir-ltr"
+                    className="w-full p-2 bg-white border border-slate-300 rounded-xl text-xs font-medium text-slate-900 text-left dir-ltr"
                   />
                 </div>
               </div>
             </div>
           </div>
 
-          {/* SECTION 3: GLOBAL CLINIC DATA & COPYRIGHTS */}
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-5">
-            <h2 className="text-base font-extrabold text-slate-900 flex items-center gap-2 border-b border-slate-200 pb-3">
+          {/* Section 3: General Info & Copyright */}
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-4">
               <Globe className="w-5 h-5 text-amber-500" />
-              <span>3. بيانات المجمع الرئيسية ونصوص حقوق النشر</span>
+              <span>معلومات المركز العامة وحقوق النشر</span>
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-extrabold text-slate-700 mb-1">البريد الإلكتروني الرئيسي *</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">البريد الإلكتروني المعتمد</label>
                 <input
                   type="email"
                   required
                   value={footerSettings.clinicEmail}
                   onChange={(e) => setFooterSettings({ ...footerSettings, clinicEmail: e.target.value })}
-                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 text-left dir-ltr"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900 text-left dir-ltr"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-extrabold text-slate-700 mb-1">الوصف التعريفي بالتذييل *</label>
-                <textarea
-                  rows={2}
+                <label className="block text-xs font-bold text-slate-700 mb-1">أوقات العمل الرسمية</label>
+                <input
+                  type="text"
                   required
-                  value={footerSettings.footerBio}
-                  onChange={(e) => setFooterSettings({ ...footerSettings, footerBio: e.target.value })}
-                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900"
+                  value={footerSettings.workingHours}
+                  onChange={(e) => setFooterSettings({ ...footerSettings, workingHours: e.target.value })}
+                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900"
                 />
               </div>
             </div>
 
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">نبذة المركز بالتذييل</label>
+              <textarea
+                rows={2}
+                required
+                value={footerSettings.footerBio}
+                onChange={(e) => setFooterSettings({ ...footerSettings, footerBio: e.target.value })}
+                className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900"
+              />
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-extrabold text-slate-700 mb-1">نص حقوق النشر (Copyright) *</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">نص حقوق النشر (Copyright)</label>
                 <input
                   type="text"
                   value={footerSettings.copyrightText}
                   onChange={(e) => setFooterSettings({ ...footerSettings, copyrightText: e.target.value })}
-                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-extrabold text-slate-700 mb-1">نص حقوق التطوير لشركة SR LOR *</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">نص حقوق التطوير (SR LOR)</label>
                 <input
                   type="text"
                   value={footerSettings.developerText}
                   onChange={(e) => setFooterSettings({ ...footerSettings, developerText: e.target.value })}
-                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900"
                 />
               </div>
             </div>
           </div>
 
-          <div className="flex justify-end pt-4">
+          <div className="flex justify-end pt-2">
             <button
               type="submit"
               disabled={loading}
-              className="px-8 py-3.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs rounded-2xl shadow-lg transition-all hover:scale-105 flex items-center gap-2"
+              className="px-8 py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-xl shadow-md transition-all flex items-center gap-2"
             >
               <Save className="w-4 h-4 text-slate-950" />
-              <span>{loading ? "جاري الحفظ..." : "حفظ وتخصيص بيانات الفروع"}</span>
+              <span>{loading ? "جاري الحفظ..." : "حفظ التغييرات"}</span>
             </button>
           </div>
 

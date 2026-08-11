@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import AdminLayout from "@/components/AdminLayout";
 import { 
   Stethoscope, Plus, Trash2, Edit3, Upload, CheckCircle2, 
-  AlertCircle, Search, Filter, MapPin, Building2, Shield, X, Eye, HelpCircle, UserCheck
+  AlertCircle, Search, Filter, MapPin, Building2, Shield, X, Eye
 } from "lucide-react";
 
 export default function AdminServicesPage() {
@@ -117,7 +117,7 @@ export default function AdminServicesPage() {
         setFormData({ ...formData, image: data.url });
         setMsg({
           type: "success",
-          text: "تم رفع صورة العيادة واختيارها بنجاح!",
+          text: "تم رفع صورة العيادة بنجاح.",
         });
       } else {
         setMsg({ type: "error", text: data.message || "حدث خطأ أثناء رفع الصورة." });
@@ -133,7 +133,7 @@ export default function AdminServicesPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.titleAr) {
-      setMsg({ type: "error", text: "يرجى كتابة اسم العيادة والتخصص بالعربية." });
+      setMsg({ type: "error", text: "يرجى كتابة اسم العيادة." });
       return;
     }
 
@@ -152,7 +152,7 @@ export default function AdminServicesPage() {
       if (data.success) {
         setMsg({
           type: "success",
-          text: isEdit ? "تم تحديث بيانات العيادة بنجاح!" : "تمت إضافة العيادة والتخصص بنجاح!",
+          text: isEdit ? "تم حفظ التعديلات بنجاح." : "تمت إضافة العيادة بنجاح.",
         });
         setShowModal(false);
         fetchServices();
@@ -201,55 +201,42 @@ export default function AdminServicesPage() {
 
   return (
     <AdminLayout>
-      <div className="space-y-8 text-slate-900">
+      <div className="space-y-8 text-slate-900 font-sans text-right">
         
         {/* Header Bar */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
           <div>
-            <h1 className="text-2xl font-extrabold text-slate-900 flex items-center gap-2">
-              <Stethoscope className="w-6 h-6 text-amber-500" />
-              <span>إدارة العيادات والتخصصات الطبية</span>
+            <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+              <Stethoscope className="w-5 h-5 text-amber-500" />
+              <span>إدارة العيادات والأقسام الطبية</span>
             </h1>
-            <p className="text-xs text-slate-500 font-semibold mt-1">
-              إضافة عيادات جديدة وتعديل العيادات السابقة، وتحديد فروع العذيبة والعامرات لكل عيادة.
+            <p className="text-xs text-slate-500 font-medium mt-1">
+              إضافة وتعديل التخصصات الطبية وتخصيص تواجدها حسب فرعي العذيبة والعامرات.
             </p>
           </div>
 
           <button
             onClick={openAddModal}
-            className="px-5 py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs rounded-2xl shadow-md transition-all hover:scale-105 flex items-center gap-2 self-start md:self-auto"
+            className="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-xl shadow-sm transition-all flex items-center gap-2 self-start md:self-auto"
           >
             <Plus className="w-4 h-4 text-slate-950" />
-            <span>إضافة عيادة وتخصص جديد</span>
+            <span>إضافة عيادة جديدة</span>
           </button>
-        </div>
-
-        {/* Global Explanatory Guide Box (شرح إرشادي شامل) */}
-        <div className="bg-slate-900 text-white p-5 rounded-3xl border border-amber-500/40 space-y-2 flex items-start gap-4">
-          <div className="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-400/30 flex items-center justify-center flex-shrink-0 mt-0.5">
-            <HelpCircle className="w-6 h-6 text-amber-400" />
-          </div>
-          <div className="text-xs space-y-1 text-right">
-            <h3 className="font-extrabold text-amber-400 text-sm">💡 دليل الشرح الإرشادي لإدارة العيادات والتخصصات:</h3>
-            <p className="text-slate-300 leading-relaxed font-semibold">
-              يمكنك إضافة عيادات وأقسام علاجية جديدة أو تعديل العيادات السابقة. فور تخصيص الفروع لكل عيادة (العذيبة أو العامرات)، سيتم تحديث الفلاتر التفاعلية في الموقع والتذييل تلقائياً.
-            </p>
-          </div>
         </div>
 
         {/* Feedback Message */}
         {msg.text && (
           <div
-            className={`p-4 rounded-2xl text-xs font-extrabold flex items-center gap-2 ${
+            className={`p-4 rounded-2xl text-xs font-bold flex items-center gap-2 ${
               msg.type === "success"
                 ? "bg-emerald-50 text-emerald-900 border border-emerald-300"
                 : "bg-rose-50 text-rose-900 border border-rose-300"
             }`}
           >
             {msg.type === "success" ? (
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
             ) : (
-              <AlertCircle className="w-5 h-5 text-rose-600 flex-shrink-0" />
+              <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
             )}
             <span>{msg.text}</span>
           </div>
@@ -261,17 +248,17 @@ export default function AdminServicesPage() {
             <Search className="w-4 h-4 text-slate-400 absolute right-3 top-3" />
             <input
               type="text"
-              placeholder="ابحث عن عيادة أو تخصص..."
+              placeholder="البحث في العيادات..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-3 pr-9 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="w-full pl-3 pr-9 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
             />
           </div>
 
           <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
-            <span className="text-xs font-extrabold text-slate-700 flex items-center gap-1">
+            <span className="text-xs font-bold text-slate-700 flex items-center gap-1">
               <Filter className="w-3.5 h-3.5 text-amber-500" />
-              <span>فلترة الفروع:</span>
+              <span>الفروع:</span>
             </span>
 
             <button
@@ -282,7 +269,7 @@ export default function AdminServicesPage() {
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200"
               }`}
             >
-              جميع الفروع ({services.length})
+              الكل ({services.length})
             </button>
 
             <button
@@ -309,28 +296,26 @@ export default function AdminServicesPage() {
           </div>
         </div>
 
-        {/* Existing Clinics Grid (إدارة العيادات والتخصصات السابقة) */}
+        {/* Existing Clinics Grid */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-amber-500" />
-              <span>إدارة العيادات والتخصصات السابقة ({filteredServices.length})</span>
-            </h2>
-          </div>
+          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+            <Building2 className="w-5 h-5 text-amber-500" />
+            <span>قائمة العيادات المعتمدة ({filteredServices.length})</span>
+          </h2>
 
           {loading ? (
-            <div className="py-12 text-center text-xs font-bold text-slate-500">جاري تحميل بيانات العيادات...</div>
+            <div className="py-12 text-center text-xs font-medium text-slate-500">جاري تحميل البيانات...</div>
           ) : filteredServices.length === 0 ? (
             <div className="py-12 text-center bg-white rounded-3xl border border-slate-200 space-y-3">
-              <Stethoscope className="w-10 h-10 text-slate-300 mx-auto" />
-              <p className="text-xs font-bold text-slate-500">لا توجد عيادات مطابقة للبحث أو الفلتر المحدد.</p>
+              <Stethoscope className="w-8 h-8 text-slate-300 mx-auto" />
+              <p className="text-xs font-medium text-slate-500">لا توجد عيادات مطابقة للبحث.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredServices.map((serv) => (
                 <div
                   key={serv.id}
-                  className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow"
+                  className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow"
                 >
                   <div className="space-y-3">
                     <div className="relative h-44 bg-slate-100 overflow-hidden">
@@ -341,21 +326,21 @@ export default function AdminServicesPage() {
                       />
                       <div className="absolute top-3 right-3 flex items-center gap-1.5">
                         {serv.branchIds?.includes("azaiba") && (
-                          <span className="bg-blue-600 text-white text-[10px] font-extrabold px-2.5 py-1 rounded-lg shadow-sm">
+                          <span className="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm">
                             العذيبة
                           </span>
                         )}
                         {serv.branchIds?.includes("amerat") && (
-                          <span className="bg-emerald-600 text-white text-[10px] font-extrabold px-2.5 py-1 rounded-lg shadow-sm">
+                          <span className="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm">
                             العامرات
                           </span>
                         )}
                       </div>
                     </div>
 
-                    <div className="p-5 space-y-2 text-right">
-                      <h3 className="font-extrabold text-slate-900 text-base">{serv.titleAr}</h3>
-                      <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed font-semibold">
+                    <div className="p-5 space-y-2">
+                      <h3 className="font-bold text-slate-900 text-base">{serv.titleAr}</h3>
+                      <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed font-normal">
                         {serv.descriptionAr || serv.shortDescriptionAr}
                       </p>
                     </div>
@@ -364,18 +349,18 @@ export default function AdminServicesPage() {
                   <div className="p-5 pt-0 flex items-center gap-2 border-t border-slate-100 mt-4">
                     <button
                       onClick={() => openEditModal(serv)}
-                      className="flex-1 py-2.5 bg-slate-100 hover:bg-amber-500 hover:text-slate-950 text-slate-800 rounded-xl text-xs font-extrabold transition-all flex items-center justify-center gap-1.5"
+                      className="flex-1 py-2 bg-slate-100 hover:bg-amber-500 hover:text-slate-950 text-slate-800 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5"
                     >
-                      <Edit3 className="w-4 h-4" />
-                      <span>تعديل التفاصيل</span>
+                      <Edit3 className="w-3.5 h-3.5" />
+                      <span>تعديل</span>
                     </button>
 
                     <button
                       onClick={() => handleDelete(serv.id, serv.titleAr)}
-                      className="p-2.5 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-xl border border-rose-200 transition-colors"
-                      title="حذف العيادة"
+                      className="p-2 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-xl border border-rose-200 transition-colors"
+                      title="حذف"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
@@ -384,15 +369,15 @@ export default function AdminServicesPage() {
           )}
         </div>
 
-        {/* Add/Edit Clinic Modal with Comprehensive Explanatory Tooltips */}
+        {/* Modal Dialog */}
         {showModal && (
           <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
             <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-2xl w-full p-6 sm:p-8 space-y-6 text-right my-8">
               
               <div className="flex items-center justify-between border-b border-slate-200 pb-4">
-                <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                   <Stethoscope className="w-5 h-5 text-amber-500" />
-                  <span>{editingService ? "تعديل تفاصيل العيادة والتخصص" : "إضافة عيادة جديدة وتخصص طبي"}</span>
+                  <span>{editingService ? "تعديل بيانات العيادة" : "إضافة عيادة جديدة"}</span>
                 </h3>
                 <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600">
                   <X className="w-5 h-5" />
@@ -403,38 +388,35 @@ export default function AdminServicesPage() {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-extrabold text-slate-700 mb-1">اسم العيادة / التخصص (بالعربية) *</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">اسم العيادة (بالعربية) *</label>
                     <input
                       type="text"
                       required
-                      placeholder="مثال: قسم طب وتجميل الأسنان"
+                      placeholder="قسم طب وتجميل الأسنان"
                       value={formData.titleAr}
                       onChange={(e) => setFormData({ ...formData, titleAr: e.target.value })}
-                      className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900 focus:ring-2 focus:ring-amber-500"
                     />
-                    <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 الشرح: الاسم الذي يظهر في قائمة التخصصات والتذييل.</span>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-extrabold text-slate-700 mb-1">اسم العيادة (بالإنجليزية)</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">اسم العيادة (بالإنجليزية)</label>
                     <input
                       type="text"
                       placeholder="Cosmetic Dentistry"
                       value={formData.titleEn}
                       onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })}
-                      className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 text-left focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900 text-left focus:ring-2 focus:ring-amber-500"
                       dir="ltr"
                     />
-                    <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 الشرح: الاسم الإنجليزي في الرابط والمعاينات.</span>
                   </div>
                 </div>
 
                 {/* Branch Checkboxes */}
                 <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
-                  <label className="block text-xs font-extrabold text-slate-800">تحديد فروع توفر هذه العيادة *</label>
-                  <p className="text-[10px] text-slate-500 font-semibold">📌 الشرح: حدد الفرع الذي تتوفر فيه هذه العيادة لفلترتها بالموقع.</p>
+                  <label className="block text-xs font-bold text-slate-800">تخصيص الفروع المتاحة بها *</label>
                   
-                  <div className="flex items-center gap-4 pt-1">
+                  <div className="flex items-center gap-6 pt-1">
                     <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-800">
                       <input
                         type="checkbox"
@@ -452,22 +434,21 @@ export default function AdminServicesPage() {
                         onChange={() => handleBranchToggle("amerat")}
                         className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500"
                       />
-                      <span>فرع العامرات</span>
+                      <span>فرع العامرات التخصصي</span>
                     </label>
                   </div>
                 </div>
 
-                {/* Live Image Preview & Upload Box */}
+                {/* Image Upload */}
                 <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
-                  <label className="block text-xs font-extrabold text-slate-800">صورة العيادة والتجهيزات *</label>
-                  <p className="text-[10px] text-slate-500 font-semibold">📌 الشرح: يمكنك رفع صورة جديدة أو اختيار رابط صورة معتمدة.</p>
+                  <label className="block text-xs font-bold text-slate-800">صورة العيادة *</label>
 
                   <div className="flex items-center gap-4">
-                    <div className="w-20 h-20 rounded-2xl bg-white border border-slate-300 overflow-hidden flex-shrink-0 flex items-center justify-center shadow-sm">
+                    <div className="w-16 h-16 rounded-xl bg-white border border-slate-300 overflow-hidden flex-shrink-0 flex items-center justify-center shadow-sm">
                       {formData.image ? (
                         <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
                       ) : (
-                        <Eye className="w-6 h-6 text-slate-300" />
+                        <Eye className="w-5 h-5 text-slate-300" />
                       )}
                     </div>
 
@@ -476,12 +457,12 @@ export default function AdminServicesPage() {
                         type="text"
                         value={formData.image}
                         onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                        className="w-full p-2 bg-white border border-slate-300 rounded-xl text-xs font-mono font-bold text-slate-800 text-left dir-ltr"
+                        className="w-full p-2 bg-white border border-slate-300 rounded-xl text-xs font-mono font-medium text-slate-800 text-left dir-ltr"
                       />
 
                       <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold cursor-pointer transition-colors">
                         <Upload className="w-3.5 h-3.5 text-amber-400" />
-                        <span>{uploadingImage ? "جاري الرفع..." : "رفع صورة جديدة"}</span>
+                        <span>{uploadingImage ? "جاري الرفع..." : "رفع صورة"}</span>
                         <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
                       </label>
                     </div>
@@ -489,44 +470,42 @@ export default function AdminServicesPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-extrabold text-slate-700 mb-1">وصف مقتضب للعيادة *</label>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">وصف مقتضب *</label>
                   <textarea
                     rows={2}
                     required
-                    placeholder="وصف مقتضب يظهر في البطاقة السريعة..."
+                    placeholder="وصف تعريفى مقتضب بالواجهة الرئيسية..."
                     value={formData.descriptionAr}
                     onChange={(e) => setFormData({ ...formData, descriptionAr: e.target.value, shortDescriptionAr: e.target.value })}
-                    className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900 focus:ring-2 focus:ring-amber-500"
                   />
-                  <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 الشرح: السطران التعريفيان في الواجهة الرئيسية.</span>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-extrabold text-slate-700 mb-1">الشرح الطبي الشامل والخدمات المتاحة *</label>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">المقال والوصف الطبي التفصيلي *</label>
                   <textarea
                     rows={4}
-                    placeholder="فقرة تفصيلية تشرح الخدمات والأجهزة الطبية المتوفرة بالعيادة..."
+                    placeholder="شرح كامل للخدمات والأجهزة الطبية المتوفرة بالعيادة..."
                     value={formData.fullParagraphAr}
                     onChange={(e) => setFormData({ ...formData, fullParagraphAr: e.target.value })}
-                    className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900 focus:ring-2 focus:ring-amber-500"
                   />
-                  <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 الشرح: المقال الكامل الشامل الذي يقابله المريض في صفحة العيادة.</span>
                 </div>
 
                 <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200">
                   <button
                     type="button"
                     onClick={() => setShowModal(false)}
-                    className="px-4 py-2.5 bg-slate-200 text-slate-700 rounded-xl font-bold text-xs hover:bg-slate-300"
+                    className="px-4 py-2.5 bg-slate-100 text-slate-700 rounded-xl font-bold text-xs hover:bg-slate-200"
                   >
                     إلغاء
                   </button>
                   <button
                     type="submit"
                     disabled={loading}
-                    className="px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl font-black text-xs shadow-md"
+                    className="px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl font-bold text-xs shadow-md"
                   >
-                    {loading ? "جاري الحفظ..." : editingService ? "حفظ التعديلات" : "إضافة العيادة بنجاح"}
+                    {loading ? "جاري الحفظ..." : editingService ? "حفظ التعديلات" : "إضافة العيادة"}
                   </button>
                 </div>
 
