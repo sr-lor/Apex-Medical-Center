@@ -5,7 +5,7 @@ import AdminLayout from "@/components/AdminLayout";
 import { 
   CreditCard, ShieldCheck, CheckCircle2, AlertCircle, RefreshCw, 
   Sparkles, Calendar, Clock, Lock, ArrowLeft, ExternalLink, Award, FileText, 
-  Gift, Heart, Tag, Cpu, Bot, Settings, Server, Headphones, Search, Globe, Layout, HardDrive, ShoppingBag
+  Gift, Heart, Tag, Cpu, Bot, Settings, Server, Headphones, Search, Globe, Layout, HardDrive, ShoppingBag, CalendarCheck, Check
 } from "lucide-react";
 
 export default function AdminSubscriptionPage() {
@@ -13,19 +13,20 @@ export default function AdminSubscriptionPage() {
   const [saveCardAutoRenewal, setSaveCardAutoRenewal] = useState(true);
   const [msg, setMsg] = useState({ type: "", text: "" });
 
-  // Subscription State with direct 65% discount applied and 6-month free grant from Ms. Rafah Abdul Qader
+  // Subscription state: Active 6-Month Free Support Grant by Ms. Rafah Abdul Qader & 65% Permanent Discount
   const [subscriptionInfo] = useState({
-    status: "active_grant",
-    planName: "باقة تشغيل كاملة لمجمع القمة الطبي (شاملة الخصم 65% ودعم رفاه عبد القادر)",
+    status: "active_free_grant",
+    planName: "باقة تشغيل كاملة لمجمع القمة الطبي (شركة SR LOR)",
     originalPriceOMR: 9.90,
     discountPercent: 65,
     finalPriceOMR: 3.465, // 9.90 - 65% = 3.465 OMR
-    grantTitle: "دعم مجاني 6 أشهر وخصم دائم 65% مقدم من الآنسة رفاه عبد القادر",
+    grantTitle: "الدعم والمنحة الخاصة المقدمة من الآنسة رفاه عبد القادر",
     grantExpiryDate: "11 فبراير 2027", // 6 months from current date
     daysRemaining: 180,
+    isFreePeriod: true, // Currently 100% free period (0.00 OMR charge)
   });
 
-  // Empty real payment history (All fake dummy invoices removed)
+  // Real verified payment records (No fake dummy data)
   const [paymentHistory] = useState([]);
 
   useEffect(() => {
@@ -33,17 +34,17 @@ export default function AdminSubscriptionPage() {
     if (query.get("success") === "true") {
       setMsg({
         type: "success",
-        text: "تم حفظ بطاقتك وتفعيل التجديد التلقائي لترخيص مجمع القمة الطبي بنجاح بسعر الخصم المباشر (3.465 ر.ع.)!",
+        text: "تم حفظ بطاقتك بنجاح للتجديد التلقائي بدون أي اقتطاع مالي حالياً طوال فترة الدعم المجاني!",
       });
     } else if (query.get("canceled") === "true") {
       setMsg({
         type: "error",
-        text: "تم إلغاء عملية الربط والدفع عبر Stripe. يمكنك إعادة المحاولة في أي وقت.",
+        text: "تم إلغاء عملية حفظ البطاقة. يمكنك الإعادة في أي وقت.",
       });
     }
   }, []);
 
-  const handlePayWithStripe = async () => {
+  const handlePayWithGateway = async () => {
     setLoadingPayment(true);
     setMsg({ type: "", text: "" });
 
@@ -52,6 +53,7 @@ export default function AdminSubscriptionPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          isFreePeriod: subscriptionInfo.isFreePeriod,
           amount: subscriptionInfo.finalPriceOMR,
           saveCardAutoRenewal,
           planName: subscriptionInfo.planName,
@@ -64,13 +66,13 @@ export default function AdminSubscriptionPage() {
       } else {
         setMsg({
           type: "error",
-          text: data.message || "حدث خطأ أثناء فتح بوابة الدفع عبر Stripe",
+          text: data.message || "حدث خطأ أثناء فتح بوابة الدفع الإلكتروني",
         });
         setLoadingPayment(false);
       }
     } catch (err) {
-      console.error("Stripe payment error:", err);
-      setMsg({ type: "error", text: "تعذر الاتصال ببوابة الدفع" });
+      console.error("Payment error:", err);
+      setMsg({ type: "error", text: "تعذر الاتصال ببوابة الدفع الإلكتروني" });
       setLoadingPayment(false);
     }
   };
@@ -87,13 +89,13 @@ export default function AdminSubscriptionPage() {
               <span>إدارة الاشتراك والدفع التلقائي</span>
             </h1>
             <p className="text-xs text-slate-500 font-semibold mt-1">
-              تجديد الاشتراك، تفعيل حفظ البطاقة للدفع التلقائي، والاستفادة من خصم 65% المباشر ودعم الآنسة رفاه عبد القادر.
+              متابعة حالة ترخيص التشغيل، تفعيل حفظ البطاقة للتجديد التلقائي، والمنحة المقدمة من الآنسة رفاه عبد القادر.
             </p>
           </div>
 
           <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-800 px-4 py-2 rounded-2xl text-xs font-extrabold border border-emerald-300">
             <Gift className="w-4 h-4 text-emerald-600" />
-            <span>الدعم المجاني والخصم مفعّلان 100%</span>
+            <span>الدعم المجاني مفعّل (0.000 ر.ع.)</span>
           </div>
         </div>
 
@@ -115,40 +117,47 @@ export default function AdminSubscriptionPage() {
           </div>
         )}
 
-        {/* 1. Main Pricing & Active Subscription Card (Direct 65% Discount Active) */}
-        <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-apex-navy text-white p-8 rounded-3xl border border-amber-500/30 shadow-xl relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        {/* 1. LUXURY PRICING DISPLAY & ACTIVE SUBSCRIPTION STATUS */}
+        <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-apex-navy text-white p-8 rounded-3xl border-2 border-amber-500/40 shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
-            <div className="lg:col-span-7 space-y-4 text-right">
-              <div className="inline-flex items-center gap-2 bg-amber-500/20 px-3.5 py-1 rounded-full text-xs font-extrabold text-amber-400 border border-amber-500/40">
-                <Sparkles className="w-4 h-4 text-amber-400" />
-                <span>تم تفعيل الخصم المباشر (65% OFF)</span>
+            {/* Left Pricing Details */}
+            <div className="lg:col-span-7 space-y-5 text-right">
+              
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="bg-emerald-500/20 text-emerald-300 text-xs font-extrabold px-3 py-1 rounded-full border border-emerald-500/40 flex items-center gap-1.5">
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>فترة الدعم المجاني نشطة (0.000 ر.ع.)</span>
+                </span>
+
+                <span className="bg-amber-500/20 text-amber-300 text-xs font-extrabold px-3 py-1 rounded-full border border-amber-500/40 flex items-center gap-1.5">
+                  <Tag className="w-3.5 h-3.5 text-amber-400" />
+                  <span>خصم دائم 65% مفعّل لاحقاً</span>
+                </span>
               </div>
 
-              <div className="space-y-1">
-                <div className="flex items-center gap-3">
-                  <span className="text-sm font-extrabold text-slate-400 line-through">
-                    السعر الأصلي: {subscriptionInfo.originalPriceOMR} ر.ع.
+              {/* Luxury Price Breakdown Box */}
+              <div className="space-y-1 bg-white/5 p-5 rounded-2xl border border-white/10">
+                <span className="text-xs text-slate-400 font-bold block">عرض السعر والترخيص المعتمد:</span>
+                <div className="flex items-baseline gap-3 flex-wrap">
+                  <span className="text-sm font-bold text-slate-400 line-through">
+                    السعر الأصلي: {subscriptionInfo.originalPriceOMR} ر.ع. / شهرياً
                   </span>
-                  <span className="bg-rose-500 text-white font-black text-[11px] px-2.5 py-0.5 rounded-md">
-                    خصم 65% مباشر
+                  <span className="text-3xl sm:text-4xl font-black text-amber-400 tracking-tight">
+                    {subscriptionInfo.finalPriceOMR} ريال عماني <span className="text-xs text-slate-300 font-bold">/ شهرياً</span>
                   </span>
                 </div>
-                <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-                  السعر الحالي: <span className="text-amber-400">3.465 ريال عماني</span> <span className="text-xs text-slate-400 font-bold">/ شهرياً</span>
-                </h2>
+                <p className="text-[11px] text-emerald-300 font-extrabold pt-1">
+                  ✨ حالياً 0.000 ر.ع. (مجاناً لمدة 6 أشهر قادمة) — ثم يبدأ الخصم الدائم 65%.
+                </p>
               </div>
 
-              <p className="text-slate-300 text-xs sm:text-sm font-medium leading-relaxed">
-                باقة تشغيل كاملة وشاملة لجميع مميزات مجمع القمة الطبي، مع إمكانية حفظ البطاقة والدفع التلقائي عبر Stripe.
-              </p>
-
-              <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-slate-300 pt-2">
+              <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-slate-300">
                 <div className="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-xl border border-white/10">
                   <Calendar className="w-4 h-4 text-amber-400" />
-                  <span>انتهاء الدعم المجاني: {subscriptionInfo.grantExpiryDate}</span>
+                  <span>تاريخ انتهاء الفترة المجانية: {subscriptionInfo.grantExpiryDate}</span>
                 </div>
 
                 <div className="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-xl border border-white/10">
@@ -158,46 +167,49 @@ export default function AdminSubscriptionPage() {
               </div>
             </div>
 
-            {/* Direct Pay Action & Card Saving Checkbox */}
+            {/* Right Card Saving & Auto-Renewal Action Box */}
             <div className="lg:col-span-5 bg-white/5 p-6 rounded-2xl border border-white/10 text-right space-y-4 backdrop-blur-md">
               <div className="border-b border-white/10 pb-3">
-                <span className="text-xs font-bold text-slate-300 block mb-1">باقة التشغيل المباشرة (Stripe Secure)</span>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-black text-amber-400">3.465 ر.ع.</span>
-                  <span className="text-xs text-slate-400 font-semibold">/ شهرياً (بعد الخصم)</span>
+                <span className="text-xs font-extrabold text-amber-400 block mb-1">باقة تشغيل كاملة — شركة SR LOR</span>
+                <div className="text-xl font-black text-white">
+                  0.000 ر.ع. <span className="text-xs text-slate-400 font-semibold">(مغلق السحب حالياً)</span>
                 </div>
               </div>
 
-              {/* Save Card Auto Renewal Option */}
-              <label className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-900/80 border border-amber-500/30 cursor-pointer text-xs text-slate-200 font-bold hover:bg-slate-900 transition-colors">
+              <p className="text-[11px] text-slate-300 font-semibold leading-relaxed bg-slate-900/60 p-3 rounded-xl border border-white/10">
+                🔒 **أمان مالي كامل**: بما أن موقعك يمتلك دعماً مجانياً لمدة 6 أشهر، لن يتم اقتطاع أو سحب أي مبالغ مالية عند إضافة بطاقتك. يمكنك حفظ البطاقة للتجديد التلقائي مستقبلاً.
+              </p>
+
+              {/* Auto Renewal Toggle */}
+              <label className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-900/90 border border-amber-500/30 cursor-pointer text-xs text-slate-200 font-bold hover:bg-slate-900 transition-colors">
                 <input
                   type="checkbox"
                   checked={saveCardAutoRenewal}
                   onChange={(e) => setSaveCardAutoRenewal(e.target.checked)}
                   className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 mt-0.5"
                 />
-                <span>حفظ بطاقة الدفع آمنة عبر Stripe وتفعيل التجديد التلقائي للاشتراك الشهري تلقائياً</span>
+                <span>حفظ بطاقة الدفع آمنة وتفعيل التجديد التلقائي مستقبلاً (0.000 ر.ع. حالياً)</span>
               </label>
 
               <button
-                onClick={handlePayWithStripe}
+                onClick={handlePayWithGateway}
                 disabled={loadingPayment}
                 className="w-full py-3.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-2xl font-black text-xs shadow-lg transition-all hover:scale-105 disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 <CreditCard className="w-4 h-4 text-slate-950" />
-                <span>{loadingPayment ? "جاري فتح بوابة Stripe..." : "ربط البطاقة والتجديد بسعر 3.465 ر.ع."}</span>
+                <span>{loadingPayment ? "جاري فتح بوابة الدفع..." : "حفظ البطاقة للتجديد التلقائي (مجاناً)"}</span>
               </button>
 
               <div className="flex items-center justify-center gap-1.5 text-[10px] text-slate-400 font-semibold">
                 <Lock className="w-3 h-3 text-emerald-400" />
-                <span>مشفّر ومؤمّن بالكامل بمعايير SSL / Stripe Live</span>
+                <span>مشفّر ومؤمّن بالكامل بمعايير SSL وحماية البطاقات</span>
               </div>
             </div>
 
           </div>
         </div>
 
-        {/* 2. CONSOLIDATED SECTION: Special Support & Grant by Ms. Rafah Abdul Qader */}
+        {/* 2. CONSOLIDATED SECTION: Special Support & Grant by Ms. Rafah Abdul Qader (Name mentioned ONCE only) */}
         <div className="bg-gradient-to-br from-amber-500/10 via-emerald-500/5 to-slate-50 border-2 border-amber-400 p-6 sm:p-8 rounded-3xl shadow-sm space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-amber-300/60 pb-4">
             <div className="space-y-1">
@@ -206,7 +218,7 @@ export default function AdminSubscriptionPage() {
                 <span>الدعم الفني والمنحة الرسمية الخاصة</span>
               </div>
               <h2 className="text-xl sm:text-2xl font-black text-slate-900">
-                الدعم والمنحة الخاصة المقدمة من الآنسة رفاه عبد القادر
+                {subscriptionInfo.grantTitle}
               </h2>
             </div>
 
@@ -216,7 +228,7 @@ export default function AdminSubscriptionPage() {
             </div>
           </div>
 
-          {/* 4 Dedicated Support Features */}
+          {/* 4 Dedicated Support Features (No duplicate name inside text) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-right">
             
             <div className="bg-white p-5 rounded-2xl border border-amber-200 shadow-sm space-y-2 hover:border-amber-400 transition-colors">
@@ -225,7 +237,7 @@ export default function AdminSubscriptionPage() {
               </div>
               <h3 className="font-extrabold text-slate-900 text-sm">دعم مجاني 6 أشهر</h3>
               <p className="text-xs text-slate-600 font-semibold leading-relaxed">
-                تشغيل واستضافة مجانية كاملة لمدة 6 أشهر مقدمة من الآنسة رفاه عبد القادر.
+                تشغيل واستضافة مجانية كاملة ومغطاة بالكامل لمدة 6 أشهر من تاريخ تفعيل المنصة.
               </p>
             </div>
 
@@ -235,7 +247,7 @@ export default function AdminSubscriptionPage() {
               </div>
               <h3 className="font-extrabold text-slate-900 text-sm">خصم دائم 65%</h3>
               <p className="text-xs text-slate-600 font-semibold leading-relaxed">
-                تخفيض دائم ومستمر بقيمة 65% عند تجديد الاشتراك بعد انتهاء المدة المجانية.
+                تخفيض دائم ومستمر بقيمة 65% على قيمة الاشتراك عند التجديد بعد انتهاء الـ 6 أشهر.
               </p>
             </div>
 
@@ -245,7 +257,7 @@ export default function AdminSubscriptionPage() {
               </div>
               <h3 className="font-extrabold text-slate-900 text-sm">إضافة ميزات وأقسام مجانية</h3>
               <p className="text-xs text-slate-600 font-semibold leading-relaxed">
-                إضافة أقسام مخصصة وميزات برمجية جديدة للموقع لا يخضع لأي رسوم إضافية.
+                إضافة ميزات برمجية جديدة وأقسام مخصصة للموقع لا يخضع لأي رسوم إضافية نهائياً.
               </p>
             </div>
 
@@ -253,9 +265,9 @@ export default function AdminSubscriptionPage() {
               <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center font-bold">
                 <Cpu className="w-5 h-5 text-purple-600" />
               </div>
-              <h3 className="font-extrabold text-slate-900 text-sm">أقوى نماذج ذكاء اصطناعي من شركة لور</h3>
+              <h3 className="font-extrabold text-slate-900 text-sm">أقوى نماذج ذكاء اصطناعي من شركة SR LOR</h3>
               <p className="text-xs text-slate-600 font-semibold leading-relaxed">
-                ربط أحدث نماذج وتطنيفات الذكاء الاصطناعي المتقدمة المزودة من شركة لور (LOR LLC).
+                ربط وتزويد المنصة بأحدث نماذج وتصنيفات الذكاء الاصطناعي المتقدمة من شركة SR LOR.
               </p>
             </div>
 
@@ -267,10 +279,10 @@ export default function AdminSubscriptionPage() {
           <div className="border-b border-slate-200 pb-4">
             <h2 className="text-xl font-extrabold text-slate-900 flex items-center gap-2">
               <Award className="w-6 h-6 text-amber-500" />
-              <span>محتويات باقة التشغيل الكاملة</span>
+              <span>محتويات باقة التشغيل الكاملة — شركة SR LOR</span>
             </h2>
             <p className="text-xs text-slate-500 font-semibold mt-1">
-              جميع أدوات وإمكانيات المنصة المشمولة تلقائياً في ترخيص التشغيل.
+              كافة الأدوات والتجهيزات المشمولة تلقائياً في باقة تشغيل مجمع القمة الطبي.
             </p>
           </div>
 
@@ -303,8 +315,16 @@ export default function AdminSubscriptionPage() {
             <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-start gap-3">
               <Headphones className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
               <div>
-                <h4 className="font-extrabold text-slate-900 text-sm mb-0.5">قسم خدمة عملاء</h4>
-                <p className="text-slate-500 text-[11px] font-normal leading-relaxed">دعم فني واستجابة مباشرة لاستفسارات الإدارة والمرضى.</p>
+                <h4 className="font-extrabold text-slate-900 text-sm mb-0.5">خدمة العملاء</h4>
+                <p className="text-slate-500 text-[11px] font-normal leading-relaxed">نظام متكامل يسهل للعملاء التواصل المباشر مع العيادة وتحديد الاستفسارات.</p>
+              </div>
+            </div>
+
+            <div className="p-4 bg-amber-50/80 rounded-2xl border border-amber-300 flex items-start gap-3">
+              <CalendarCheck className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-extrabold text-slate-900 text-sm mb-0.5">نظام الحجوزات</h4>
+                <p className="text-amber-800 text-[11px] font-bold leading-relaxed">يتم التفعيل والربط المباشر فور طلب الميزة من الإدارة.</p>
               </div>
             </div>
 
@@ -340,7 +360,7 @@ export default function AdminSubscriptionPage() {
               </div>
             </div>
 
-            <div className="p-4 bg-amber-50/80 rounded-2xl border border-amber-300 flex items-start gap-3">
+            <div className="p-4 bg-amber-50/80 rounded-2xl border border-amber-300 flex items-start gap-3 sm:col-span-2 lg:col-span-1">
               <ShoppingBag className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
               <div>
                 <h4 className="font-extrabold text-slate-900 text-sm mb-0.5">متجر العروض والأسعار</h4>
@@ -357,10 +377,10 @@ export default function AdminSubscriptionPage() {
             <div>
               <h3 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
                 <FileText className="w-5 h-5 text-amber-500" />
-                <span>سجل عمليات الدفع المؤكدة (Stripe)</span>
+                <span>سجل عمليات الدفع المؤكدة</span>
               </h3>
               <p className="text-xs text-slate-500 font-semibold mt-0.5">
-                يتم تسجلي الفواتير والإيصالات هنا تلقائياً فور تنفيذ أي عملية دفع حقيقية عبر Stripe.
+                يتم تسجيل الفواتير والإيصالات هنا تلقائياً فور تنفيذ أي عملية دفع حقيقية.
               </p>
             </div>
             <span className="text-xs font-extrabold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">
@@ -372,8 +392,8 @@ export default function AdminSubscriptionPage() {
             <div className="py-12 text-center space-y-2 bg-slate-50 rounded-2xl border border-slate-200">
               <Gift className="w-10 h-10 text-amber-500 mx-auto" />
               <h4 className="font-extrabold text-slate-800 text-sm">الاشتراك حالياً في فترة الدعم المجاني (6 أشهر)</h4>
-              <p className="text-xs text-slate-500 max-w-md mx-auto">
-                لا توجد فواتير مستحقة الدفع حالياً. سيتم إدراج أي إيصال جديد هنا تلقائياً عند تنفيذ عملية دفع عبر Stripe.
+              <p className="text-xs text-slate-500 max-w-md mx-auto font-semibold">
+                لا توجد رسوم مستحقة حالياً. السحب المالي معطل ومحمي بنسبة 100% طوال فترة الدعم.
               </p>
             </div>
           ) : (

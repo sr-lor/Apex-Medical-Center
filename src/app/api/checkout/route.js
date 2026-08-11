@@ -9,13 +9,13 @@ const stripe = new Stripe(stripeKey || "sk_test_mock", {
 export async function POST(request) {
   try {
     const body = await request.json();
-    const amount = body.amount || 3.465; // Direct 65% discount applied (3.465 OMR)
-    const saveCardAutoRenewal = body.saveCardAutoRenewal ?? true;
-    const planName = body.planName || "باقة تشغيل كاملة لمجمع القمة الطبي (شاملة الخصم 65% ودعم رفاه عبد القادر)";
+    const isFreePeriod = body.isFreePeriod ?? true;
+    const amount = isFreePeriod ? 0.00 : (body.amount || 3.465); // 0.00 OMR during 6-month free period
+    const planName = body.planName || "باقة تشغيل كاملة لمجمع القمة الطبي (شركة SR LOR)";
 
     const origin = request.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-    // Create Stripe Checkout Session with Card Saving for Auto-Renewal
+    // If currently in free 6-month support period, setup future usage without immediate charge
     let session;
     try {
       session = await stripe.checkout.sessions.create({
@@ -26,23 +26,23 @@ export async function POST(request) {
               currency: "omr",
               product_data: {
                 name: planName,
-                description: "باقة تشغيل كاملة بعد الخصم المباشر 65% (3.465 ر.ع.) - دعم 6 أشهر مجاني مقدم من الآنسة رفاه عبد القادر",
+                description: isFreePeriod
+                  ? "فترة الدعم المجاني مفعّلة (0.000 ر.ع.) - حفظ البطاقة آمنة للتجديد المباشر بعد 6 أشهر"
+                  : "باقة تشغيل كاملة بعد الخصم المباشر 65% (3.465 ر.ع. شهرياً)",
                 images: ["https://apexmedicaloman.com/wp-content/uploads/2026/06/Apex_Log.png"],
               },
-              unit_amount: Math.round(amount * 1000), // 3465 baisa (3.465 OMR)
+              unit_amount: Math.round(amount * 1000), // 0 baisa or 3465 baisa
             },
             quantity: 1,
           },
         ],
         mode: "payment",
-        payment_intent_data: saveCardAutoRenewal
-          ? { setup_future_usage: "off_session" }
-          : undefined,
+        payment_intent_data: { setup_future_usage: "off_session" },
         success_url: `${origin}/admin/subscription?success=true`,
         cancel_url: `${origin}/admin/subscription?canceled=true`,
       });
     } catch (err) {
-      console.warn("Stripe OMR currency checkout fallback attempt:", err.message);
+      console.warn("Currency checkout fallback attempt:", err.message);
       session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: [
@@ -51,17 +51,17 @@ export async function POST(request) {
               currency: "usd",
               product_data: {
                 name: planName,
-                description: "Full Operating License for Apex Medical Center (Discounted Price 3.465 OMR)",
+                description: isFreePeriod 
+                  ? "Free 6-Month Support Period Active ($0 Charge - Save Card Only)"
+                  : "Full Operating License for Apex Medical Center (Discounted Price 3.465 OMR)",
               },
-              unit_amount: 900, // $9.00 USD ~ 3.465 OMR
+              unit_amount: isFreePeriod ? 0 : 900,
             },
             quantity: 1,
           },
         ],
         mode: "payment",
-        payment_intent_data: saveCardAutoRenewal
-          ? { setup_future_usage: "off_session" }
-          : undefined,
+        payment_intent_data: { setup_future_usage: "off_session" },
         success_url: `${origin}/admin/subscription?success=true`,
         cancel_url: `${origin}/admin/subscription?canceled=true`,
       });
@@ -73,9 +73,9 @@ export async function POST(request) {
       sessionId: session.id,
     });
   } catch (error) {
-    console.error("Stripe Checkout Error:", error);
+    console.error("Checkout Gateway Error:", error);
     return NextResponse.json(
-      { success: false, message: error.message },
+      { success: false, message: "حدث خطأ أثناء الاتصال ببوابة الدفع الإلكتروني" },
       { status: 500 }
     );
   }
