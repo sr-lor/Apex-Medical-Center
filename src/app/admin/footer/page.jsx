@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import AdminLayout from "@/components/AdminLayout";
 import { 
   SlidersHorizontal, Save, CheckCircle2, AlertCircle, Phone, Mail, MapPin, 
-  Clock, Instagram, Youtube, Facebook, MessageCircle, Building2, Globe, FileText, Layout
+  Clock, Instagram, Youtube, Facebook, MessageCircle, Building2, Globe, FileText, Layout, Info, HelpCircle
 } from "lucide-react";
 
 export default function AdminFooterSettingsPage() {
@@ -78,7 +78,7 @@ export default function AdminFooterSettingsPage() {
               <span>إدارة وتعديل تذييل الموقع (Footer Settings)</span>
             </h1>
             <p className="text-xs text-slate-500 font-semibold mt-1">
-              التحكم الكامل بأرقام التواصل، الفروع، أوقات العمل، منصات التواصل الاجتماعي، ونصوص حقوق الموقع.
+              التحكم الكامل بأرقام التواصل، الفروع، أوقات العمل، منصات التواصل الاجتماعي، ونصوص حقوق الموقع مع الشروحات الإرشادية.
             </p>
           </div>
 
@@ -90,6 +90,19 @@ export default function AdminFooterSettingsPage() {
             <Save className="w-4 h-4 text-slate-950" />
             <span>{loading ? "جاري الحفظ..." : "حفظ وتطوير التغييرات"}</span>
           </button>
+        </div>
+
+        {/* Global Explanatory Guide Box (شرح إرشادي شامل) */}
+        <div className="bg-slate-900 text-white p-5 sm:p-6 rounded-3xl border border-amber-500/40 space-y-2 flex items-start gap-4">
+          <div className="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-400/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <HelpCircle className="w-6 h-6 text-amber-400" />
+          </div>
+          <div className="text-xs space-y-1 text-right">
+            <h3 className="font-extrabold text-amber-400 text-sm">💡 دليل ودليل الشرح الإرشادي للتعديل على التذييل:</h3>
+            <p className="text-slate-300 leading-relaxed font-semibold">
+              تسمح لك هذه الصفحة بالتحكم الحي والتفصيلي بكافة عناصر تذييل الموقع (Footer). أرقام التواصل وروابط الفروع التي تقوم بتغييرها هنا تظهر فورياً في البطاقات الخمس المنفصلة وفي بطاقات الفروع العائمة بالموقع.
+            </p>
+          </div>
         </div>
 
         {/* Feedback Message */}
@@ -130,6 +143,7 @@ export default function AdminFooterSettingsPage() {
                   className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 text-left focus:ring-2 focus:ring-amber-500"
                   dir="ltr"
                 />
+                <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 الشرح: الرقم الظاهر ببطاقة الهاتف وفي ترويسة التذييل.</span>
               </div>
 
               <div>
@@ -142,6 +156,7 @@ export default function AdminFooterSettingsPage() {
                   className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 text-left focus:ring-2 focus:ring-amber-500"
                   dir="ltr"
                 />
+                <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 الشرح: الرقم المربوط بزر المراسلة المباشرة على الواتساب.</span>
               </div>
 
               <div>
@@ -154,6 +169,7 @@ export default function AdminFooterSettingsPage() {
                   className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 text-left focus:ring-2 focus:ring-amber-500"
                   dir="ltr"
                 />
+                <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 الشرح: البريد المعتمد لاستقبال الاستفسارات والردود.</span>
               </div>
             </div>
 
@@ -167,6 +183,7 @@ export default function AdminFooterSettingsPage() {
                   onChange={(e) => setFooterSettings({ ...footerSettings, workingHours: e.target.value })}
                   className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:ring-2 focus:ring-amber-500"
                 />
+                <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 الشرح: ساعات الدوام الرسمي الموضحة في بطاقة أوقات العمل.</span>
               </div>
 
               <div>
@@ -178,6 +195,7 @@ export default function AdminFooterSettingsPage() {
                   onChange={(e) => setFooterSettings({ ...footerSettings, footerBio: e.target.value })}
                   className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:ring-2 focus:ring-amber-500"
                 />
+                <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 الشرح: الفقرة التعريفية القصيرة في العمود الأول أسفل الشعار.</span>
               </div>
             </div>
           </div>
@@ -186,7 +204,7 @@ export default function AdminFooterSettingsPage() {
           <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-5">
             <h2 className="text-base font-extrabold text-slate-900 flex items-center gap-2 border-b border-slate-200 pb-3">
               <Building2 className="w-5 h-5 text-amber-500" />
-              <span>2. بيانات وإحداثيات الفروع (العذيبة والعامرات)</span>
+              <span>2. بيانات وإحداثيات الفروع (بطاقات الفروع العائمة)</span>
             </h2>
 
             {/* Branch 1: Al Azaiba */}
@@ -196,27 +214,36 @@ export default function AdminFooterSettingsPage() {
                 <span>الفرع الأول (العذيبة)</span>
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <input
-                  type="text"
-                  placeholder="عنوان الفرع (مثال: مسقط - العذيبة)"
-                  value={footerSettings.azaibaAddress}
-                  onChange={(e) => setFooterSettings({ ...footerSettings, azaibaAddress: e.target.value })}
-                  className="p-2.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900"
-                />
-                <input
-                  type="text"
-                  placeholder="الوصف المقتضب للفرع"
-                  value={footerSettings.azaibaDesc}
-                  onChange={(e) => setFooterSettings({ ...footerSettings, azaibaDesc: e.target.value })}
-                  className="p-2.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900"
-                />
-                <input
-                  type="text"
-                  placeholder="رابط موقع الخريطة Google Maps"
-                  value={footerSettings.azaibaMapUrl}
-                  onChange={(e) => setFooterSettings({ ...footerSettings, azaibaMapUrl: e.target.value })}
-                  className="p-2.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900 text-left dir-ltr"
-                />
+                <div>
+                  <input
+                    type="text"
+                    placeholder="عنوان الفرع (مسقط - العذيبة)"
+                    value={footerSettings.azaibaAddress}
+                    onChange={(e) => setFooterSettings({ ...footerSettings, azaibaAddress: e.target.value })}
+                    className="p-2.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900 w-full"
+                  />
+                  <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 الشرح: عنوان الشارع والموقع.</span>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="الوصف المقتضب للفرع"
+                    value={footerSettings.azaibaDesc}
+                    onChange={(e) => setFooterSettings({ ...footerSettings, azaibaDesc: e.target.value })}
+                    className="p-2.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900 w-full"
+                  />
+                  <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 الشرح: التخصصات المتاحة بهذا الفرع.</span>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="رابط موقع الخريطة Google Maps"
+                    value={footerSettings.azaibaMapUrl}
+                    onChange={(e) => setFooterSettings({ ...footerSettings, azaibaMapUrl: e.target.value })}
+                    className="p-2.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900 text-left dir-ltr w-full"
+                  />
+                  <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 الشرح: رابط خرائط جوجل المباشر.</span>
+                </div>
               </div>
             </div>
 
@@ -227,20 +254,26 @@ export default function AdminFooterSettingsPage() {
                 <span>الفرع الثاني (العامرات)</span>
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <input
-                  type="text"
-                  placeholder="عنوان الفرع (مثال: مسقط - العامرات)"
-                  value={footerSettings.ameratAddress}
-                  onChange={(e) => setFooterSettings({ ...footerSettings, ameratAddress: e.target.value })}
-                  className="p-2.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900"
-                />
-                <input
-                  type="text"
-                  placeholder="الوصف المقتضب للفرع الثاني"
-                  value={footerSettings.ameratDesc}
-                  onChange={(e) => setFooterSettings({ ...footerSettings, ameratDesc: e.target.value })}
-                  className="p-2.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900"
-                />
+                <div>
+                  <input
+                    type="text"
+                    placeholder="عنوان الفرع (مسقط - العامرات)"
+                    value={footerSettings.ameratAddress}
+                    onChange={(e) => setFooterSettings({ ...footerSettings, ameratAddress: e.target.value })}
+                    className="p-2.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900 w-full"
+                  />
+                  <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 الشرح: عنوان الشارع بالعامرات.</span>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="الوصف المقتضب للفرع الثاني"
+                    value={footerSettings.ameratDesc}
+                    onChange={(e) => setFooterSettings({ ...footerSettings, ameratDesc: e.target.value })}
+                    className="p-2.5 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-900 w-full"
+                  />
+                  <span className="text-[10px] text-slate-400 font-semibold mt-1 block">📌 الشرح: الخدمات المتوفرة بالعامرات.</span>
+                </div>
               </div>
             </div>
           </div>
