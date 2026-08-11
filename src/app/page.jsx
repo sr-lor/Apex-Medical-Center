@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import HeroSection from "@/components/HeroSection";
-import StatsSection from "@/components/StatsSection";
 import ServiceCard from "@/components/ServiceCard";
 import DoctorCard from "@/components/DoctorCard";
 import TestimonialsSection from "@/components/TestimonialsSection";
@@ -23,9 +22,6 @@ export default function HomePage() {
     <div className="space-y-0 bg-[#0B0A0C] text-white">
       {/* 1. Hero Section */}
       <HeroSection onOpenBooking={() => handleBookDoctor("")} />
-
-      {/* 2. Stats & Branch Features Banner */}
-      <StatsSection />
 
       {/* 3. Medical Specialties Section */}
       <section className="py-20 bg-[#0B0A0C]">
