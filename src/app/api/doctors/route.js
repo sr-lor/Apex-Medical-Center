@@ -22,6 +22,7 @@ export async function POST(request) {
       specialtyId: body.specialtyId || "cosmetic-dentistry",
       specialtyAr: body.specialtyAr || "طب وتجميل الأسنان",
       specialtyEn: body.specialtyEn || "Cosmetic Dentistry",
+      branchIds: body.branchIds || ["azaiba"],
       image: body.image || "/wp-content/uploads/2026/07/NO-IMAGE.jpg",
       experienceAr: body.experienceAr || "خبرة واسعة في التخصص الطبي.",
       experienceEn: body.experienceEn || "Extensive clinical experience.",
@@ -33,6 +34,39 @@ export async function POST(request) {
 
     doctors.unshift(newDoc);
     return NextResponse.json({ success: true, data: newDoc });
+  } catch (error) {
+    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+  }
+}
+
+export async function PUT(request) {
+  try {
+    const body = await request.json();
+    const { id } = body;
+    if (!id) {
+      return NextResponse.json({ success: false, message: "معرف الطبيب مفقود" }, { status: 400 });
+    }
+
+    const index = doctors.findIndex((d) => d.id === id);
+    if (index === -1) {
+      return NextResponse.json({ success: false, message: "الطبيب غير موجود" }, { status: 404 });
+    }
+
+    doctors[index] = {
+      ...doctors[index],
+      nameAr: body.nameAr ?? doctors[index].nameAr,
+      nameEn: body.nameEn ?? doctors[index].nameEn,
+      titleAr: body.titleAr ?? doctors[index].titleAr,
+      titleEn: body.titleEn ?? doctors[index].titleEn,
+      specialtyId: body.specialtyId ?? doctors[index].specialtyId,
+      specialtyAr: body.specialtyAr ?? doctors[index].specialtyAr,
+      branchIds: body.branchIds ?? doctors[index].branchIds,
+      image: body.image ?? doctors[index].image,
+      experienceAr: body.experienceAr ?? doctors[index].experienceAr,
+      availableDaysAr: body.availableDaysAr ?? doctors[index].availableDaysAr,
+    };
+
+    return NextResponse.json({ success: true, data: doctors[index] });
   } catch (error) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }

@@ -37,9 +37,9 @@ export default function AdminLayout({ children }) {
   };
 
   const navItems = [
-    { href: "/admin/dashboard", label: "إدارة المواعيد", icon: Calendar },
-    { href: "/admin/doctors", label: "إدارة الأطباء", icon: UserCheck },
-    { href: "/admin/services", label: "إدارة العيادات", icon: Stethoscope },
+    { href: "/admin/doctors", label: "إدارة الأطباء والكادر", icon: UserCheck },
+    { href: "/admin/services", label: "إدارة التخصصات والعيادات", icon: Stethoscope },
+    { href: "/admin/dashboard", label: "لوحة التحكم الرئيسية", icon: LayoutDashboard },
     { href: "/admin/media", label: "مكتبة الوسائط AWS S3", icon: Image },
   ];
 

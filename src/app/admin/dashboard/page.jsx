@@ -2,131 +2,199 @@
 
 import { useState, useEffect } from "react";
 import AdminLayout from "@/components/AdminLayout";
-import { initialAppointments } from "@/lib/data-store";
-import { Calendar, CheckCircle2, Clock, XCircle, Search, Filter, Plus } from "lucide-react";
+import Link from "next/link";
+import { 
+  UserCheck, Stethoscope, MapPin, Building2, Shield, Image, 
+  ArrowLeft, Plus, Edit3, Sparkles, CheckCircle2 
+} from "lucide-react";
 
 export default function AdminDashboard() {
-  const [appointments, setAppointments] = useState(initialAppointments);
-  const [search, setSearch] = useState("");
+  const [doctorsCount, setDoctorsCount] = useState(0);
+  const [azaibaDoctorsCount, setAzaibaDoctorsCount] = useState(0);
+  const [ameratDoctorsCount, setAmeratDoctorsCount] = useState(0);
 
-  const updateStatus = (id, newStatus) => {
-    setAppointments((prev) =>
-      prev.map((apt) => (apt.id === id ? { ...apt, status: newStatus } : apt))
-    );
-  };
+  const [servicesCount, setServicesCount] = useState(0);
+  const [azaibaServicesCount, setAzaibaServicesCount] = useState(0);
+  const [ameratServicesCount, setAmeratServicesCount] = useState(0);
 
-  const filtered = appointments.filter(
-    (apt) =>
-      apt.patientName.includes(search) ||
-      apt.phone.includes(search) ||
-      apt.doctorName.includes(search)
-  );
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [docsRes, servsRes] = await Promise.all([
+          fetch("/api/doctors"),
+          fetch("/api/services"),
+        ]);
+        const docsData = await docsRes.json();
+        const servsData = await servsRes.json();
+
+        if (docsData.success) {
+          const docs = docsData.data;
+          setDoctorsCount(docs.length);
+          setAzaibaDoctorsCount(docs.filter((d) => d.branchIds?.includes("azaiba")).length);
+          setAmeratDoctorsCount(docs.filter((d) => d.branchIds?.includes("amerat")).length);
+        }
+
+        if (servsData.success) {
+          const servs = servsData.data;
+          setServicesCount(servs.length);
+          setAzaibaServicesCount(servs.filter((s) => s.branchIds?.includes("azaiba")).length);
+          setAmeratServicesCount(servs.filter((s) => s.branchIds?.includes("amerat")).length);
+        }
+      } catch (err) {
+        console.error("Dashboard data load error:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadData();
+  }, []);
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
+      <div className="space-y-8">
         
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900">إدارة حجوزات المواعيد</h1>
-            <p className="text-xs text-slate-500 mt-1">
-              متابعة جميع طلبات حجز المواعيد القادمة من موقع مجمع القمة الطبي وتأكيدها.
+        {/* Welcome Header */}
+        <div className="bg-gradient-to-r from-apex-navy via-[#1E1B1C] to-slate-900 text-white p-8 rounded-3xl border border-apex-gold/30 shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-64 h-64 bg-apex-gold/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div className="relative z-10 space-y-3">
+            <div className="inline-flex items-center gap-2 bg-white/10 px-3.5 py-1 rounded-full text-xs font-bold text-apex-gold border border-apex-gold/30">
+              <Shield className="w-4 h-4 text-apex-gold" />
+              <span>نظام إدارة مجمع القمة الطبي - سلطنة عمان</span>
+            </div>
+            
+            <h1 className="text-3xl font-extrabold tracking-tight">
+              أهلاً بك في لوحة تحكم <span className="text-gradient-apex">مجمع القمة الطبي</span>
+            </h1>
+            <p className="text-slate-300 text-xs sm:text-sm max-w-2xl font-medium leading-relaxed">
+              يمكنك من هنا التحكم الكامل بالأطباء، التخصصات، تصفية الفروع (العذيبة والعامرات)، وتحديث التخزين السحابي AWS S3 بسهولة وفورية.
             </p>
           </div>
-
-          <div className="flex items-center gap-2">
-            <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1.5 rounded-full">
-              إجمالي الحجوزات: {appointments.length}
-            </span>
-          </div>
         </div>
 
-        {/* Search & Filter */}
-        <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between gap-4">
-          <div className="relative flex-grow max-w-md">
-            <Search className="w-4 h-4 text-slate-400 absolute right-3 top-3" />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="البحث باسم المريض أو رقم الهاتف أو الطبيب..."
-              className="w-full pr-10 pl-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-apex-navy"
-            />
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          
+          {/* Total Doctors */}
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-500">إجمالي الكادر الطبي</span>
+              <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-200">
+                <UserCheck className="w-5 h-5" />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-3xl font-extrabold text-slate-900">{loading ? "..." : doctorsCount}</h2>
+              <p className="text-[11px] text-slate-400 mt-1 font-semibold">أطباء واستشاريين معتمدين</p>
+            </div>
+            <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] font-extrabold">
+              <span className="text-blue-600 font-bold">عذيبة: {azaibaDoctorsCount}</span>
+              <span className="text-emerald-600 font-bold">عامرات: {ameratDoctorsCount}</span>
+            </div>
           </div>
+
+          {/* Total Specialties */}
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-500">التخصصات والعيادات</span>
+              <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-200">
+                <Stethoscope className="w-5 h-5" />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-3xl font-extrabold text-slate-900">{loading ? "..." : servicesCount}</h2>
+              <p className="text-[11px] text-slate-400 mt-1 font-semibold">عيادة وأقسام علاجية متخصصة</p>
+            </div>
+            <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] font-extrabold">
+              <span className="text-blue-600 font-bold">عذيبة: {azaibaServicesCount}</span>
+              <span className="text-emerald-600 font-bold">عامرات: {ameratServicesCount}</span>
+            </div>
+          </div>
+
+          {/* Azaiba Branch */}
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-500">فرع العذيبة الرئيسي</span>
+              <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-200">
+                <MapPin className="w-5 h-5" />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-xl font-extrabold text-slate-900">مسقط - العذيبة</h2>
+              <p className="text-[11px] text-slate-400 mt-1 font-semibold">كافة التخصصات والجراحات</p>
+            </div>
+            <div className="pt-2 border-t border-slate-100 text-[11px] font-bold text-blue-700">
+              {azaibaDoctorsCount} أطباء • {azaibaServicesCount} عيادات
+            </div>
+          </div>
+
+          {/* Amerat Branch */}
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-500">فرع العامرات</span>
+              <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200">
+                <Building2 className="w-5 h-5" />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-xl font-extrabold text-slate-900">مسقط - العامرات</h2>
+              <p className="text-[11px] text-slate-400 mt-1 font-semibold">عيادات السمنة والليزر والطب العام</p>
+            </div>
+            <div className="pt-2 border-t border-slate-100 text-[11px] font-bold text-emerald-700">
+              {ameratDoctorsCount} أطباء • {ameratServicesCount} عيادات
+            </div>
+          </div>
+
         </div>
 
-        {/* Appointments Table */}
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-right text-xs">
-              <thead className="bg-slate-50 text-slate-700 border-b border-slate-200 font-bold">
-                <tr>
-                  <th className="p-4">رقم الحجز</th>
-                  <th className="p-4">اسم المريض</th>
-                  <th className="p-4">رقم الهاتف</th>
-                  <th className="p-4">التخصص / الطبيب</th>
-                  <th className="p-4">التاريخ والوقت</th>
-                  <th className="p-4">الحالة</th>
-                  <th className="p-4">إجراءات التغيير</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-800 font-medium">
-                {filtered.map((apt) => (
-                  <tr key={apt.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="p-4 font-mono font-bold text-apex-navy">{apt.id}</td>
-                    <td className="p-4 font-bold">{apt.patientName}</td>
-                    <td className="p-4 font-mono">{apt.phone}</td>
-                    <td className="p-4">
-                      <div className="font-semibold text-slate-900">{apt.doctorName}</div>
-                      <div className="text-[10px] text-slate-500">{apt.specialty}</div>
-                    </td>
-                    <td className="p-4">
-                      <div>{apt.date}</div>
-                      <div className="text-[10px] text-slate-400">{apt.time}</div>
-                    </td>
-                    <td className="p-4">
-                      <span
-                        className={`inline-block px-3 py-1 rounded-full text-[10px] font-bold ${
-                          apt.status === "مؤكد"
-                            ? "bg-emerald-100 text-emerald-700"
-                            : apt.status === "مكتمل"
-                            ? "bg-blue-100 text-blue-700"
-                            : apt.status === "ملغى"
-                            ? "bg-rose-100 text-rose-700"
-                            : "bg-amber-100 text-amber-700"
-                        }`}
-                      >
-                        {apt.status}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-1.5">
-                        <button
-                          onClick={() => updateStatus(apt.id, "مؤكد")}
-                          className="px-2.5 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg text-[10px] font-bold"
-                        >
-                          تأكيد
-                        </button>
-                        <button
-                          onClick={() => updateStatus(apt.id, "مكتمل")}
-                          className="px-2.5 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg text-[10px] font-bold"
-                        >
-                          إكمال
-                        </button>
-                        <button
-                          onClick={() => updateStatus(apt.id, "ملغى")}
-                          className="px-2.5 py-1 bg-rose-50 text-rose-700 hover:bg-rose-100 rounded-lg text-[10px] font-bold"
-                        >
-                          إلغاء
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* Action Shortcuts */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          {/* Doctor Management Shortcut */}
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 rounded-2xl bg-apex-navy text-white flex items-center justify-center mb-3">
+                <UserCheck className="w-6 h-6 text-apex-gold" />
+              </div>
+              <h3 className="text-lg font-extrabold text-slate-900">إدارة وتعديل الأطباء</h3>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                إضافة أطباء جدد، تعديل السير السريرية والمؤهلات، رفع الصور إلى AWS S3، وفلترة الأطباء حسب فرع العذيبة أو العامرات.
+              </p>
+            </div>
+
+            <Link
+              href="/admin/doctors"
+              className="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-extrabold py-3 px-5 rounded-2xl text-xs transition-colors shadow-sm"
+            >
+              <span>فتح لوحة التحكم بالأطباء</span>
+              <ArrowLeft className="w-4 h-4 text-apex-gold" />
+            </Link>
           </div>
+
+          {/* Service Management Shortcut */}
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 rounded-2xl bg-apex-navy text-white flex items-center justify-center mb-3">
+                <Stethoscope className="w-6 h-6 text-apex-gold" />
+              </div>
+              <h3 className="text-lg font-extrabold text-slate-900">إدارة وتعديل التخصصات والعيادات</h3>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                تعديل نصوص التخصصات الطبية، إضافة أقسام جديدة، تخصيص فروع كل عيادة، وتنسيق الأوصاف البرمجية الكاملة.
+              </p>
+            </div>
+
+            <Link
+              href="/admin/services"
+              className="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-extrabold py-3 px-5 rounded-2xl text-xs transition-colors shadow-sm"
+            >
+              <span>فتح لوحة التحكم بالتخصصات</span>
+              <ArrowLeft className="w-4 h-4 text-apex-gold" />
+            </Link>
+          </div>
+
         </div>
 
       </div>
