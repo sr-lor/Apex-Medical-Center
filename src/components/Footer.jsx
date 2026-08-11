@@ -242,17 +242,6 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Admin Login Link */}
-          <div className="flex items-center gap-3">
-            <Link
-              href="/admin/login"
-              className="hover:text-apex-gold transition-colors flex items-center gap-1.5 text-slate-300 hover:underline text-xs"
-            >
-              <Shield className="w-3.5 h-3.5 text-apex-gold" />
-              <span>دخول الإدارة</span>
-            </Link>
-          </div>
-
         </div>
 
       </div>

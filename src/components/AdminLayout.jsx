@@ -81,20 +81,12 @@ export default function AdminLayout({ children }) {
         </div>
 
         <div className="pt-4 border-t border-white/10 space-y-2">
-          <Link
-            href="/"
-            target="_blank"
-            className="flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:bg-white/5"
-          >
-            <span>معاينة الموقع العام</span>
-            <Sparkles className="w-3.5 h-3.5 text-apex-gold" />
-          </Link>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-rose-400 hover:bg-rose-500/10 transition-colors"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 transition-colors"
           >
             <LogOut className="w-4 h-4" />
-            <span>تسجيل الخروج</span>
+            <span>تسجيل الخروج الأمني</span>
           </button>
         </div>
       </aside>

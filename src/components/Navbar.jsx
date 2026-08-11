@@ -544,15 +544,6 @@ export default function Navbar() {
                 <MessageCircle className="w-5 h-5" />
                 <span>تواصل معنا عبر الواتساب</span>
               </a>
-
-              <Link
-                href="/admin/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-center gap-1.5 text-xs text-slate-400 hover:text-apex-gold transition-colors pt-1"
-              >
-                <Shield className="w-3.5 h-3.5 text-apex-gold" />
-                <span>دخول الإدارة</span>
-              </Link>
             </div>
           </div>
         </div>
