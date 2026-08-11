@@ -109,7 +109,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {initialDoctors.slice(0, 4).map((doc) => (
-              <DoctorCard key={doc.id} doctor={doc} onBook={handleBookDoctor} />
+              <DoctorCard key={doc.id} doctor={doc} />
             ))}
           </div>
         </div>
