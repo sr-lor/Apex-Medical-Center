@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { 
   Phone, Mail, MapPin, Clock, Shield, Facebook, Instagram, Youtube, 
-  ChevronLeft, MessageCircle, Building2, ExternalLink, X, Navigation, Info, Award, Globe
+  ChevronLeft, MessageCircle, Building2, ExternalLink, X, Navigation, Info, Award, Globe, Stethoscope
 } from "lucide-react";
 
 export default function Footer() {
@@ -14,14 +14,35 @@ export default function Footer() {
     clinicEmail: "info@apexmedicaloman.com",
     workingHours: "السبت - الخميس: 09:00 ص - 09:00 م",
     footerBio: "مجمع القمة الطبي في سلطنة عمان (Apex Medical Center) - وجهتك الرائدة للرعاية الصحية المتكاملة، طب وتجميل الأسنان، الجراحة التجميلية، الجلدية والليزر، وجراحات إدارة السمنة والوزن بأعلى المعايير العالمية.",
+    
+    // Branch 1: Al Azaiba Dedicated Details
     azaibaAddress: "مسقط - العذيبة - شارع السلطان قابوس",
     azaibaDesc: "تخصصات متكاملة وجراحات تجميلية وأسنان",
     azaibaMapUrl: "https://maps.app.goo.gl/yWq6D32JjmRpHQtb8",
+    azaibaPhone: "968 97031500",
+    azaibaWhatsapp: "96897031500",
+    azaibaHours: "السبت - الخميس: 09:00 ص - 09:00 م",
+    azaibaInstagramUrl: "https://www.instagram.com/apex_medical_clinics_center?igsh=MWV2a2gyYTRoYnFpYQ%3D%3D&utm_source=qr",
+    azaibaYoutubeUrl: "https://www.youtube.com",
+    azaibaFacebookUrl: "https://www.facebook.com",
+
+    // Branch 2: Al Amerat Dedicated Details
     ameratAddress: "مسقط - العامرات - الشارع العام",
     ameratDesc: "عيادات السمنة والتخسيس • ليزر والبشرة • طب عام",
+    ameratMapUrl: "https://maps.google.com",
+    ameratPhone: "968 97031500",
+    ameratWhatsapp: "96897031500",
+    ameratHours: "السبت - الخميس: 09:00 ص - 09:00 م",
+    ameratInstagramUrl: "https://www.instagram.com/apex_medical_clinics_center?igsh=MWV2a2gyYTRoYnFpYQ%3D%3D&utm_source=qr",
+    ameratYoutubeUrl: "https://www.youtube.com",
+    ameratFacebookUrl: "https://www.facebook.com",
+
+    // Global Social Links
     instagramUrl: "https://www.instagram.com/apex_medical_clinics_center?igsh=MWV2a2gyYTRoYnFpYQ%3D%3D&utm_source=qr",
     youtubeUrl: "https://www.youtube.com",
     facebookUrl: "https://www.facebook.com",
+
+    // Copyright
     copyrightText: "© 2026 مجمع القمة الطبي (Apex Medical Center Oman). جميع الحقوق محفوظة.",
     developerText: "تطوير المؤسسة رفاه عبد القادر مؤسسة ونائبة الرئيس التنفيذي SR LOR, LLC",
   });
@@ -47,9 +68,12 @@ export default function Footer() {
       address: footerData.azaibaAddress,
       desc: footerData.azaibaDesc,
       mapUrl: footerData.azaibaMapUrl,
-      phone: footerData.clinicPhone,
-      whatsapp: footerData.whatsappPhone,
-      hours: footerData.workingHours,
+      phone: footerData.azaibaPhone || footerData.clinicPhone,
+      whatsapp: footerData.azaibaWhatsapp || footerData.whatsappPhone,
+      hours: footerData.azaibaHours || footerData.workingHours,
+      instagramUrl: footerData.azaibaInstagramUrl || footerData.instagramUrl,
+      youtubeUrl: footerData.azaibaYoutubeUrl || footerData.youtubeUrl,
+      facebookUrl: footerData.azaibaFacebookUrl || footerData.facebookUrl,
       specialties: ["طب وتجميل الأسنان", "الجراحة التجميلية", "الجلدية والتجميل النسائي", "جراحة العظام والمفاصل"],
       badge: "المركز الرئيسي والعمليات",
     },
@@ -57,10 +81,13 @@ export default function Footer() {
       name: "فرع العامرات المتخصص",
       address: footerData.ameratAddress,
       desc: footerData.ameratDesc,
-      mapUrl: "https://maps.google.com",
-      phone: footerData.clinicPhone,
-      whatsapp: footerData.whatsappPhone,
-      hours: footerData.workingHours,
+      mapUrl: footerData.ameratMapUrl || "https://maps.google.com",
+      phone: footerData.ameratPhone || footerData.clinicPhone,
+      whatsapp: footerData.ameratWhatsapp || footerData.whatsappPhone,
+      hours: footerData.ameratHours || footerData.workingHours,
+      instagramUrl: footerData.ameratInstagramUrl || footerData.instagramUrl,
+      youtubeUrl: footerData.ameratYoutubeUrl || footerData.youtubeUrl,
+      facebookUrl: footerData.ameratFacebookUrl || footerData.facebookUrl,
       specialties: ["إدارة السمنة والوزن", "العناية بالبشرة والليزر", "الطب العام والعيادات التخصصية"],
       badge: "عيادات التخسيس والبشرة",
     },
@@ -409,10 +436,56 @@ export default function Footer() {
               <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-2">
                 <span className="text-amber-400 flex items-center gap-1.5">
                   <MapPin className="w-4 h-4" />
-                  <span>العنوان الجغرافي:</span>
+                  <span>الموقع الجغرافي للفرع:</span>
                 </span>
                 <p className="text-white text-sm font-extrabold">{branchDetails[activeBranchModal].address}</p>
                 <p className="text-slate-400 text-[11px]">{branchDetails[activeBranchModal].desc}</p>
+              </div>
+
+              {/* Dedicated Per-Branch Social Accounts Bar */}
+              <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-2">
+                <span className="text-amber-400 flex items-center gap-1.5">
+                  <Globe className="w-4 h-4" />
+                  <span>حسابات التواصل الاجتماعي الخاصة بهذا الفرع:</span>
+                </span>
+                
+                <div className="flex items-center gap-2.5 pt-1">
+                  {branchDetails[activeBranchModal].instagramUrl && (
+                    <a
+                      href={branchDetails[activeBranchModal].instagramUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-3 py-1.5 bg-white/10 hover:bg-[#E1306C] hover:text-white text-slate-200 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1.5"
+                    >
+                      <Instagram className="w-3.5 h-3.5" />
+                      <span>إنستغرام الفرع</span>
+                    </a>
+                  )}
+
+                  {branchDetails[activeBranchModal].youtubeUrl && (
+                    <a
+                      href={branchDetails[activeBranchModal].youtubeUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-3 py-1.5 bg-white/10 hover:bg-[#FF0000] hover:text-white text-slate-200 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1.5"
+                    >
+                      <Youtube className="w-3.5 h-3.5" />
+                      <span>يوتيوب الفرع</span>
+                    </a>
+                  )}
+
+                  {branchDetails[activeBranchModal].facebookUrl && (
+                    <a
+                      href={branchDetails[activeBranchModal].facebookUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-3 py-1.5 bg-white/10 hover:bg-[#1877F2] hover:text-white text-slate-200 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1.5"
+                    >
+                      <Facebook className="w-3.5 h-3.5" />
+                      <span>فيسبوك الفرع</span>
+                    </a>
+                  )}
+                </div>
               </div>
 
               <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-2">
