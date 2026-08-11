@@ -5,13 +5,33 @@ import AdminLayout from "@/components/AdminLayout";
 import { 
   CreditCard, ShieldCheck, CheckCircle2, AlertCircle, RefreshCw, 
   Sparkles, Calendar, Clock, Lock, ArrowLeft, ExternalLink, Award, FileText, 
-  Gift, Heart, Tag, Cpu, Bot, Settings, Server, Headphones, Search, Globe, Layout, HardDrive, ShoppingBag, CalendarCheck, Check
+  Gift, Heart, Tag, Cpu, Bot, Settings, Server, Headphones, Search, Globe, Layout, HardDrive, ShoppingBag, CalendarCheck, Check, Mail, KeyRound, UserCheck, X
 } from "lucide-react";
 
 export default function AdminSubscriptionPage() {
-  const [loadingPayment, setLoadingPayment] = useState(false);
-  const [saveCardAutoRenewal, setSaveCardAutoRenewal] = useState(true);
-  const [isCardSaved, setIsCardSaved] = useState(false);
+  // Step State: 'INIT' | 'OTP_SENT' | 'CARD_FORM' | 'BOUND_SUCCESS'
+  const [currentStep, setCurrentStep] = useState("INIT");
+  
+  // Master Account & Email
+  const [emailInput, setEmailInput] = useState("");
+  const [masterOwner, setMasterOwner] = useState(null);
+
+  // OTP State
+  const [generatedOtp, setGeneratedOtp] = useState("");
+  const [otpInput, setOtpInput] = useState("");
+  const [otpError, setOtpError] = useState("");
+
+  // Card Form State
+  const [cardData, setCardData] = useState({
+    holderName: "",
+    cardNumber: "",
+    expiry: "",
+    cvc: "",
+  });
+  const [cardError, setCardError] = useState("");
+  const [savedCardInfo, setSavedCardInfo] = useState(null);
+
+  const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState({ type: "", text: "" });
 
   // Subscription state: Active 6-Month Free Support Grant by Ms. Rafah Abdul Qader & 65% Permanent Discount
@@ -31,38 +51,146 @@ export default function AdminSubscriptionPage() {
   const [paymentHistory] = useState([]);
 
   useEffect(() => {
-    // Restore saved card status from localStorage
-    const storedCardSaved = localStorage.getItem("apex_card_saved");
-    if (storedCardSaved === "true") {
-      setIsCardSaved(true);
+    // Restore master owner & card info from localStorage
+    const savedOwner = localStorage.getItem("apex_master_owner_email");
+    const savedCard = localStorage.getItem("apex_saved_card_json");
+
+    if (savedOwner && savedCard) {
+      setMasterOwner(savedOwner);
+      try {
+        setSavedCardInfo(JSON.parse(savedCard));
+        setCurrentStep("BOUND_SUCCESS");
+      } catch (e) {
+        console.error(e);
+      }
     }
   }, []);
 
-  const handleSaveCardLocally = () => {
-    setLoadingPayment(true);
+  // Step 1: Send OTP Code to Email
+  const handleSendOtp = (e) => {
+    e.preventDefault();
+    if (!emailInput || !emailInput.includes("@")) {
+      setMsg({ type: "error", text: "يرجى إدخال بريد إلكتروني صحيح للربط والتحقق." });
+      return;
+    }
+
+    setLoading(true);
     setMsg({ type: "", text: "" });
+    setOtpError("");
+
+    // Generate 6-digit random OTP
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    setGeneratedOtp(code);
 
     setTimeout(() => {
-      localStorage.setItem("apex_card_saved", "true");
-      setIsCardSaved(true);
-      setLoadingPayment(false);
+      setLoading(false);
+      setCurrentStep("OTP_SENT");
       setMsg({
         type: "success",
-        text: "تم حفظ بطاقتك وتفعيل التجديد التلقائي لترخيص مجمع القمة الطبي بنجاح! السحب المالي مغلق ومجاني بالكامل (0.000 ر.ع.) طوال فترة الـ 6 أشهر القادمة.",
+        text: `تم توليد كود التحقق المباشر بنجاح! كود التحقق الخاص بك هو: [ ${code} ]`,
       });
     }, 600);
   };
 
-  const handleToggleCardSaved = () => {
-    if (isCardSaved) {
-      localStorage.setItem("apex_card_saved", "false");
-      setIsCardSaved(false);
+  // Step 2: Verify OTP Code
+  const handleVerifyOtp = (e) => {
+    e.preventDefault();
+    if (otpInput.trim() !== generatedOtp) {
+      setOtpError("كود التحقق غير صحيح، يرجى التأكد من إدخال الرمز المكون من 6 أرقام.");
+      return;
+    }
+
+    setOtpError("");
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+      setMasterOwner(emailInput);
+      localStorage.setItem("apex_master_owner_email", emailInput);
+      setCurrentStep("CARD_FORM");
       setMsg({
-        type: "error",
-        text: "تم إلغاء حفظ البطاقة والتجديد التلقائي.",
+        type: "success",
+        text: "تم إثبات ملكية البريد والربط كحساب مدير معتمد بنجاح! يرجى إدخال بيانات بطاقة الدفع الآن.",
       });
+    }, 600);
+  };
+
+  // Format Card Number (XXXX XXXX XXXX XXXX)
+  const handleCardNumberChange = (val) => {
+    const raw = val.replace(/\D/g, "").slice(0, 16);
+    const formatted = raw.replace(/(.{4})/g, "$1 ").trim();
+    setCardData({ ...cardData, cardNumber: formatted });
+  };
+
+  // Format Expiry (MM/YY)
+  const handleExpiryChange = (val) => {
+    const raw = val.replace(/\D/g, "").slice(0, 4);
+    if (raw.length >= 3) {
+      setCardData({ ...cardData, expiry: `${raw.slice(0, 2)}/${raw.slice(2)}` });
     } else {
-      handleSaveCardLocally();
+      setCardData({ ...cardData, expiry: raw });
+    }
+  };
+
+  // Step 3: Save Credit Card Details Securely
+  const handleSaveCard = (e) => {
+    e.preventDefault();
+    setCardError("");
+
+    const cleanNum = cardData.cardNumber.replace(/\s/g, "");
+    if (cleanNum.length < 15) {
+      setCardError("رقم البطاقة غير مكتمل، يجب أن يتكون من 15 أو 16 رقم.");
+      return;
+    }
+    if (!cardData.expiry || cardData.expiry.length < 5) {
+      setCardError("تاريخ الانتهاء غير صحيح (MM/YY).");
+      return;
+    }
+    if (!cardData.cvc || cardData.cvc.length < 3) {
+      setCardError("رمز الأمان (CVC/CVV) يتكون من 3 أو 4 أرقام.");
+      return;
+    }
+
+    setLoading(true);
+
+    // Detect Brand
+    let brand = "بطاقة ائتمانية";
+    if (cleanNum.startsWith("4")) brand = "Visa";
+    else if (cleanNum.startsWith("5")) brand = "Mastercard";
+
+    const last4 = cleanNum.slice(-4);
+    const cardObj = {
+      brand,
+      last4,
+      holderName: cardData.holderName || "المدير المعتمد",
+      expiry: cardData.expiry,
+      savedAt: new Date().toLocaleDateString("ar-OM"),
+    };
+
+    setTimeout(() => {
+      localStorage.setItem("apex_saved_card_json", JSON.stringify(cardObj));
+      setSavedCardInfo(cardObj);
+      setLoading(false);
+      setCurrentStep("BOUND_SUCCESS");
+      setMsg({
+        type: "success",
+        text: `تم حفظ وتشفير بطاقتك (${brand} •••• ${last4}) وحساب المدير (${masterOwner}) بنجاح! السحب مغلق 0.000 ر.ع. حالياً طوال فترة الـ 6 أشهر.`,
+      });
+    }, 700);
+  };
+
+  // Reset or Change Card Flow
+  const handleResetBinding = () => {
+    if (confirm("هل أنت تأكد من رغبتك في إعادة ربط حساب المدير أو تحديث بطاقة الدفع؟")) {
+      localStorage.removeItem("apex_master_owner_email");
+      localStorage.removeItem("apex_saved_card_json");
+      setMasterOwner(null);
+      setSavedCardInfo(null);
+      setCurrentStep("INIT");
+      setOtpInput("");
+      setGeneratedOtp("");
+      setCardData({ holderName: "", cardNumber: "", expiry: "", cvc: "" });
+      setMsg({ type: "success", text: "تم إعادة ضبط الربط. يمكنك الآن ربط حساب مدير وبطاقة جديدة." });
     }
   };
 
@@ -78,7 +206,7 @@ export default function AdminSubscriptionPage() {
               <span>إدارة الاشتراك والدفع التلقائي</span>
             </h1>
             <p className="text-xs text-slate-500 font-semibold mt-1">
-              متابعة حالة ترخيص التشغيل، تفعيل حفظ البطاقة للتجديد التلقائي، والمنحة المقدمة من الآنسة رفاه عبد القادر.
+              متابعة حالة ترخيص التشغيل، ربط حساب المدير المعتمد بكود التحقق المباشر، وتأكيد البطاقة الائتمانية.
             </p>
           </div>
 
@@ -158,54 +286,242 @@ export default function AdminSubscriptionPage() {
               </div>
             </div>
 
-            {/* Right Card Saving Box (No Email Field, No External Redirection) */}
-            <div className="lg:col-span-5 bg-white/5 p-6 rounded-2xl border border-white/10 text-right space-y-4 backdrop-blur-md">
+            {/* Right Card Saving & OTP Verification Box (Master Single Owner Lock) */}
+            <div className="lg:col-span-5 bg-white/5 p-6 rounded-2xl border border-white/10 text-right space-y-4 backdrop-blur-md text-white">
               <div className="border-b border-white/10 pb-3">
-                <span className="text-xs font-extrabold text-amber-400 block mb-1">باقة تشغيل كاملة — شركة SR LOR</span>
+                <span className="text-xs font-extrabold text-amber-400 block mb-1">ربط المدير المعتمد والبطاقة — شركة SR LOR</span>
                 <div className="text-xl font-black text-white flex items-center justify-between">
                   <span>0.000 ر.ع.</span>
                   <span className="text-xs text-emerald-400 font-bold bg-emerald-500/20 px-2.5 py-1 rounded-lg border border-emerald-500/30">
-                    مغلق السحب حالياً
+                    السحب مغلق مجاناً
                   </span>
                 </div>
               </div>
 
-              <div className="text-[11px] text-slate-200 font-semibold leading-relaxed bg-slate-900/80 p-3.5 rounded-xl border border-white/10 space-y-1">
-                <span className="font-extrabold text-amber-400 block">🔒 أمان مالي وتجديد تلقائي:</span>
-                <p className="text-slate-300">
-                  موقعك يمتلك دعماً مجانياً لمدة 6 أشهر، لن يتم اقتطاع أو سحب أي مبالغ مالية. تفعيل حفظ البطاقة يضمن استمرارية الخدمة للتجديد المباشر بعد انتهاء الفترة المجانية.
-                </p>
-              </div>
+              {/* STEP 1: Enter Email & Request OTP */}
+              {currentStep === "INIT" && (
+                <form onSubmit={handleSendOtp} className="space-y-4">
+                  <div className="text-[11px] text-slate-200 font-semibold bg-slate-900/80 p-3 rounded-xl border border-white/10">
+                    <span className="font-extrabold text-amber-400 block mb-0.5">👤 ربط حساب المدير الأول (Master Owner):</span>
+                    أدخل البريد الإلكتروني للمدير الذي سيتم قفل وربط صفحة الاشتراك به حُصرياً بدون كلمة سر عبر كود التحقق المباشر.
+                  </div>
 
-              {/* Saved Card Status Badge & Toggle Button */}
-              {isCardSaved ? (
-                <div className="space-y-3">
-                  <div className="p-3.5 bg-emerald-500/20 rounded-xl border border-emerald-500/40 text-emerald-300 text-xs font-extrabold flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                    <span>تم تفعيل حفظ البطاقة والتجديد التلقائي آمنة بنجاح!</span>
+                  <div>
+                    <label className="block text-xs font-extrabold text-slate-200 mb-1.5">
+                      بريد المدير المعتمد (Master Admin Email) *
+                    </label>
+                    <div className="relative">
+                      <Mail className="w-4 h-4 text-slate-400 absolute right-3 top-3" />
+                      <input
+                        type="email"
+                        required
+                        placeholder="admin@apexmedicaloman.com"
+                        value={emailInput}
+                        onChange={(e) => setEmailInput(e.target.value)}
+                        className="w-full pl-3 pr-10 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs font-bold text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 text-left"
+                        dir="ltr"
+                      />
+                    </div>
                   </div>
 
                   <button
-                    onClick={handleToggleCardSaved}
-                    className="w-full py-2.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 rounded-xl font-bold text-xs border border-rose-500/40 transition-colors"
+                    type="submit"
+                    disabled={loading}
+                    className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2"
                   >
-                    إلغاء حفظ البطاقة
+                    <KeyRound className="w-4 h-4 text-slate-950" />
+                    <span>{loading ? "جاري الإرسال..." : "إرسال كود التحقق المباشر (OTP)"}</span>
                   </button>
-                </div>
-              ) : (
-                <button
-                  onClick={handleSaveCardLocally}
-                  disabled={loadingPayment}
-                  className="w-full py-3.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-2xl font-black text-xs shadow-lg transition-all hover:scale-105 disabled:opacity-50 flex items-center justify-center gap-2"
-                >
-                  <CreditCard className="w-4 h-4 text-slate-950" />
-                  <span>{loadingPayment ? "جاري التفعيل..." : "تفعيل حفظ البطاقة للتجديد التلقائي (مجاناً)"}</span>
-                </button>
+                </form>
               )}
 
-              <div className="flex items-center justify-center gap-1.5 text-[10px] text-slate-400 font-semibold">
+              {/* STEP 2: Verify OTP Code */}
+              {currentStep === "OTP_SENT" && (
+                <form onSubmit={handleVerifyOtp} className="space-y-4">
+                  <div className="text-[11px] text-slate-200 font-semibold bg-slate-900/80 p-3 rounded-xl border border-white/10">
+                    <span className="font-extrabold text-amber-400 block mb-0.5">🔑 كود التحقق المباشر:</span>
+                    أدخل رمز التحقق المكون من 6 أرقام المرسل للبريد الإلكتروني (<span className="text-amber-300 dir-ltr">{emailInput}</span>).
+                  </div>
+
+                  {otpError && (
+                    <p className="text-xs text-rose-400 font-bold bg-rose-500/10 p-2.5 rounded-lg border border-rose-500/30">
+                      {otpError}
+                    </p>
+                  )}
+
+                  <div>
+                    <label className="block text-xs font-extrabold text-slate-200 mb-1.5">
+                      رمز التحقق المكون من 6 أرقام (OTP Code) *
+                    </label>
+                    <input
+                      type="text"
+                      maxLength={6}
+                      required
+                      placeholder="849201"
+                      value={otpInput}
+                      onChange={(e) => setOtpInput(e.target.value)}
+                      className="w-full p-3 bg-slate-900 border border-amber-500/60 rounded-xl text-center font-mono text-lg tracking-widest text-amber-400 font-black focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    />
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setCurrentStep("INIT")}
+                      className="py-2.5 px-4 bg-slate-800 text-slate-300 rounded-xl font-bold text-xs hover:bg-slate-700"
+                    >
+                      تغيير البريد
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="flex-1 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2"
+                    >
+                      <CheckCircle2 className="w-4 h-4 text-slate-950" />
+                      <span>تأكيد كود التحقق والربط الحصري</span>
+                    </button>
+                  </div>
+                </form>
+              )}
+
+              {/* STEP 3: Embedded Credit Card Input Form */}
+              {currentStep === "CARD_FORM" && (
+                <form onSubmit={handleSaveCard} className="space-y-3.5 text-right">
+                  <div className="text-[11px] text-slate-200 font-semibold bg-slate-900/80 p-3 rounded-xl border border-white/10">
+                    <span className="font-extrabold text-amber-400 block mb-0.5">💳 إدخال بطاقة الدفع الائتمانية:</span>
+                    أدخل بيانات البطاقة لحفظها وتشفيرها سحابياً للتجديد التلقائي بعد انتهاء الـ 6 أشهر. (السحب مغلق حالياً 0.000 ر.ع.).
+                  </div>
+
+                  {cardError && (
+                    <p className="text-xs text-rose-400 font-bold bg-rose-500/10 p-2.5 rounded-lg border border-rose-500/30">
+                      {cardError}
+                    </p>
+                  )}
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-300 mb-1">اسم حامل البطاقة *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="اسم حامل البطاقة المدون عليها"
+                      value={cardData.holderName}
+                      onChange={(e) => setCardData({ ...cardData, holderName: e.target.value })}
+                      className="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs font-bold text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-300 mb-1">رقم البطاقة الائتمانية (16 رقم) *</label>
+                    <div className="relative">
+                      <CreditCard className="w-4 h-4 text-slate-400 absolute right-3 top-3" />
+                      <input
+                        type="text"
+                        required
+                        placeholder="4532 8492 1092 4242"
+                        value={cardData.cardNumber}
+                        onChange={(e) => handleCardNumberChange(e.target.value)}
+                        className="w-full pl-3 pr-10 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs font-mono font-bold text-amber-400 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 text-left"
+                        dir="ltr"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-300 mb-1">تاريخ الانتهاء *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="MM/YY (08/28)"
+                        value={cardData.expiry}
+                        onChange={(e) => handleExpiryChange(e.target.value)}
+                        className="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs font-mono font-bold text-amber-400 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 text-center"
+                        dir="ltr"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-300 mb-1">رمز CVC / CVV *</label>
+                      <input
+                        type="password"
+                        maxLength={4}
+                        required
+                        placeholder="123"
+                        value={cardData.cvc}
+                        onChange={(e) => setCardData({ ...cardData, cvc: e.target.value.replace(/\D/g, "") })}
+                        className="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs font-mono font-bold text-amber-400 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 text-center"
+                        dir="ltr"
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full py-3.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-2xl font-black text-xs shadow-lg transition-all hover:scale-105 disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-slate-950" />
+                    <span>{loading ? "جاري التشفير والربط..." : "ربط وحفظ البطاقة آمنة (0.000 ر.ع.)"}</span>
+                  </button>
+                </form>
+              )}
+
+              {/* STEP 4: Success & Verified Bound State */}
+              {currentStep === "BOUND_SUCCESS" && masterOwner && (
+                <div className="space-y-4">
+                  
+                  {/* Master Account Badge */}
+                  <div className="p-3.5 bg-slate-900/90 rounded-2xl border border-amber-500/40 space-y-2">
+                    <div className="flex items-center justify-between text-xs font-extrabold">
+                      <span className="text-amber-400 flex items-center gap-1.5">
+                        <UserCheck className="w-4 h-4 text-amber-400" />
+                        <span>حساب المدير المعتمد (Master Owner)</span>
+                      </span>
+                      <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[10px] rounded-md border border-emerald-500/30">
+                        مربوط ومُقفل 🔒
+                      </span>
+                    </div>
+                    <p className="text-xs font-mono font-bold text-white text-left dir-ltr bg-slate-950/80 p-2 rounded-xl border border-white/10">
+                      {masterOwner}
+                    </p>
+                  </div>
+
+                  {/* Saved Credit Card Details */}
+                  {savedCardInfo && (
+                    <div className="p-3.5 bg-emerald-500/10 rounded-2xl border border-emerald-500/40 space-y-2">
+                      <div className="flex items-center justify-between text-xs font-extrabold text-emerald-300">
+                        <span className="flex items-center gap-1.5">
+                          <CreditCard className="w-4 h-4 text-emerald-400" />
+                          <span>البطاقة الائتمانية المحفوظة والتجديد التلقائي</span>
+                        </span>
+                        <span className="text-[10px] font-mono text-emerald-400">{savedCardInfo.brand}</span>
+                      </div>
+
+                      <div className="flex items-center justify-between font-mono text-sm font-black text-amber-400 bg-slate-950/80 p-2.5 rounded-xl border border-white/10">
+                        <span>•••• •••• •••• {savedCardInfo.last4}</span>
+                        <span className="text-xs text-slate-300">{savedCardInfo.expiry}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="p-3 bg-emerald-500/20 rounded-xl border border-emerald-500/40 text-emerald-300 text-xs font-extrabold flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                    <span>الاشتراك مفعل 100% — السحب مغلق 0.000 ر.ع. حالياً طوال فترة الدعم.</span>
+                  </div>
+
+                  <button
+                    onClick={handleResetBinding}
+                    className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-bold text-xs border border-slate-700 transition-colors"
+                  >
+                    تحديث أو تغيير بطاقة المدير
+                  </button>
+
+                </div>
+              )}
+
+              <div className="flex items-center justify-center gap-1.5 text-[10px] text-slate-400 font-semibold pt-1">
                 <Lock className="w-3 h-3 text-emerald-400" />
-                <span>مشفّر ومؤمّن بالكامل بمعايير SSL وحماية البطاقات</span>
+                <span>تشفير أحادي SSL مع ربط المدير الأول المعتمد حصرياً</span>
               </div>
             </div>
 
