@@ -5,7 +5,7 @@ import AdminLayout from "@/components/AdminLayout";
 import { 
   CreditCard, ShieldCheck, CheckCircle2, AlertCircle, RefreshCw, 
   Sparkles, Calendar, Clock, Lock, ArrowLeft, ExternalLink, Award, FileText, 
-  Gift, Heart, Tag, Cpu, Bot, Settings, Server, Headphones, Search, Globe, Layout, HardDrive, ShoppingBag, CalendarCheck, Check, Mail, KeyRound, UserCheck, X
+  Gift, Heart, Tag, Cpu, Bot, Settings, Server, Headphones, Search, Globe, Layout, HardDrive, ShoppingBag, CalendarCheck, Check, Mail, KeyRound, UserCheck, X, Copy
 } from "lucide-react";
 
 export default function AdminSubscriptionPage() {
@@ -66,7 +66,7 @@ export default function AdminSubscriptionPage() {
     }
   }, []);
 
-  // Step 1: Send OTP Code to Email
+  // Step 1: Send OTP Code to Email & Display Code Instantly
   const handleSendOtp = (e) => {
     e.preventDefault();
     if (!emailInput || !emailInput.includes("@")) {
@@ -81,15 +81,16 @@ export default function AdminSubscriptionPage() {
     // Generate 6-digit random OTP
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     setGeneratedOtp(code);
+    setOtpInput(code); // Auto-prefill for 1-click instant verification
 
     setTimeout(() => {
       setLoading(false);
       setCurrentStep("OTP_SENT");
       setMsg({
         type: "success",
-        text: `تم توليد كود التحقق المباشر بنجاح! كود التحقق الخاص بك هو: [ ${code} ]`,
+        text: `تم توليد كود التحقق المباشر بنجاح! رمز التحقق الخاص بك هو: [ ${code} ]`,
       });
-    }, 600);
+    }, 500);
   };
 
   // Step 2: Verify OTP Code
@@ -112,7 +113,7 @@ export default function AdminSubscriptionPage() {
         type: "success",
         text: "تم إثبات ملكية البريد والربط كحساب مدير معتمد بنجاح! يرجى إدخال بيانات بطاقة الدفع الآن.",
       });
-    }, 600);
+    }, 500);
   };
 
   // Format Card Number (XXXX XXXX XXXX XXXX)
@@ -176,7 +177,7 @@ export default function AdminSubscriptionPage() {
         type: "success",
         text: `تم حفظ وتشفير بطاقتك (${brand} •••• ${last4}) وحساب المدير (${masterOwner}) بنجاح! السحب مغلق 0.000 ر.ع. حالياً طوال فترة الـ 6 أشهر.`,
       });
-    }, 700);
+    }, 600);
   };
 
   // Reset or Change Card Flow
@@ -315,7 +316,7 @@ export default function AdminSubscriptionPage() {
                       <input
                         type="email"
                         required
-                        placeholder="admin@apexmedicaloman.com"
+                        placeholder="admin@srlor.com"
                         value={emailInput}
                         onChange={(e) => setEmailInput(e.target.value)}
                         className="w-full pl-3 pr-10 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs font-bold text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 text-left"
@@ -330,17 +331,29 @@ export default function AdminSubscriptionPage() {
                     className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2"
                   >
                     <KeyRound className="w-4 h-4 text-slate-950" />
-                    <span>{loading ? "جاري الإرسال..." : "إرسال كود التحقق المباشر (OTP)"}</span>
+                    <span>{loading ? "جاري التوليد..." : "توليد وإرسال كود التحقق المباشر (OTP)"}</span>
                   </button>
                 </form>
               )}
 
-              {/* STEP 2: Verify OTP Code */}
+              {/* STEP 2: Display & Verify OTP Code */}
               {currentStep === "OTP_SENT" && (
                 <form onSubmit={handleVerifyOtp} className="space-y-4">
-                  <div className="text-[11px] text-slate-200 font-semibold bg-slate-900/80 p-3 rounded-xl border border-white/10">
-                    <span className="font-extrabold text-amber-400 block mb-0.5">🔑 كود التحقق المباشر:</span>
-                    أدخل رمز التحقق المكون من 6 أرقام المرسل للبريد الإلكتروني (<span className="text-amber-300 dir-ltr">{emailInput}</span>).
+                  
+                  {/* Generated OTP Code Display Banner */}
+                  <div className="p-3.5 bg-amber-500/20 border-2 border-amber-400 rounded-2xl text-center space-y-2 shadow-md">
+                    <span className="text-xs text-amber-300 font-extrabold block">🔑 كود التحقق المباشر المولد الخاص بك:</span>
+                    <div className="text-2xl font-mono font-black tracking-widest text-amber-400 select-all">
+                      {generatedOtp}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setOtpInput(generatedOtp)}
+                      className="text-[11px] font-black text-slate-950 bg-amber-400 hover:bg-amber-500 px-3 py-1 rounded-lg transition-all inline-flex items-center gap-1 shadow-sm"
+                    >
+                      <Check className="w-3.5 h-3.5" />
+                      <span>تعبئة كود التحقق المباشر ({generatedOtp})</span>
+                    </button>
                   </div>
 
                   {otpError && (
