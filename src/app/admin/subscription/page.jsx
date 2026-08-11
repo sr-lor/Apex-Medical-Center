@@ -5,10 +5,18 @@ import AdminLayout from "@/components/AdminLayout";
 import { 
   CreditCard, ShieldCheck, CheckCircle2, AlertCircle, RefreshCw, 
   Sparkles, Calendar, Clock, Lock, ArrowLeft, ExternalLink, Award, FileText, 
-  Gift, Heart, Tag, Cpu, Bot, Settings, Server, Headphones, Search, Globe, Layout, HardDrive, ShoppingBag, CalendarCheck, Check, Mail, KeyRound, UserCheck, X, Copy
+  Gift, Heart, Tag, Cpu, Bot, Settings, Server, Headphones, Search, Globe, Layout, HardDrive, ShoppingBag, CalendarCheck, Check, Mail, KeyRound, UserCheck, X, Copy, ShieldAlert, Key
 } from "lucide-react";
 
 export default function AdminSubscriptionPage() {
+  // Manager Security Key Lock Screen State
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [securityPinInput, setSecurityPinInput] = useState("");
+  const [savedSecurityPin, setSavedSecurityPin] = useState("778899"); // Default Manager Security PIN
+  const [pinError, setPinError] = useState("");
+  const [isChangingPin, setIsChangingPin] = useState(false);
+  const [newPinInput, setNewPinInput] = useState("");
+
   // Step State: 'INIT' | 'OTP_SENT' | 'CARD_FORM' | 'BOUND_SUCCESS'
   const [currentStep, setCurrentStep] = useState("INIT");
   
@@ -20,6 +28,7 @@ export default function AdminSubscriptionPage() {
   const [generatedOtp, setGeneratedOtp] = useState("");
   const [otpInput, setOtpInput] = useState("");
   const [otpError, setOtpError] = useState("");
+  const [awsStatus, setAwsStatus] = useState("");
 
   // Card Form State
   const [cardData, setCardData] = useState({
@@ -51,7 +60,10 @@ export default function AdminSubscriptionPage() {
   const [paymentHistory] = useState([]);
 
   useEffect(() => {
-    // Restore master owner & card info from localStorage
+    // Restore saved PIN, master owner & card info from localStorage
+    const customPin = localStorage.getItem("apex_manager_security_pin");
+    if (customPin) setSavedSecurityPin(customPin);
+
     const savedOwner = localStorage.getItem("apex_master_owner_email");
     const savedCard = localStorage.getItem("apex_saved_card_json");
 
@@ -66,8 +78,34 @@ export default function AdminSubscriptionPage() {
     }
   }, []);
 
-  // Step 1: Send OTP Code to Email & Display Code Instantly
-  const handleSendOtp = (e) => {
+  // Handle Security Lock Unlock
+  const handleUnlockPage = (e) => {
+    e.preventDefault();
+    if (securityPinInput.trim() === savedSecurityPin) {
+      setIsUnlocked(true);
+      setPinError("");
+      setMsg({ type: "success", text: "تم التحقق من مفتاح الحماية وتأكيد هوية المدير بنجاح!" });
+    } else {
+      setPinError("مفتاح الحماية السري غير صحيح! يرجى إدخال PIN المعتمد للمدير.");
+    }
+  };
+
+  // Handle Changing Security PIN Key
+  const handleSaveNewPin = (e) => {
+    e.preventDefault();
+    if (!newPinInput || newPinInput.length < 4) {
+      alert("مفتاح الحماية يجب أن يتكون من 4 أرقام/رموز على الأقل.");
+      return;
+    }
+    localStorage.setItem("apex_manager_security_pin", newPinInput);
+    setSavedSecurityPin(newPinInput);
+    setIsChangingPin(false);
+    setNewPinInput("");
+    setMsg({ type: "success", text: `تم تحديث وحفظ مفتاح الحماية الخاص بالمدير بنجاح!` });
+  };
+
+  // Step 1: Send OTP Code to Email via API / AWS SES
+  const handleSendOtp = async (e) => {
     e.preventDefault();
     if (!emailInput || !emailInput.includes("@")) {
       setMsg({ type: "error", text: "يرجى إدخال بريد إلكتروني صحيح للربط والتحقق." });
@@ -77,20 +115,41 @@ export default function AdminSubscriptionPage() {
     setLoading(true);
     setMsg({ type: "", text: "" });
     setOtpError("");
+    setAwsStatus("");
 
     // Generate 6-digit random OTP
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     setGeneratedOtp(code);
-    setOtpInput(code); // Auto-prefill for 1-click instant verification
+    setOtpInput(code); // Auto-prefill for instant verification
 
-    setTimeout(() => {
+    try {
+      const res = await fetch("/api/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: emailInput, otp: code }),
+      });
+
+      const data = await res.json();
+      setLoading(false);
+      setCurrentStep("OTP_SENT");
+
+      if (data.emailSentViaAws) {
+        setAwsStatus("✨ تم إرسال الرسالة فعلياً إلى بريدك عبر AWS SES!");
+      }
+
+      setMsg({
+        type: "success",
+        text: data.message || `تم توليد كود التحقق المباشر بنجاح! الرمز الخاص بك هو: [ ${code} ]`,
+      });
+    } catch (err) {
+      console.error(err);
       setLoading(false);
       setCurrentStep("OTP_SENT");
       setMsg({
         type: "success",
         text: `تم توليد كود التحقق المباشر بنجاح! رمز التحقق الخاص بك هو: [ ${code} ]`,
       });
-    }, 500);
+    }
   };
 
   // Step 2: Verify OTP Code
@@ -195,11 +254,72 @@ export default function AdminSubscriptionPage() {
     }
   };
 
+  // IF LOCKED: Show High-Security Manager Gate Screen
+  if (!isUnlocked) {
+    return (
+      <AdminLayout>
+        <div className="max-w-md mx-auto my-12 text-slate-900 space-y-6">
+          <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-apex-navy text-white p-8 rounded-3xl border-2 border-amber-500/40 shadow-2xl text-center space-y-6 relative overflow-hidden">
+            <div className="w-16 h-16 bg-amber-500/20 rounded-2xl border border-amber-400/40 flex items-center justify-center mx-auto text-amber-400 shadow-inner">
+              <ShieldAlert className="w-8 h-8 text-amber-400" />
+            </div>
+
+            <div>
+              <span className="bg-amber-500/20 text-amber-300 text-[10px] font-extrabold px-3 py-1 rounded-full border border-amber-500/30 uppercase tracking-widest">
+                Master Security Gate 🔒
+              </span>
+              <h2 className="text-xl font-black text-white mt-2">
+                بوابة حماية المدير المعتمد
+              </h2>
+              <p className="text-xs text-slate-400 font-semibold mt-1">
+                صفحة إدارة الاشتراك والبطاقات محمية بمفتاح سري خاص بالمدير لمنع الوصول غير المصرح به.
+              </p>
+            </div>
+
+            {pinError && (
+              <div className="p-3 bg-rose-500/20 border border-rose-500/40 rounded-xl text-rose-300 text-xs font-bold">
+                {pinError}
+              </div>
+            )}
+
+            <form onSubmit={handleUnlockPage} className="space-y-4 text-right">
+              <div>
+                <label className="block text-xs font-extrabold text-slate-300 mb-1.5 flex items-center gap-1.5">
+                  <Key className="w-4 h-4 text-amber-400" />
+                  <span>أدخل مفتاح الحماية السري للمدير (PIN) *</span>
+                </label>
+                <input
+                  type="password"
+                  required
+                  placeholder="••••••"
+                  value={securityPinInput}
+                  onChange={(e) => setSecurityPinInput(e.target.value)}
+                  className="w-full p-3 bg-slate-900 border border-amber-500/60 rounded-xl text-center font-mono text-xl tracking-widest text-amber-400 font-black focus:outline-none focus:ring-2 focus:ring-amber-500"
+                />
+                <span className="text-[10px] text-slate-400 font-semibold mt-1 block">
+                  💡 مفتاح الحماية المبدئي هو: <code className="text-amber-300 font-bold">778899</code> (يمكنك تغييره فور الدخول).
+                </span>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-3.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-2xl font-black text-xs shadow-lg transition-all hover:scale-105 flex items-center justify-center gap-2"
+              >
+                <ShieldCheck className="w-4 h-4 text-slate-950" />
+                <span>فتح القفل وتأكيد هوية المدير</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </AdminLayout>
+    );
+  }
+
   return (
     <AdminLayout>
       <div className="space-y-8 text-slate-900">
         
-        {/* Header Title */}
+        {/* Header Title & Security Settings Bar */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
           <div>
             <h1 className="text-2xl font-extrabold text-slate-900 flex items-center gap-2">
@@ -211,11 +331,47 @@ export default function AdminSubscriptionPage() {
             </p>
           </div>
 
-          <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-800 px-4 py-2 rounded-2xl text-xs font-extrabold border border-emerald-300">
-            <Gift className="w-4 h-4 text-emerald-600" />
-            <span>الدعم المجاني مفعّل (0.000 ر.ع.)</span>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setIsChangingPin(!isChangingPin)}
+              className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold border border-slate-300 flex items-center gap-1.5 transition-colors"
+            >
+              <Key className="w-4 h-4 text-amber-600" />
+              <span>{isChangingPin ? "إلغاء التعديل" : "تعديل مفتاح الحماية (PIN)"}</span>
+            </button>
+
+            <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-800 px-4 py-2 rounded-2xl text-xs font-extrabold border border-emerald-300">
+              <Gift className="w-4 h-4 text-emerald-600" />
+              <span>الدعم المجاني مفعّل (0.000 ر.ع.)</span>
+            </div>
           </div>
         </div>
+
+        {/* Change Security PIN Key Form Box */}
+        {isChangingPin && (
+          <form onSubmit={handleSaveNewPin} className="bg-slate-900 text-white p-5 rounded-2xl border border-amber-500/40 space-y-3">
+            <h3 className="text-xs font-extrabold text-amber-400 flex items-center gap-2">
+              <Key className="w-4 h-4 text-amber-400" />
+              <span>تعيين مفتاح حماية سري جديد لصفحة الاشتراكات (Manager PIN Key)</span>
+            </h3>
+            <div className="flex items-center gap-3">
+              <input
+                type="text"
+                required
+                placeholder="أدخل مفتاح الحماية الجديد (مثل: 998877)"
+                value={newPinInput}
+                onChange={(e) => setNewPinInput(e.target.value)}
+                className="flex-1 p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-xs font-mono font-bold text-amber-400"
+              />
+              <button
+                type="submit"
+                className="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl font-black text-xs"
+              >
+                حفظ المفتاح الجديد
+              </button>
+            </div>
+          </form>
+        )}
 
         {/* Feedback Message */}
         {msg.text && (
@@ -331,7 +487,7 @@ export default function AdminSubscriptionPage() {
                     className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2"
                   >
                     <KeyRound className="w-4 h-4 text-slate-950" />
-                    <span>{loading ? "جاري التوليد..." : "توليد وإرسال كود التحقق المباشر (OTP)"}</span>
+                    <span>{loading ? "جاري التوليد والإرسال..." : "توليد وإرسال كود التحقق المباشر (OTP)"}</span>
                   </button>
                 </form>
               )}
@@ -346,6 +502,9 @@ export default function AdminSubscriptionPage() {
                     <div className="text-2xl font-mono font-black tracking-widest text-amber-400 select-all">
                       {generatedOtp}
                     </div>
+                    {awsStatus && (
+                      <p className="text-[11px] text-emerald-300 font-extrabold">{awsStatus}</p>
+                    )}
                     <button
                       type="button"
                       onClick={() => setOtpInput(generatedOtp)}
