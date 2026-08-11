@@ -9,17 +9,19 @@ const stripe = new Stripe(stripeKey || "sk_test_mock", {
 export async function POST(request) {
   try {
     const body = await request.json();
+    const email = body.email || "admin@apexmedicaloman.com";
     const isFreePeriod = body.isFreePeriod ?? true;
     const amount = isFreePeriod ? 0.00 : (body.amount || 3.465); // 0.00 OMR during 6-month free period
     const planName = body.planName || "باقة تشغيل كاملة لمجمع القمة الطبي (شركة SR LOR)";
 
     const origin = request.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-    // If currently in free 6-month support period, setup future usage without immediate charge
+    // Create Stripe Checkout Session with prefilled customer_email & Card Saving
     let session;
     try {
       session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
+        customer_email: email, // Prefill email so Stripe doesn't prompt repeatedly
         line_items: [
           {
             price_data: {
@@ -27,24 +29,25 @@ export async function POST(request) {
               product_data: {
                 name: planName,
                 description: isFreePeriod
-                  ? "فترة الدعم المجاني مفعّلة (0.000 ر.ع.) - حفظ البطاقة آمنة للتجديد المباشر بعد 6 أشهر"
+                  ? "فترة الدعم المجاني مفعّلة - حفظ البطاقة آمنة للتجديد المباشر بعد 6 أشهر"
                   : "باقة تشغيل كاملة بعد الخصم المباشر 65% (3.465 ر.ع. شهرياً)",
                 images: ["https://apexmedicaloman.com/wp-content/uploads/2026/06/Apex_Log.png"],
               },
-              unit_amount: Math.round(amount * 1000), // 0 baisa or 3465 baisa
+              unit_amount: Math.round(amount * 1000),
             },
             quantity: 1,
           },
         ],
         mode: "payment",
         payment_intent_data: { setup_future_usage: "off_session" },
-        success_url: `${origin}/admin/subscription?success=true`,
+        success_url: `${origin}/admin/subscription?success=true&email=${encodeURIComponent(email)}`,
         cancel_url: `${origin}/admin/subscription?canceled=true`,
       });
     } catch (err) {
       console.warn("Currency checkout fallback attempt:", err.message);
       session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
+        customer_email: email,
         line_items: [
           {
             price_data: {
@@ -62,7 +65,7 @@ export async function POST(request) {
         ],
         mode: "payment",
         payment_intent_data: { setup_future_usage: "off_session" },
-        success_url: `${origin}/admin/subscription?success=true`,
+        success_url: `${origin}/admin/subscription?success=true&email=${encodeURIComponent(email)}`,
         cancel_url: `${origin}/admin/subscription?canceled=true`,
       });
     }

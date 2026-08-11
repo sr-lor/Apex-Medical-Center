@@ -5,12 +5,14 @@ import AdminLayout from "@/components/AdminLayout";
 import { 
   CreditCard, ShieldCheck, CheckCircle2, AlertCircle, RefreshCw, 
   Sparkles, Calendar, Clock, Lock, ArrowLeft, ExternalLink, Award, FileText, 
-  Gift, Heart, Tag, Cpu, Bot, Settings, Server, Headphones, Search, Globe, Layout, HardDrive, ShoppingBag, CalendarCheck, Check
+  Gift, Heart, Tag, Cpu, Bot, Settings, Server, Headphones, Search, Globe, Layout, HardDrive, ShoppingBag, CalendarCheck, Check, Mail
 } from "lucide-react";
 
 export default function AdminSubscriptionPage() {
   const [loadingPayment, setLoadingPayment] = useState(false);
   const [saveCardAutoRenewal, setSaveCardAutoRenewal] = useState(true);
+  const [adminEmail, setAdminEmail] = useState("admin@apexmedicaloman.com");
+  const [isCardSaved, setIsCardSaved] = useState(false);
   const [msg, setMsg] = useState({ type: "", text: "" });
 
   // Subscription state: Active 6-Month Free Support Grant by Ms. Rafah Abdul Qader & 65% Permanent Discount
@@ -30,11 +32,25 @@ export default function AdminSubscriptionPage() {
   const [paymentHistory] = useState([]);
 
   useEffect(() => {
+    // Restore saved admin email & card status from localStorage
+    const storedEmail = localStorage.getItem("apex_admin_email");
+    const storedCardSaved = localStorage.getItem("apex_card_saved");
+    if (storedEmail) setAdminEmail(storedEmail);
+    if (storedCardSaved === "true") setIsCardSaved(true);
+
     const query = new URLSearchParams(window.location.search);
+    const emailParam = query.get("email");
+
     if (query.get("success") === "true") {
+      const activeEmail = emailParam || storedEmail || adminEmail;
+      localStorage.setItem("apex_admin_email", activeEmail);
+      localStorage.setItem("apex_card_saved", "true");
+      setIsCardSaved(true);
+      setAdminEmail(activeEmail);
+
       setMsg({
         type: "success",
-        text: "تم حفظ بطاقتك بنجاح للتجديد التلقائي بدون أي اقتطاع مالي حالياً طوال فترة الدعم المجاني!",
+        text: `تم حفظ بطاقتك والبريد الإلكتروني المعتمد (${activeEmail}) للتجديد التلقائي بنجاح!`,
       });
     } else if (query.get("canceled") === "true") {
       setMsg({
@@ -45,14 +61,23 @@ export default function AdminSubscriptionPage() {
   }, []);
 
   const handlePayWithGateway = async () => {
+    if (!adminEmail || !adminEmail.includes("@")) {
+      setMsg({ type: "error", text: "يرجى كتابة بريد إلكتروني صحيح لتسجيل التنبيهات وإيصالات الدفع." });
+      return;
+    }
+
     setLoadingPayment(true);
     setMsg({ type: "", text: "" });
+
+    // Store email locally before redirecting
+    localStorage.setItem("apex_admin_email", adminEmail);
 
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          email: adminEmail,
           isFreePeriod: subscriptionInfo.isFreePeriod,
           amount: subscriptionInfo.finalPriceOMR,
           saveCardAutoRenewal,
@@ -117,7 +142,7 @@ export default function AdminSubscriptionPage() {
           </div>
         )}
 
-        {/* 1. LUXURY PRICING DISPLAY & ACTIVE SUBSCRIPTION STATUS */}
+        {/* 1. LUXURY PRICING DISPLAY & ACTIVE SUBSCRIPTION STATUS (Clean Non-Duplicate Formatting) */}
         <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-apex-navy text-white p-8 rounded-3xl border-2 border-amber-500/40 shadow-2xl relative overflow-hidden">
           <div className="absolute top-0 left-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -129,7 +154,7 @@ export default function AdminSubscriptionPage() {
               <div className="flex flex-wrap items-center gap-2">
                 <span className="bg-emerald-500/20 text-emerald-300 text-xs font-extrabold px-3 py-1 rounded-full border border-emerald-500/40 flex items-center gap-1.5">
                   <Check className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>فترة الدعم المجاني نشطة (0.000 ر.ع.)</span>
+                  <span>فترة الدعم المجاني نشطة (6 أشهر)</span>
                 </span>
 
                 <span className="bg-amber-500/20 text-amber-300 text-xs font-extrabold px-3 py-1 rounded-full border border-amber-500/40 flex items-center gap-1.5">
@@ -138,19 +163,21 @@ export default function AdminSubscriptionPage() {
                 </span>
               </div>
 
-              {/* Luxury Price Breakdown Box */}
-              <div className="space-y-1 bg-white/5 p-5 rounded-2xl border border-white/10">
-                <span className="text-xs text-slate-400 font-bold block">عرض السعر والترخيص المعتمد:</span>
+              {/* Clean Pricing Box - Zero Text Duplication */}
+              <div className="space-y-2 bg-white/5 p-5 rounded-2xl border border-white/10">
+                <span className="text-xs text-slate-300 font-bold block">عرض السعر والترخيص المعتمد:</span>
+                
                 <div className="flex items-baseline gap-3 flex-wrap">
                   <span className="text-sm font-bold text-slate-400 line-through">
-                    السعر الأصلي: {subscriptionInfo.originalPriceOMR} ر.ع. / شهرياً
+                    السعر الأصلي: {subscriptionInfo.originalPriceOMR} ر.ع.
                   </span>
                   <span className="text-3xl sm:text-4xl font-black text-amber-400 tracking-tight">
                     {subscriptionInfo.finalPriceOMR} ريال عماني <span className="text-xs text-slate-300 font-bold">/ شهرياً</span>
                   </span>
                 </div>
+
                 <p className="text-[11px] text-emerald-300 font-extrabold pt-1">
-                  ✨ حالياً 0.000 ر.ع. (مجاناً لمدة 6 أشهر قادمة) — ثم يبدأ الخصم الدائم 65%.
+                  ✨ تكلفة التشغيل حالياً 0.000 ر.ع. (مجاناً حتى {subscriptionInfo.grantExpiryDate}).
                 </p>
               </div>
 
@@ -167,29 +194,60 @@ export default function AdminSubscriptionPage() {
               </div>
             </div>
 
-            {/* Right Card Saving & Auto-Renewal Action Box */}
+            {/* Right Card Saving & Email Persistence Box */}
             <div className="lg:col-span-5 bg-white/5 p-6 rounded-2xl border border-white/10 text-right space-y-4 backdrop-blur-md">
               <div className="border-b border-white/10 pb-3">
                 <span className="text-xs font-extrabold text-amber-400 block mb-1">باقة تشغيل كاملة — شركة SR LOR</span>
-                <div className="text-xl font-black text-white">
-                  0.000 ر.ع. <span className="text-xs text-slate-400 font-semibold">(مغلق السحب حالياً)</span>
+                <div className="text-xl font-black text-white flex items-center justify-between">
+                  <span>0.000 ر.ع.</span>
+                  <span className="text-xs text-emerald-400 font-bold bg-emerald-500/20 px-2.5 py-1 rounded-lg border border-emerald-500/30">
+                    مغلق السحب حالياً
+                  </span>
                 </div>
               </div>
 
-              <p className="text-[11px] text-slate-300 font-semibold leading-relaxed bg-slate-900/60 p-3 rounded-xl border border-white/10">
-                🔒 **أمان مالي كامل**: بما أن موقعك يمتلك دعماً مجانياً لمدة 6 أشهر، لن يتم اقتطاع أو سحب أي مبالغ مالية عند إضافة بطاقتك. يمكنك حفظ البطاقة للتجديد التلقائي مستقبلاً.
-              </p>
+              {/* Clean Notice Without Raw Markdown Formatting */}
+              <div className="text-[11px] text-slate-200 font-semibold leading-relaxed bg-slate-900/80 p-3 rounded-xl border border-white/10 space-y-1">
+                <span className="font-extrabold text-amber-400 block">🔒 أمان مالي وتأكيد البريد:</span>
+                <p className="text-slate-300">
+                  موقعك يمتلك دعماً مجانياً لمدة 6 أشهر، لن يتم اقتطاع أو سحب أي مبالغ مالية عند إضافة بطاقتك. يمكنك حفظ البطاقة والبريد للتجديد التلقائي مستقبلاً.
+                </p>
+              </div>
 
-              {/* Auto Renewal Toggle */}
-              <label className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-900/90 border border-amber-500/30 cursor-pointer text-xs text-slate-200 font-bold hover:bg-slate-900 transition-colors">
+              {/* Verified Email Input Field */}
+              <div className="space-y-1.5">
+                <label className="block text-xs font-bold text-slate-200 flex items-center gap-1">
+                  <Mail className="w-3.5 h-3.5 text-amber-400" />
+                  <span>البريد الإلكتروني المعتمد للتنبيهات والإيصالات *</span>
+                </label>
                 <input
-                  type="checkbox"
-                  checked={saveCardAutoRenewal}
-                  onChange={(e) => setSaveCardAutoRenewal(e.target.checked)}
-                  className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 mt-0.5"
+                  type="email"
+                  required
+                  placeholder="admin@apexmedicaloman.com"
+                  value={adminEmail}
+                  onChange={(e) => setAdminEmail(e.target.value)}
+                  className="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs font-bold text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 text-left"
+                  dir="ltr"
                 />
-                <span>حفظ بطاقة الدفع آمنة وتفعيل التجديد التلقائي مستقبلاً (0.000 ر.ع. حالياً)</span>
-              </label>
+              </div>
+
+              {/* Saved Card Badge or Toggle */}
+              {isCardSaved ? (
+                <div className="p-3 bg-emerald-500/20 rounded-xl border border-emerald-500/40 text-emerald-300 text-xs font-extrabold flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                  <span>تم تفعيل حفظ البطاقة والبريد الإلكتروني المعتمد بنجاح!</span>
+                </div>
+              ) : (
+                <label className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-900/90 border border-amber-500/30 cursor-pointer text-xs text-slate-200 font-bold hover:bg-slate-900 transition-colors">
+                  <input
+                    type="checkbox"
+                    checked={saveCardAutoRenewal}
+                    onChange={(e) => setSaveCardAutoRenewal(e.target.checked)}
+                    className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 mt-0.5"
+                  />
+                  <span>حفظ بطاقة الدفع آمنة وتفعيل التجديد التلقائي مستقبلاً (0.000 ر.ع. حالياً)</span>
+                </label>
+              )}
 
               <button
                 onClick={handlePayWithGateway}
@@ -197,7 +255,7 @@ export default function AdminSubscriptionPage() {
                 className="w-full py-3.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-2xl font-black text-xs shadow-lg transition-all hover:scale-105 disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 <CreditCard className="w-4 h-4 text-slate-950" />
-                <span>{loadingPayment ? "جاري فتح بوابة الدفع..." : "حفظ البطاقة للتجديد التلقائي (مجاناً)"}</span>
+                <span>{loadingPayment ? "جاري الحفظ والتحقق..." : "حفظ البطاقة والبريد المعتمد (مجاناً)"}</span>
               </button>
 
               <div className="flex items-center justify-center gap-1.5 text-[10px] text-slate-400 font-semibold">
