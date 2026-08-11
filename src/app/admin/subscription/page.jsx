@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import AdminLayout from "@/components/AdminLayout";
 import { 
   CreditCard, ShieldCheck, CheckCircle2, AlertCircle, RefreshCw, 
-  Sparkles, Calendar, Clock, Lock, ArrowLeft, ExternalLink, Award, FileText, Gift, Heart, Tag
+  Sparkles, Calendar, Clock, Lock, ArrowLeft, ExternalLink, Award, FileText, 
+  Gift, Heart, Tag, Cpu, Bot, Settings, Server, Headphones, Search, Globe, Layout, HardDrive, ShoppingBag
 } from "lucide-react";
 
 export default function AdminSubscriptionPage() {
@@ -12,27 +13,27 @@ export default function AdminSubscriptionPage() {
   const [saveCardAutoRenewal, setSaveCardAutoRenewal] = useState(true);
   const [msg, setMsg] = useState({ type: "", text: "" });
 
-  // Subscription State with 6-month free grant from Ms. Rafah Abdul Qader
-  const [subscriptionInfo, setSubscriptionInfo] = useState({
-    status: "active_grant", // 'active_grant', 'active', 'due'
-    planName: "باقة تشغيل كاملة لمجمع القمة الطبي (Apex Medical Center Full Platform)",
+  // Subscription State with direct 65% discount applied and 6-month free grant from Ms. Rafah Abdul Qader
+  const [subscriptionInfo] = useState({
+    status: "active_grant",
+    planName: "باقة تشغيل كاملة لمجمع القمة الطبي (شاملة الخصم 65% ودعم رفاه عبد القادر)",
     originalPriceOMR: 9.90,
     discountPercent: 65,
-    discountedPriceOMR: 3.465,
-    grantTitle: "دعم مجاني لتشغيل الموقع لمدة 6 أشهر مقدم من الآنسة رفاه عبد القادر",
+    finalPriceOMR: 3.465, // 9.90 - 65% = 3.465 OMR
+    grantTitle: "دعم مجاني 6 أشهر وخصم دائم 65% مقدم من الآنسة رفاه عبد القادر",
     grantExpiryDate: "11 فبراير 2027", // 6 months from current date
     daysRemaining: 180,
   });
 
-  // Empty real payment history (All fake dummy invoices permanently removed)
-  const [paymentHistory, setPaymentHistory] = useState([]);
+  // Empty real payment history (All fake dummy invoices removed)
+  const [paymentHistory] = useState([]);
 
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     if (query.get("success") === "true") {
       setMsg({
         type: "success",
-        text: "تم حفظ بطاقتك وتفعيل التجديد التلقائي لترخيص مجمع القمة الطبي بنجاح!",
+        text: "تم حفظ بطاقتك وتفعيل التجديد التلقائي لترخيص مجمع القمة الطبي بنجاح بسعر الخصم المباشر (3.465 ر.ع.)!",
       });
     } else if (query.get("canceled") === "true") {
       setMsg({
@@ -51,7 +52,7 @@ export default function AdminSubscriptionPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount: subscriptionInfo.originalPriceOMR,
+          amount: subscriptionInfo.finalPriceOMR,
           saveCardAutoRenewal,
           planName: subscriptionInfo.planName,
         }),
@@ -86,13 +87,13 @@ export default function AdminSubscriptionPage() {
               <span>إدارة الاشتراك والدفع التلقائي</span>
             </h1>
             <p className="text-xs text-slate-500 font-semibold mt-1">
-              متابعة حالة الدعم المجاني، تفعيل حفظ البطاقة للتجديد التلقائي، والاطلاع على تفاصيل الترخيص بالعملة العمانية.
+              تجديد الاشتراك، تفعيل حفظ البطاقة للدفع التلقائي، والاستفادة من خصم 65% المباشر ودعم الآنسة رفاه عبد القادر.
             </p>
           </div>
 
           <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-800 px-4 py-2 rounded-2xl text-xs font-extrabold border border-emerald-300">
             <Gift className="w-4 h-4 text-emerald-600" />
-            <span>الدعم المجاني مفعّل 100%</span>
+            <span>الدعم المجاني والخصم مفعّلان 100%</span>
           </div>
         </div>
 
@@ -114,54 +115,40 @@ export default function AdminSubscriptionPage() {
           </div>
         )}
 
-        {/* Special Grant & Official Notice Card */}
-        <div className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 text-slate-950 p-6 sm:p-8 rounded-3xl shadow-lg border border-amber-400 relative overflow-hidden">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div className="space-y-2 max-w-2xl">
-              <div className="inline-flex items-center gap-1.5 bg-slate-950 text-amber-400 px-3 py-1 rounded-full text-xs font-extrabold shadow-sm">
-                <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-400" />
-                <span>دعم وتطوير خاص</span>
-              </div>
-              <h2 className="text-xl sm:text-2xl font-black text-slate-950 leading-tight">
-                {subscriptionInfo.grantTitle}
-              </h2>
-              <p className="text-slate-900 text-xs sm:text-sm font-bold leading-relaxed">
-                ملاحظة رسمية: يتم تشغيل المنصة مجاناً بالكامل لمدة 6 أشهر قادمة (حتى {subscriptionInfo.grantExpiryDate}). وفي حال رغبتم بالاستمرار باستخدام منصتنا بعد ذلك، ستحصلون على <span className="underline decoration-2 font-black">خصم خاص بقيمة 65%</span> على الاشتراك!
-              </p>
-            </div>
-
-            <div className="bg-slate-950 text-white p-5 rounded-2xl text-center space-y-1 min-w-[200px] border border-amber-400/30 flex-shrink-0">
-              <span className="text-[11px] text-slate-400 font-bold block">السعر الأصلي للباقة</span>
-              <span className="text-xl font-black text-rose-400 line-through">9.90 ر.ع.</span>
-              <span className="text-[10px] text-emerald-400 font-extrabold block">مجاناً حالياً لمدة 6 أشهر</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Active Plan Overview Card with Auto-Renewal Card Saving */}
+        {/* 1. Main Pricing & Active Subscription Card (Direct 65% Discount Active) */}
         <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-apex-navy text-white p-8 rounded-3xl border border-amber-500/30 shadow-xl relative overflow-hidden">
           <div className="absolute top-0 left-0 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
             <div className="lg:col-span-7 space-y-4 text-right">
-              <div className="inline-flex items-center gap-2 bg-white/10 px-3.5 py-1 rounded-full text-xs font-bold text-amber-400 border border-amber-400/30">
+              <div className="inline-flex items-center gap-2 bg-amber-500/20 px-3.5 py-1 rounded-full text-xs font-extrabold text-amber-400 border border-amber-500/40">
                 <Sparkles className="w-4 h-4 text-amber-400" />
-                <span>باقة تشغيل كاملة (Full Operating Package)</span>
+                <span>تم تفعيل الخصم المباشر (65% OFF)</span>
               </div>
 
-              <h2 className="text-3xl font-extrabold text-white tracking-tight">
-                السعر الأصلي: <span className="text-amber-400">9.90 ريال عماني / شهرياً</span>
-              </h2>
+              <div className="space-y-1">
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-extrabold text-slate-400 line-through">
+                    السعر الأصلي: {subscriptionInfo.originalPriceOMR} ر.ع.
+                  </span>
+                  <span className="bg-rose-500 text-white font-black text-[11px] px-2.5 py-0.5 rounded-md">
+                    خصم 65% مباشر
+                  </span>
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+                  السعر الحالي: <span className="text-amber-400">3.465 ريال عماني</span> <span className="text-xs text-slate-400 font-bold">/ شهرياً</span>
+                </h2>
+              </div>
 
               <p className="text-slate-300 text-xs sm:text-sm font-medium leading-relaxed">
-                ترخيص تشغيل شامل لمجمع القمة الطبي (فرعي العذيبة والعامرات)، لوحة التحكم بالكامل، وتحديثات التطوير المستمرة بدون أي تكاليف إضافية.
+                باقة تشغيل كاملة وشاملة لجميع مميزات مجمع القمة الطبي، مع إمكانية حفظ البطاقة والدفع التلقائي عبر Stripe.
               </p>
 
               <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-slate-300 pt-2">
                 <div className="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-xl border border-white/10">
                   <Calendar className="w-4 h-4 text-amber-400" />
-                  <span>تاريخ انتهاء الدعم المجاني: {subscriptionInfo.grantExpiryDate}</span>
+                  <span>انتهاء الدعم المجاني: {subscriptionInfo.grantExpiryDate}</span>
                 </div>
 
                 <div className="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-xl border border-white/10">
@@ -174,10 +161,10 @@ export default function AdminSubscriptionPage() {
             {/* Direct Pay Action & Card Saving Checkbox */}
             <div className="lg:col-span-5 bg-white/5 p-6 rounded-2xl border border-white/10 text-right space-y-4 backdrop-blur-md">
               <div className="border-b border-white/10 pb-3">
-                <span className="text-xs font-bold text-slate-300 block mb-1">باقة تشغيل كاملة (Stripe Secure)</span>
+                <span className="text-xs font-bold text-slate-300 block mb-1">باقة التشغيل المباشرة (Stripe Secure)</span>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-black text-amber-400">9.90 ر.ع.</span>
-                  <span className="text-xs text-slate-400 font-semibold">/ شهرياً (خصم 65% لاحقاً)</span>
+                  <span className="text-3xl font-black text-amber-400">3.465 ر.ع.</span>
+                  <span className="text-xs text-slate-400 font-semibold">/ شهرياً (بعد الخصم)</span>
                 </div>
               </div>
 
@@ -198,7 +185,7 @@ export default function AdminSubscriptionPage() {
                 className="w-full py-3.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-2xl font-black text-xs shadow-lg transition-all hover:scale-105 disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 <CreditCard className="w-4 h-4 text-slate-950" />
-                <span>{loadingPayment ? "جاري فتح بوابة Stripe..." : "ربط البطاقة والتجديد عبر Stripe"}</span>
+                <span>{loadingPayment ? "جاري فتح بوابة Stripe..." : "ربط البطاقة والتجديد بسعر 3.465 ر.ع."}</span>
               </button>
 
               <div className="flex items-center justify-center gap-1.5 text-[10px] text-slate-400 font-semibold">
@@ -210,66 +197,154 @@ export default function AdminSubscriptionPage() {
           </div>
         </div>
 
-        {/* Features Included */}
+        {/* 2. CONSOLIDATED SECTION: Special Support & Grant by Ms. Rafah Abdul Qader */}
+        <div className="bg-gradient-to-br from-amber-500/10 via-emerald-500/5 to-slate-50 border-2 border-amber-400 p-6 sm:p-8 rounded-3xl shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-amber-300/60 pb-4">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-1.5 bg-amber-500 text-slate-950 px-3 py-1 rounded-full text-xs font-black shadow-sm">
+                <Heart className="w-3.5 h-3.5 text-rose-950 fill-rose-950" />
+                <span>الدعم الفني والمنحة الرسمية الخاصة</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900">
+                الدعم والمنحة الخاصة المقدمة من الآنسة رفاه عبد القادر
+              </h2>
+            </div>
+
+            <div className="bg-amber-500 text-slate-950 px-4 py-2 rounded-2xl text-xs font-black flex items-center gap-2 shadow-sm self-start sm:self-auto">
+              <Award className="w-4 h-4 text-slate-950" />
+              <span>دعم وتطوير مجاني مفعّل</span>
+            </div>
+          </div>
+
+          {/* 4 Dedicated Support Features */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-right">
+            
+            <div className="bg-white p-5 rounded-2xl border border-amber-200 shadow-sm space-y-2 hover:border-amber-400 transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+                <Gift className="w-5 h-5 text-amber-600" />
+              </div>
+              <h3 className="font-extrabold text-slate-900 text-sm">دعم مجاني 6 أشهر</h3>
+              <p className="text-xs text-slate-600 font-semibold leading-relaxed">
+                تشغيل واستضافة مجانية كاملة لمدة 6 أشهر مقدمة من الآنسة رفاه عبد القادر.
+              </p>
+            </div>
+
+            <div className="bg-white p-5 rounded-2xl border border-emerald-200 shadow-sm space-y-2 hover:border-emerald-400 transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+                <Tag className="w-5 h-5 text-emerald-600" />
+              </div>
+              <h3 className="font-extrabold text-slate-900 text-sm">خصم دائم 65%</h3>
+              <p className="text-xs text-slate-600 font-semibold leading-relaxed">
+                تخفيض دائم ومستمر بقيمة 65% عند تجديد الاشتراك بعد انتهاء المدة المجانية.
+              </p>
+            </div>
+
+            <div className="bg-white p-5 rounded-2xl border border-blue-200 shadow-sm space-y-2 hover:border-blue-400 transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold">
+                <Sparkles className="w-5 h-5 text-blue-600" />
+              </div>
+              <h3 className="font-extrabold text-slate-900 text-sm">إضافة ميزات وأقسام مجانية</h3>
+              <p className="text-xs text-slate-600 font-semibold leading-relaxed">
+                إضافة أقسام مخصصة وميزات برمجية جديدة للموقع لا يخضع لأي رسوم إضافية.
+              </p>
+            </div>
+
+            <div className="bg-white p-5 rounded-2xl border border-purple-200 shadow-sm space-y-2 hover:border-purple-400 transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center font-bold">
+                <Cpu className="w-5 h-5 text-purple-600" />
+              </div>
+              <h3 className="font-extrabold text-slate-900 text-sm">أقوى نماذج ذكاء اصطناعي من شركة لور</h3>
+              <p className="text-xs text-slate-600 font-semibold leading-relaxed">
+                ربط أحدث نماذج وتطنيفات الذكاء الاصطناعي المتقدمة المزودة من شركة لور (LOR LLC).
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        {/* 3. CONSOLIDATED SECTION: Full Package Contents (محتويات الباقة) */}
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
-          <h3 className="text-lg font-extrabold text-slate-900 border-b border-slate-200 pb-3 flex items-center gap-2">
-            <Award className="w-5 h-5 text-amber-500" />
-            <span>مميزات باقة التشغيل الكاملة والشروط المعتمدة (9.90 ر.ع. شهرياً)</span>
-          </h3>
+          <div className="border-b border-slate-200 pb-4">
+            <h2 className="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+              <Award className="w-6 h-6 text-amber-500" />
+              <span>محتويات باقة التشغيل الكاملة</span>
+            </h2>
+            <p className="text-xs text-slate-500 font-semibold mt-1">
+              جميع أدوات وإمكانيات المنصة المشمولة تلقائياً في ترخيص التشغيل.
+            </p>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs font-bold text-slate-800">
             
-            <div className="p-4 bg-amber-50/60 rounded-2xl border border-amber-200 flex items-start gap-3">
-              <Gift className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-start gap-3">
+              <Bot className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
               <div>
-                <h4 className="font-extrabold text-slate-900 text-sm mb-1">دعم مجاني 6 أشهر</h4>
-                <p className="text-slate-600 text-[11px] font-semibold leading-relaxed">
-                  مقدم كاملاً من الآنسة رفاه عبد القادر لتشغيل موقع مجمع القمة الطبي.
-                </p>
-              </div>
-            </div>
-
-            <div className="p-4 bg-emerald-50/60 rounded-2xl border border-emerald-200 flex items-start gap-3">
-              <Tag className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
-              <div>
-                <h4 className="font-extrabold text-slate-900 text-sm mb-1">خصم 65% عند الاستمرار</h4>
-                <p className="text-slate-600 text-[11px] font-semibold leading-relaxed">
-                  في حال رغبتم بالاستمرار باستخدام منصتنا بعد انتهاء الفترة المجانية.
-                </p>
-              </div>
-            </div>
-
-            <div className="p-4 bg-blue-50/60 rounded-2xl border border-blue-200 flex items-start gap-3">
-              <Sparkles className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-              <div>
-                <h4 className="font-extrabold text-slate-900 text-sm mb-1">تطوير بدون رسوم إضافية</h4>
-                <p className="text-slate-600 text-[11px] font-semibold leading-relaxed">
-                  إضافة ميزات جديدة وتطوير الموقع لا يخضع لأي رسوم إضافية نهائياً (دعم من رفاه عبد القادر).
-                </p>
+                <h4 className="font-extrabold text-slate-900 text-sm mb-0.5">رين AI</h4>
+                <p className="text-slate-500 text-[11px] font-normal leading-relaxed">المساعد الطبي الذكي للتفاعل الفوري والإجابة عن استفسارات المرضى.</p>
               </div>
             </div>
 
             <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-start gap-3">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+              <Settings className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
               <div>
-                <h4 className="font-extrabold text-slate-900 text-sm mb-1">لوحة تحكم معزولة تماماً</h4>
-                <p className="text-slate-500 text-[11px] font-normal leading-relaxed">تحكم أمني مستقل ومأمن لبيانات المجمع والأطباء.</p>
+                <h4 className="font-extrabold text-slate-900 text-sm mb-0.5">تعديل وتخصيص كامل</h4>
+                <p className="text-slate-500 text-[11px] font-normal leading-relaxed">إمكانية التعديل الكامل على بيانات الأطباء والتخصصات وفلترة الفروع.</p>
               </div>
             </div>
 
             <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-start gap-3">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+              <Server className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
               <div>
-                <h4 className="font-extrabold text-slate-900 text-sm mb-1">إدارة الأطباء والتخصصات</h4>
-                <p className="text-slate-500 text-[11px] font-normal leading-relaxed">إضافة وتعديل الأطباء والعيادات وفلترة الفروع.</p>
+                <h4 className="font-extrabold text-slate-900 text-sm mb-0.5">استضافة آمنة وسريعة</h4>
+                <p className="text-slate-500 text-[11px] font-normal leading-relaxed">خوادم عالية السرعة مع حماية تشفير كاملة لبيانات المجمع.</p>
               </div>
             </div>
 
             <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-start gap-3">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+              <Headphones className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
               <div>
-                <h4 className="font-extrabold text-slate-900 text-sm mb-1">المعاينة والحفظ السحابي للصور</h4>
-                <p className="text-slate-500 text-[11px] font-normal leading-relaxed">رفع ومعاينة الصور والوسائط بسرعة فائقة.</p>
+                <h4 className="font-extrabold text-slate-900 text-sm mb-0.5">قسم خدمة عملاء</h4>
+                <p className="text-slate-500 text-[11px] font-normal leading-relaxed">دعم فني واستجابة مباشرة لاستفسارات الإدارة والمرضى.</p>
+              </div>
+            </div>
+
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-start gap-3">
+              <Search className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-extrabold text-slate-900 text-sm mb-0.5">توزيع سلس وسهولة البحث</h4>
+                <p className="text-slate-500 text-[11px] font-normal leading-relaxed">فلترة تفاعلية وسريعة للبحث في الأطباء والعيادات حسب الفرع.</p>
+              </div>
+            </div>
+
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-start gap-3">
+              <Globe className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-extrabold text-slate-900 text-sm mb-0.5">تحسين عملية البحث في جوجل (SEO)</h4>
+                <p className="text-slate-500 text-[11px] font-normal leading-relaxed">تهيئة برمجية شاملة لمحركات البحث لرفع ترتيب المجمع في مسقط.</p>
+              </div>
+            </div>
+
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-start gap-3">
+              <Layout className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-extrabold text-slate-900 text-sm mb-0.5">تصميم عصري وحديث</h4>
+                <p className="text-slate-500 text-[11px] font-normal leading-relaxed">واجهات فاخرة فائقة السرعة متوافقة كلياً مع الجوال والأجهزة.</p>
+              </div>
+            </div>
+
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-start gap-3">
+              <HardDrive className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-extrabold text-slate-900 text-sm mb-0.5">مساحة تخزين غير محدودة</h4>
+                <p className="text-slate-500 text-[11px] font-normal leading-relaxed">رفع وتخزين صور الأطباء والوسائط بدون أي قيود مساحة.</p>
+              </div>
+            </div>
+
+            <div className="p-4 bg-amber-50/80 rounded-2xl border border-amber-300 flex items-start gap-3">
+              <ShoppingBag className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-extrabold text-slate-900 text-sm mb-0.5">متجر العروض والأسعار</h4>
+                <p className="text-amber-800 text-[11px] font-bold leading-relaxed">ميزة قابلة للتفعيل فور طلب إدارة المجمع.</p>
               </div>
             </div>
 

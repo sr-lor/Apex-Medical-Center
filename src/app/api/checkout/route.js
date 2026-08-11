@@ -9,9 +9,9 @@ const stripe = new Stripe(stripeKey || "sk_test_mock", {
 export async function POST(request) {
   try {
     const body = await request.json();
-    const amount = body.amount || 9.90; // Original 9.90 OMR / month
+    const amount = body.amount || 3.465; // Direct 65% discount applied (3.465 OMR)
     const saveCardAutoRenewal = body.saveCardAutoRenewal ?? true;
-    const planName = body.planName || "باقة تشغيل كاملة لمجمع القمة الطبي (شاملة الدعم والتطوير)";
+    const planName = body.planName || "باقة تشغيل كاملة لمجمع القمة الطبي (شاملة الخصم 65% ودعم رفاه عبد القادر)";
 
     const origin = request.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
@@ -26,10 +26,10 @@ export async function POST(request) {
               currency: "omr",
               product_data: {
                 name: planName,
-                description: "باقة تشغيل كاملة - دعم 6 أشهر مجاني مقدم من الآنسة رفاه عبد القادر + خصم 65% لاحقاً",
+                description: "باقة تشغيل كاملة بعد الخصم المباشر 65% (3.465 ر.ع.) - دعم 6 أشهر مجاني مقدم من الآنسة رفاه عبد القادر",
                 images: ["https://apexmedicaloman.com/wp-content/uploads/2026/06/Apex_Log.png"],
               },
-              unit_amount: Math.round(amount * 1000), // OMR unit amount in baisa (9900 baisa)
+              unit_amount: Math.round(amount * 1000), // 3465 baisa (3.465 OMR)
             },
             quantity: 1,
           },
@@ -51,9 +51,9 @@ export async function POST(request) {
               currency: "usd",
               product_data: {
                 name: planName,
-                description: "Full Operating License for Apex Medical Center (Equivalent to 9.90 OMR)",
+                description: "Full Operating License for Apex Medical Center (Discounted Price 3.465 OMR)",
               },
-              unit_amount: 2570, // $25.70 USD ~ 9.90 OMR
+              unit_amount: 900, // $9.00 USD ~ 3.465 OMR
             },
             quantity: 1,
           },
