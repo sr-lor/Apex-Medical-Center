@@ -9,7 +9,7 @@ const stripe = new Stripe(stripeKey || "sk_test_mock", {
 export async function POST(request) {
   try {
     const body = await request.json();
-    const email = body.email || "admin@apexmedicaloman.com";
+    const email = body.email || "admin@srlor.com";
     const isFreePeriod = body.isFreePeriod ?? true;
     const amount = isFreePeriod ? 0.00 : (body.amount || 3.465); // 0.00 OMR during 6-month free period
     const planName = body.planName || "باقة تشغيل كاملة لمجمع القمة الطبي (شركة SR LOR)";

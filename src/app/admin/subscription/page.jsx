@@ -13,7 +13,7 @@ export default function AdminSubscriptionPage() {
   const [currentStep, setCurrentStep] = useState("INIT");
   
   // Master Account & Email
-  const [emailInput, setEmailInput] = useState("");
+  const [emailInput, setEmailInput] = useState("admin@srlor.com");
   const [masterOwner, setMasterOwner] = useState(null);
 
   // OTP State
