@@ -54,13 +54,15 @@ export default function HeroSection({ onOpenBooking }) {
 
             {/* CTA Action Buttons */}
             <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-              <button
-                onClick={onOpenBooking}
-                className="bg-gradient-to-r from-apex-gold to-apex-gold-dark hover:from-apex-gold-dark hover:to-apex-gold-deep text-slate-950 font-extrabold px-8 py-4 rounded-2xl shadow-gold hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 text-base hover:scale-105"
+              <a
+                href="https://wa.me/96897031500?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%85%D8%AC%D9%85%D8%B9%20%D8%A7%D9%84%D9%82%D9%85%D8%A9%20%D8%A7%D9%84%D8%B7%D8%A8%D9%8A"
+                target="_blank"
+                rel="noreferrer"
+                className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-extrabold px-8 py-4 rounded-2xl shadow-lg transition-all duration-300 flex items-center justify-center gap-3 text-base hover:scale-105"
               >
-                <Calendar className="w-5 h-5 text-slate-950" />
-                <span>احجز موعدك الآن أونلاين</span>
-              </button>
+                <MessageCircle className="w-5 h-5 text-white" />
+                <span>تواصل معنا عبر الواتساب</span>
+              </a>
 
               <a
                 href="https://wa.me/96897031500"

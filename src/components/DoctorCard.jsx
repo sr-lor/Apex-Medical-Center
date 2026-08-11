@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar, Award, MapPin, Info } from "lucide-react";
+import { Award, MapPin, Info, MessageCircle } from "lucide-react";
 import DoctorDetailsModal from "./DoctorDetailsModal";
 
-export default function DoctorCard({ doctor, onBook }) {
+export default function DoctorCard({ doctor }) {
   const [detailsOpen, setDetailsOpen] = useState(false);
 
   const branchText = doctor.branchIds?.includes("amerat") && doctor.branchIds?.includes("azaiba")
@@ -12,6 +12,11 @@ export default function DoctorCard({ doctor, onBook }) {
     : doctor.branchIds?.includes("amerat")
     ? "فرع العامرات"
     : "فرع العذيبة";
+
+  const whatsappMessage = encodeURIComponent(
+    `مرحباً مجمع القمة الطبي، أود الاستفسار والتواصل بخصوص ${doctor.nameAr} (${doctor.titleAr})`
+  );
+  const whatsappUrl = `https://wa.me/96897031500?text=${whatsappMessage}`;
 
   return (
     <>
@@ -35,7 +40,7 @@ export default function DoctorCard({ doctor, onBook }) {
             </div>
           </div>
 
-          {/* Doctor Details - Specialty Title first, then Doctor Name matching original site screenshot */}
+          {/* Doctor Details */}
           <p className="text-slate-300 text-sm font-medium mb-1.5 min-h-[28px]">
             {doctor.titleAr}
           </p>
@@ -48,7 +53,7 @@ export default function DoctorCard({ doctor, onBook }) {
           </h3>
         </div>
 
-        {/* Action Buttons: اقرأ المزيد + حجز موعد */}
+        {/* Action Buttons: اقرأ المزيد + تواصل واتساب */}
         <div className="flex items-center gap-2 pt-2">
           <button
             onClick={() => setDetailsOpen(true)}
@@ -58,13 +63,15 @@ export default function DoctorCard({ doctor, onBook }) {
             <span>اقرأ المزيد</span>
           </button>
 
-          <button
-            onClick={() => onBook(doctor.id)}
-            className="flex-1 py-2.5 bg-gradient-to-r from-apex-gold to-apex-gold-dark hover:from-apex-gold-dark hover:to-apex-gold-deep text-slate-950 rounded-xl font-extrabold text-xs transition-colors flex items-center justify-center gap-1.5 shadow-gold"
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-xl font-extrabold text-xs transition-colors flex items-center justify-center gap-1.5 shadow-md"
           >
-            <Calendar className="w-4 h-4 text-slate-950" />
-            <span>حجز موعد</span>
-          </button>
+            <MessageCircle className="w-4 h-4" />
+            <span>تواصل واتساب</span>
+          </a>
         </div>
       </div>
 
@@ -73,7 +80,6 @@ export default function DoctorCard({ doctor, onBook }) {
         doctor={doctor}
         isOpen={detailsOpen}
         onClose={() => setDetailsOpen(false)}
-        onBook={onBook}
       />
     </>
   );

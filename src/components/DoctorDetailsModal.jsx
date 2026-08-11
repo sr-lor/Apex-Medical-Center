@@ -1,8 +1,8 @@
 "use client";
 
-import { X, Calendar, Award, MapPin, CheckCircle2, UserCheck, ShieldCheck } from "lucide-react";
+import { X, MessageCircle, Award, MapPin, CheckCircle2, UserCheck, ShieldCheck } from "lucide-react";
 
-export default function DoctorDetailsModal({ doctor, isOpen, onClose, onBook }) {
+export default function DoctorDetailsModal({ doctor, isOpen, onClose }) {
   if (!isOpen || !doctor) return null;
 
   const branchText = doctor.branchIds?.includes("amerat") && doctor.branchIds?.includes("azaiba")
@@ -96,16 +96,15 @@ export default function DoctorDetailsModal({ doctor, isOpen, onClose, onBook }) 
 
         {/* Footer CTAs */}
         <div className="p-5 border-t border-white/10 bg-[#0B0A0C] flex flex-col sm:flex-row items-center gap-3">
-          <button
-            onClick={() => {
-              onClose();
-              onBook(doctor.id);
-            }}
-            className="w-full sm:flex-1 py-3 bg-gradient-to-r from-apex-gold to-apex-gold-dark hover:from-apex-gold-dark hover:to-apex-gold-deep text-slate-950 rounded-xl font-extrabold text-sm transition-all flex items-center justify-center gap-2 shadow-gold"
+          <a
+            href={`https://wa.me/96897031500?text=${encodeURIComponent(`مرحباً مجمع القمة الطبي، أود الاستفسار والتواصل بخصوص ${doctor.nameAr} (${doctor.titleAr})`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:flex-1 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-xl font-extrabold text-sm transition-all flex items-center justify-center gap-2 shadow-emerald"
           >
-            <Calendar className="w-4 h-4 text-slate-950" />
-            <span>حجز موعد مع الطبيب الآن</span>
-          </button>
+            <MessageCircle className="w-4 h-4" />
+            <span>تواصل عبر الواتساب الآن</span>
+          </a>
 
           <button
             onClick={onClose}

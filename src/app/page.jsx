@@ -7,20 +7,12 @@ import ServiceCard from "@/components/ServiceCard";
 import DoctorCard from "@/components/DoctorCard";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import FAQSection from "@/components/FAQSection";
-import BookingModal from "@/components/BookingModal";
 import { initialServices, initialDoctors } from "@/lib/data-store";
 import { Sparkles, Shield, HeartPulse, CheckCircle2, Phone, Calendar, ArrowLeft, MessageCircle } from "lucide-react";
 import Link from "next/link";
 
 export default function HomePage() {
-  const [bookingOpen, setBookingOpen] = useState(false);
-  const [selectedDocId, setSelectedDocId] = useState("");
   const [activeBranch, setActiveBranch] = useState("all");
-
-  const handleBookDoctor = (doctorId) => {
-    setSelectedDocId(doctorId);
-    setBookingOpen(true);
-  };
 
   const filteredServices =
     activeBranch === "all"
@@ -189,13 +181,6 @@ export default function HomePage() {
 
       {/* 7. FAQ */}
       <FAQSection />
-
-      {/* Booking Modal */}
-      <BookingModal
-        isOpen={bookingOpen}
-        onClose={() => setBookingOpen(false)}
-        preselectedDoctorId={selectedDocId}
-      />
     </div>
   );
 }

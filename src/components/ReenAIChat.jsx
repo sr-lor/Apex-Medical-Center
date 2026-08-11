@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Sparkles, MessageSquare, X, Send, User, Bot, CheckCircle2, Calendar, MapPin, Phone, ArrowLeft, RefreshCw } from "lucide-react";
 import Link from "next/link";
 
-export default function ReenAIChat({ onOpenBooking }) {
+export default function ReenAIChat() {
   const [isOpen, setIsOpen] = useState(false);
   const [inputMsg, setInputMsg] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -228,16 +228,16 @@ export default function ReenAIChat({ onOpenBooking }) {
                     {msg.ctaAction && (
                       <div className="mt-3 pt-2.5 border-t border-slate-100">
                         {msg.ctaAction.type === "book" ? (
-                          <button
-                            onClick={() => {
-                              onOpenBooking();
-                              setIsOpen(false);
-                            }}
-                            className="w-full py-2 px-3 bg-gradient-to-r from-apex-gold to-apex-gold-dark text-slate-950 rounded-xl font-extrabold text-xs shadow-sm hover:shadow transition-all flex items-center justify-center gap-1.5"
+                          <a
+                            href="https://wa.me/96897031500?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%85%D8%AC%D9%85%D8%B9%20%D8%A7%D9%84%D9%82%D9%85%D8%A9%20%D8%A7%D9%84%D8%B7%D8%A8%D9%8A"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => setIsOpen(false)}
+                            className="w-full py-2 px-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-extrabold text-xs shadow-sm hover:shadow transition-all flex items-center justify-center gap-1.5"
                           >
-                            <Calendar className="w-3.5 h-3.5 text-slate-950" />
-                            <span>{msg.ctaAction.text}</span>
-                          </button>
+                            <Phone className="w-3.5 h-3.5" />
+                            <span>تواصل معنا عبر الواتساب المباشر</span>
+                          </a>
                         ) : (
                           <Link
                             href={msg.ctaAction.href}

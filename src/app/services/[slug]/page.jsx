@@ -1,16 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { initialServices, initialDoctors } from "@/lib/data-store";
 import DoctorCard from "@/components/DoctorCard";
-import BookingModal from "@/components/BookingModal";
 import Link from "next/link";
-import { CheckCircle2, ArrowRight, Phone, Calendar, ShieldCheck, Sparkles, UserCheck } from "lucide-react";
+import { CheckCircle2, ArrowRight, Phone, Calendar, ShieldCheck, Sparkles, UserCheck, MessageCircle } from "lucide-react";
 
 export default function ServiceDetailPage({ params }) {
-  const [bookingOpen, setBookingOpen] = useState(false);
-  const [selectedDocId, setSelectedDocId] = useState("");
-
   const service = initialServices.find((s) => s.slug === params.slug);
 
   if (!service) {
@@ -150,19 +145,13 @@ export default function ServiceDetailPage({ params }) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedDoctors.map((doc) => (
-                <DoctorCard key={doc.id} doctor={doc} onBook={handleBookDoctor} />
+                <DoctorCard key={doc.id} doctor={doc} />
               ))}
             </div>
           </div>
         )}
 
       </div>
-
-      <BookingModal
-        isOpen={bookingOpen}
-        onClose={() => setBookingOpen(false)}
-        preselectedDoctorId={selectedDocId}
-      />
     </div>
   );
 }

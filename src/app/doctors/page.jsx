@@ -3,19 +3,11 @@
 import { useState } from "react";
 import { initialDoctors } from "@/lib/data-store";
 import DoctorCard from "@/components/DoctorCard";
-import BookingModal from "@/components/BookingModal";
 import { UserCheck, Sparkles, MapPin, Building2, Calendar, Phone } from "lucide-react";
 
 export default function DoctorsPage() {
-  const [bookingOpen, setBookingOpen] = useState(false);
-  const [selectedDocId, setSelectedDocId] = useState("");
   const [activeBranch, setActiveBranch] = useState("all");
   const [activeCategory, setActiveCategory] = useState("all");
-
-  const handleBookDoctor = (docId) => {
-    setSelectedDocId(docId);
-    setBookingOpen(true);
-  };
 
   const branchesList = [
     { id: "all", label: "جميع الفروع" },
@@ -145,7 +137,7 @@ export default function DoctorsPage() {
         ) : filteredDoctors.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {filteredDoctors.map((doc) => (
-              <DoctorCard key={doc.id} doctor={doc} onBook={handleBookDoctor} />
+              <DoctorCard key={doc.id} doctor={doc} />
             ))}
           </div>
         ) : (
@@ -155,12 +147,6 @@ export default function DoctorsPage() {
         )}
 
       </div>
-
-      <BookingModal
-        isOpen={bookingOpen}
-        onClose={() => setBookingOpen(false)}
-        preselectedDoctorId={selectedDocId}
-      />
     </div>
   );
 }

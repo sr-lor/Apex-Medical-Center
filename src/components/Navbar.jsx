@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Phone, Calendar, Menu, X, Shield, Clock, MapPin, ChevronDown, ChevronLeft, Mail, Building2, UserCheck, Sparkles } from "lucide-react";
+import { Phone, MessageCircle, Menu, X, Shield, Clock, MapPin, ChevronDown, ChevronLeft, Mail, Building2, UserCheck, Sparkles } from "lucide-react";
 
-export default function Navbar({ onOpenBooking }) {
+export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
@@ -367,13 +367,15 @@ export default function Navbar({ onOpenBooking }) {
               </Link>
             </div>
 
-            <button
-              onClick={onOpenBooking}
-              className="hidden sm:flex items-center gap-2 bg-gradient-to-r from-apex-gold to-apex-gold-dark hover:from-apex-gold-dark hover:to-apex-gold-deep text-slate-950 px-5 py-2 rounded-full font-extrabold text-xs sm:text-sm shadow-gold hover:shadow-xl transition-all hover:scale-105"
+            <a
+              href="https://wa.me/96897031500?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%85%D8%AC%D9%85%D8%B9%20%D8%A7%D9%84%D9%82%D9%85%D8%A9%20%D8%A7%D9%84%D8%B7%D8%A8%D9%8A"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-5 py-2 rounded-full font-extrabold text-xs sm:text-sm shadow-md hover:shadow-xl transition-all hover:scale-105"
             >
-              <Calendar className="w-4 h-4 text-slate-950" />
-              <span>حجز موعد أونلاين</span>
-            </button>
+              <MessageCircle className="w-4 h-4" />
+              <span>تواصل معنا عبر الواتساب</span>
+            </a>
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -532,16 +534,16 @@ export default function Navbar({ onOpenBooking }) {
                 <span>اتصال مباشر: 968 97031500</span>
               </a>
 
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenBooking();
-                }}
-                className="w-full flex items-center justify-center gap-2 bg-apex-gold text-slate-950 py-3 rounded-xl font-extrabold shadow-md text-sm"
+              <a
+                href="https://wa.me/96897031500?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%85%D8%AC%D9%85%D8%B9%20%D8%A7%D9%84%D9%82%D9%85%D8%A9%20%D8%A7%D9%84%D8%B7%D8%A8%D9%8A"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-extrabold shadow-md text-sm transition-colors"
               >
-                <Calendar className="w-5 h-5 text-slate-950" />
-                <span>حجز موعد أونلاين</span>
-              </button>
+                <MessageCircle className="w-5 h-5" />
+                <span>تواصل معنا عبر الواتساب</span>
+              </a>
 
               <Link
                 href="/admin/login"
