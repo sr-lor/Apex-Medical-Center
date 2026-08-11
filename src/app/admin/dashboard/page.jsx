@@ -5,7 +5,7 @@ import AdminLayout from "@/components/AdminLayout";
 import Link from "next/link";
 import { 
   UserCheck, Stethoscope, MapPin, Building2, Shield, Image, 
-  ArrowLeft, Plus, Edit3, Sparkles, CheckCircle2 
+  ArrowLeft, Plus, Edit3, Sparkles, CheckCircle2, SlidersHorizontal, CreditCard, Users
 } from "lucide-react";
 
 export default function AdminDashboard() {
@@ -60,7 +60,7 @@ export default function AdminDashboard() {
         <div className="bg-gradient-to-r from-apex-navy via-[#1E1B1C] to-slate-900 text-white p-8 rounded-3xl border border-apex-gold/30 shadow-xl relative overflow-hidden">
           <div className="absolute top-0 left-0 w-64 h-64 bg-apex-gold/10 rounded-full blur-3xl pointer-events-none"></div>
           
-          <div className="relative z-10 space-y-3">
+          <div className="relative z-10 space-y-3 text-right">
             <div className="inline-flex items-center gap-2 bg-white/10 px-3.5 py-1 rounded-full text-xs font-bold text-apex-gold border border-apex-gold/30">
               <Shield className="w-4 h-4 text-apex-gold" />
               <span>نظام إدارة مجمع القمة الطبي - سلطنة عمان</span>
@@ -70,7 +70,7 @@ export default function AdminDashboard() {
               أهلاً بك في لوحة تحكم <span className="text-gradient-apex">مجمع القمة الطبي</span>
             </h1>
             <p className="text-slate-300 text-xs sm:text-sm max-w-2xl font-medium leading-relaxed">
-              يمكنك من هنا التحكم الكامل بالأطباء، التخصصات، تصفية الفروع (العذيبة والعامرات)، وتحديث وصور الوسائط بسهولة وفورية.
+              يمكنك من هنا التحكم الكامل بالأطباء، التخصصات، تصفية الفروع (العذيبة والعامرات)، تذييل الموقع، والصلاحيات بسهولة وفورية.
             </p>
           </div>
         </div>
@@ -79,7 +79,7 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           
           {/* Total Doctors */}
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4 text-right">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-500">إجمالي الكادر الطبي</span>
               <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-200">
@@ -97,7 +97,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Total Specialties */}
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4 text-right">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-500">التخصصات والعيادات</span>
               <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-200">
@@ -115,7 +115,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Azaiba Branch */}
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4 text-right">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-500">فرع العذيبة الرئيسي</span>
               <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-200">
@@ -132,7 +132,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Amerat Branch */}
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4 text-right">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-500">فرع العامرات</span>
               <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200">
@@ -150,11 +150,11 @@ export default function AdminDashboard() {
 
         </div>
 
-        {/* Action Shortcuts */}
+        {/* Action Shortcuts Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           
           {/* Doctor Management Shortcut */}
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between text-right">
             <div>
               <div className="w-12 h-12 rounded-2xl bg-apex-navy text-white flex items-center justify-center mb-3">
                 <UserCheck className="w-6 h-6 text-apex-gold" />
@@ -175,7 +175,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Service Management Shortcut */}
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between text-right">
             <div>
               <div className="w-12 h-12 rounded-2xl bg-apex-navy text-white flex items-center justify-center mb-3">
                 <Stethoscope className="w-6 h-6 text-apex-gold" />
@@ -191,6 +191,48 @@ export default function AdminDashboard() {
               className="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-extrabold py-3 px-5 rounded-2xl text-xs transition-colors shadow-sm"
             >
               <span>فتح لوحة التحكم بالتخصصات</span>
+              <ArrowLeft className="w-4 h-4 text-apex-gold" />
+            </Link>
+          </div>
+
+          {/* Footer Management Shortcut */}
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between text-right">
+            <div>
+              <div className="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center mb-3">
+                <SlidersHorizontal className="w-6 h-6 text-slate-950" />
+              </div>
+              <h3 className="text-lg font-extrabold text-slate-900">إدارة تذييل الموقع والبيانات الرسمية</h3>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                التحكم التام في أرقام الهاتف، الواتساب، عناوين الفروع، أوقات العمل، منصات التواصل الاجتماعي، ونصوص تذييل الموقع.
+              </p>
+            </div>
+
+            <Link
+              href="/admin/footer"
+              className="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-extrabold py-3 px-5 rounded-2xl text-xs transition-colors shadow-sm"
+            >
+              <span>فتح إعدادات تذييل الموقع</span>
+              <ArrowLeft className="w-4 h-4 text-apex-gold" />
+            </Link>
+          </div>
+
+          {/* Users & Roles Management Shortcut */}
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between text-right">
+            <div>
+              <div className="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center mb-3">
+                <Users className="w-6 h-6 text-amber-400" />
+              </div>
+              <h3 className="text-lg font-extrabold text-slate-900">إدارة الموظفين والصلاحيات</h3>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                إضافة حسابات الموظفين وتخصيص صلاحياتهم على الأطباء والخدمات، مع قفل خانة البطاقات ببصمة المدير حصرياً.
+              </p>
+            </div>
+
+            <Link
+              href="/admin/users"
+              className="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-extrabold py-3 px-5 rounded-2xl text-xs transition-colors shadow-sm"
+            >
+              <span>إدارة الموظفين والصلاحيات</span>
               <ArrowLeft className="w-4 h-4 text-apex-gold" />
             </Link>
           </div>

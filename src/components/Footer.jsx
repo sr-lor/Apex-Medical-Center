@@ -1,9 +1,40 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Phone, Mail, MapPin, Clock, Shield, Facebook, Instagram, Youtube, ChevronLeft, MessageCircle, Building2 } from "lucide-react";
 
 export default function Footer() {
+  const [footerData, setFooterData] = useState({
+    clinicPhone: "968 97031500",
+    whatsappPhone: "96897031500",
+    clinicEmail: "info@apexmedicaloman.com",
+    workingHours: "السبت - الخميس: 09:00 ص - 09:00 م",
+    footerBio: "مجمع القمة الطبي في سلطنة عمان (Apex Medical Center) - وجهتك الرائدة للرعاية الصحية المتكاملة، طب وتجميل الأسنان، الجراحة التجميلية، الجلدية والليزر، وجراحات إدارة السمنة والوزن بأعلى المعايير العالمية.",
+    azaibaAddress: "مسقط - العذيبة - شارع السلطان قابوس",
+    azaibaDesc: "تخصصات متكاملة وجراحات تجميلية وأسنان",
+    azaibaMapUrl: "https://maps.app.goo.gl/yWq6D32JjmRpHQtb8",
+    ameratAddress: "مسقط - العامرات - الشارع العام",
+    ameratDesc: "عيادات السمنة والتخسيس • ليزر والبشرة • طب عام",
+    instagramUrl: "https://www.instagram.com/apex_medical_clinics_center?igsh=MWV2a2gyYTRoYnFpYQ%3D%3D&utm_source=qr",
+    youtubeUrl: "https://www.youtube.com",
+    facebookUrl: "https://www.facebook.com",
+    copyrightText: "© 2026 مجمع القمة الطبي (Apex Medical Center Oman). جميع الحقوق محفوظة.",
+    developerText: "تطوير المؤسسة رفاه عبد القادر مؤسسة ونائبة الرئيس التنفيذي SR LOR, LLC",
+  });
+
+  useEffect(() => {
+    // Dynamically load footer settings from localStorage if customized in control panel
+    const saved = localStorage.getItem("apex_footer_settings_json");
+    if (saved) {
+      try {
+        setFooterData((prev) => ({ ...prev, ...JSON.parse(saved) }));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, []);
+
   return (
     <footer className="bg-[#151112] text-white pt-16 pb-8 border-t border-apex-gold/30">
       <div className="w-full px-4 sm:px-8 lg:px-12">
@@ -19,45 +50,51 @@ export default function Footer() {
               />
             </div>
             <p className="text-slate-300 text-xs leading-relaxed">
-              مجمع القمة الطبي في سلطنة عمان (Apex Medical Center) - وجهتك الرائدة للرعاية الصحية المتكاملة، طب وتجميل الأسنان، الجراحة التجميلية، الجلدية والليزر، وجراحات إدارة السمنة والوزن بأعلى المعايير العالمية.
+              {footerData.footerBio}
             </p>
 
             {/* Official Social Media Platform Icons */}
             <div className="space-y-2 pt-2">
               <p className="text-xs font-bold text-apex-gold">منصات التواصل الاجتماعي الرسمية:</p>
               <div className="flex items-center gap-3">
-                <a
-                  href="https://www.instagram.com/apex_medical_clinics_center?igsh=MWV2a2gyYTRoYnFpYQ%3D%3D&utm_source=qr"
-                  target="_blank"
-                  rel="noreferrer"
-                  title="إنستغرام مجمع القمة الطبي"
-                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#E1306C] hover:text-white flex items-center justify-center transition-all border border-white/10"
-                >
-                  <Instagram className="w-4 h-4" />
-                </a>
+                {footerData.instagramUrl && (
+                  <a
+                    href={footerData.instagramUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    title="إنستغرام مجمع القمة الطبي"
+                    className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#E1306C] hover:text-white flex items-center justify-center transition-all border border-white/10"
+                  >
+                    <Instagram className="w-4 h-4" />
+                  </a>
+                )}
+
+                {footerData.youtubeUrl && (
+                  <a
+                    href={footerData.youtubeUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    title="قناة اليوتيوب مجمع القمة الطبي"
+                    className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#FF0000] hover:text-white flex items-center justify-center transition-all border border-white/10"
+                  >
+                    <Youtube className="w-4 h-4" />
+                  </a>
+                )}
+
+                {footerData.facebookUrl && (
+                  <a
+                    href={footerData.facebookUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    title="فيسبوك مجمع القمة الطبي"
+                    className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#1877F2] hover:text-white flex items-center justify-center transition-all border border-white/10"
+                  >
+                    <Facebook className="w-4 h-4" />
+                  </a>
+                )}
 
                 <a
-                  href="https://www.youtube.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  title="قناة اليوتيوب مجمع القمة الطبي"
-                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#FF0000] hover:text-white flex items-center justify-center transition-all border border-white/10"
-                >
-                  <Youtube className="w-4 h-4" />
-                </a>
-
-                <a
-                  href="https://www.facebook.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  title="فيسبوك مجمع القمة الطبي"
-                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#1877F2] hover:text-white flex items-center justify-center transition-all border border-white/10"
-                >
-                  <Facebook className="w-4 h-4" />
-                </a>
-
-                <a
-                  href="https://wa.me/96897031500"
+                  href={`https://wa.me/${footerData.whatsappPhone.replace(/\D/g, "")}`}
                   target="_blank"
                   rel="noreferrer"
                   title="واتساب مجمع القمة الطبي"
@@ -178,18 +215,20 @@ export default function Footer() {
                   <Building2 className="w-4 h-4 text-apex-gold" />
                   <span>1. فرع العذيبة</span>
                 </div>
-                <a
-                  href="https://maps.app.goo.gl/yWq6D32JjmRpHQtb8"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-[10px] text-white/80 hover:text-apex-gold underline flex items-center gap-1"
-                >
-                  <MapPin className="w-3 h-3 text-apex-gold" />
-                  <span>الخريطة 📍</span>
-                </a>
+                {footerData.azaibaMapUrl && (
+                  <a
+                    href={footerData.azaibaMapUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[10px] text-white/80 hover:text-apex-gold underline flex items-center gap-1"
+                  >
+                    <MapPin className="w-3 h-3 text-apex-gold" />
+                    <span>الخريطة 📍</span>
+                  </a>
+                )}
               </div>
-              <p className="text-[11px] text-slate-300">مسقط - العذيبة - شارع السلطان قابوس</p>
-              <p className="text-[11px] text-slate-400">تخصصات متكاملة وجراحات تجميلية وأسنان</p>
+              <p className="text-[11px] text-slate-300">{footerData.azaibaAddress}</p>
+              <p className="text-[11px] text-slate-400">{footerData.azaibaDesc}</p>
             </div>
 
             {/* Branch 2: Al Amerat */}
@@ -198,23 +237,23 @@ export default function Footer() {
                 <Building2 className="w-4 h-4 text-apex-gold" />
                 <span>2. فرع العامرات</span>
               </div>
-              <p className="text-[11px] text-slate-300">مسقط - العامرات - الشارع العام</p>
-              <p className="text-[11px] text-slate-400">عيادات السمنة والتخسيس • ليزر والبشرة • طب عام</p>
+              <p className="text-[11px] text-slate-300">{footerData.ameratAddress}</p>
+              <p className="text-[11px] text-slate-400">{footerData.ameratDesc}</p>
             </div>
 
             {/* Contact & Hours */}
             <div className="space-y-2 pt-1 text-xs text-slate-300">
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-apex-gold flex-shrink-0" />
-                <span dir="ltr" className="text-white font-bold">968 97031500</span>
+                <span dir="ltr" className="text-white font-bold">{footerData.clinicPhone}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-apex-gold flex-shrink-0" />
-                <span>info@apexmedicaloman.com</span>
+                <span>{footerData.clinicEmail}</span>
               </div>
               <div className="flex items-center gap-2 text-[11px] text-slate-400">
                 <Clock className="w-4 h-4 text-apex-gold flex-shrink-0" />
-                <span>السبت - الخميس: 09:00 ص - 09:00 م</span>
+                <span>{footerData.workingHours}</span>
               </div>
             </div>
 
@@ -227,10 +266,10 @@ export default function Footer() {
           {/* Copyright & Clean Developer Info */}
           <div className="space-y-1 text-center md:text-right">
             <p className="font-medium text-slate-300">
-              © {new Date().getFullYear()} مجمع القمة الطبي (Apex Medical Center Oman). جميع الحقوق محفوظة.
+              {footerData.copyrightText}
             </p>
             <p className="text-[11px] text-slate-300">
-              تطوير المؤسسة رفاه عبد القادر مؤسسة ونائبة الرئيس التنفيذي{" "}
+              {footerData.developerText}{" "}
               <a
                 href="https://srlor.com"
                 target="_blank"

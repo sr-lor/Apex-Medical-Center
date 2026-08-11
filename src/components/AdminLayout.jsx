@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { 
-  Calendar, UserCheck, Stethoscope, Image, LogOut, Shield, LayoutDashboard, Sparkles, CreditCard, Users, Heart, Gift, Tag, Cpu, Award
+  Calendar, UserCheck, Stethoscope, Image, LogOut, Shield, LayoutDashboard, Sparkles, CreditCard, Users, Heart, Gift, Tag, Cpu, Award, SlidersHorizontal
 } from "lucide-react";
 
 export default function AdminLayout({ children }) {
@@ -41,6 +41,7 @@ export default function AdminLayout({ children }) {
   const navItems = [
     { href: "/admin/doctors", label: "إدارة الأطباء والكادر", icon: UserCheck },
     { href: "/admin/services", label: "إدارة التخصصات والعيادات", icon: Stethoscope },
+    { href: "/admin/footer", label: "إدارة تذييل الموقع والبيانات", icon: SlidersHorizontal },
     { href: "/admin/subscription", label: "إدارة الاشتراك والترخيص", icon: CreditCard },
     { href: "/admin/users", label: "إدارة الموظفين والصلاحيات", icon: Users },
     { href: "/admin/dashboard", label: "لوحة التحكم الرئيسية", icon: LayoutDashboard },
