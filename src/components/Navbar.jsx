@@ -374,7 +374,7 @@ export default function Navbar() {
               className="hidden sm:flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-5 py-2 rounded-full font-extrabold text-xs sm:text-sm shadow-md hover:shadow-xl transition-all hover:scale-105"
             >
               <MessageCircle className="w-4 h-4" />
-              <span>تواصل معنا عبر الواتساب</span>
+              <span>احجز موعدك</span>
             </a>
 
             <button

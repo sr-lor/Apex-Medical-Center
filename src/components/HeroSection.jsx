@@ -61,7 +61,7 @@ export default function HeroSection({ onOpenBooking }) {
                 className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-extrabold px-8 py-4 rounded-2xl shadow-lg transition-all duration-300 flex items-center justify-center gap-3 text-base hover:scale-105"
               >
                 <MessageCircle className="w-5 h-5 text-white" />
-                <span>تواصل معنا عبر الواتساب</span>
+                <span>احجز موعدك الآن</span>
               </a>
 
               <a
