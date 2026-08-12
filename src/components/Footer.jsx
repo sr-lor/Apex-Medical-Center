@@ -92,34 +92,56 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-[#0B0F19] text-white pt-16 pb-8 border-t border-amber-500/20 relative font-sans text-right">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <footer className="bg-[#0B0F19] text-white pt-14 pb-8 border-t border-amber-500/20 relative font-sans text-right">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         
-        {/* EXECUTIVE CONTACT & LOCATION CARDS */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* MAIN FOOTER CONTENT GRID */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-10 border-b border-white/10">
           
-          {/* Card 1: Social Media Platforms */}
-          <div className="bg-white/[0.03] p-6 rounded-2xl border border-white/10 space-y-4 hover:border-amber-500/40 transition-all backdrop-blur-xl">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-amber-400">التواصل الاجتماعي</span>
-              <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-400">
-                <Globe className="w-4 h-4" />
+          {/* COL 1: LOGO, BIO & OUTSIDE GLOBAL CONTACT INFORMATION */}
+          <div className="lg:col-span-4 space-y-5">
+            <div className="bg-white/10 p-2.5 rounded-xl inline-block backdrop-blur-md border border-white/10">
+              <img
+                src="/wp-content/uploads/2026/02/apex_logo-apexmedicaloman_white-txt.png"
+                alt="Apex Medical Center"
+                className="h-10 object-contain"
+              />
+            </div>
+            
+            <p className="text-slate-300 text-xs leading-relaxed font-normal">
+              {footerData.footerBio}
+            </p>
+
+            {/* GLOBAL CONTACT DETAILS OUTSIDE CARDS */}
+            <div className="space-y-2 pt-2 border-t border-white/10 text-xs text-slate-300 font-bold">
+              <div className="flex items-center gap-2">
+                <Phone className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                <span>الهاتف المباشر:</span>
+                <span dir="ltr" className="text-amber-400 font-mono font-black">{footerData.clinicPhone}</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Mail className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                <span>البريد الإلكتروني:</span>
+                <span dir="ltr" className="text-slate-200 font-mono text-[11px]">{footerData.clinicEmail}</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                <span>أوقات العمل الرسمية:</span>
+                <span className="text-slate-200">{footerData.workingHours}</span>
               </div>
             </div>
-            <div>
-              <h4 className="text-sm font-bold text-white">المنصات الرسمية</h4>
-              <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
-                متابعة التغطيات الحية والنتائج الطبية المعتمدة.
-              </p>
-            </div>
-            <div className="flex items-center gap-2 pt-2 border-t border-white/10">
+
+            {/* SOCIAL MEDIA ICONS OUTSIDE CARDS */}
+            <div className="flex items-center gap-2.5 pt-2">
               {footerData.instagramUrl && (
                 <a
                   href={footerData.instagramUrl}
                   target="_blank"
                   rel="noreferrer"
                   title="Instagram"
-                  className="w-8 h-8 rounded-lg bg-white/5 hover:bg-[#E1306C] text-slate-300 hover:text-white flex items-center justify-center transition-all border border-white/10"
+                  className="w-9 h-9 rounded-xl bg-white/5 hover:bg-[#E1306C] text-slate-300 hover:text-white flex items-center justify-center transition-all border border-white/10"
                 >
                   <Instagram className="w-4 h-4" />
                 </a>
@@ -130,7 +152,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noreferrer"
                   title="YouTube"
-                  className="w-8 h-8 rounded-lg bg-white/5 hover:bg-[#FF0000] text-slate-300 hover:text-white flex items-center justify-center transition-all border border-white/10"
+                  className="w-9 h-9 rounded-xl bg-white/5 hover:bg-[#FF0000] text-slate-300 hover:text-white flex items-center justify-center transition-all border border-white/10"
                 >
                   <Youtube className="w-4 h-4" />
                 </a>
@@ -141,7 +163,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noreferrer"
                   title="Facebook"
-                  className="w-8 h-8 rounded-lg bg-white/5 hover:bg-[#1877F2] text-slate-300 hover:text-white flex items-center justify-center transition-all border border-white/10"
+                  className="w-9 h-9 rounded-xl bg-white/5 hover:bg-[#1877F2] text-slate-300 hover:text-white flex items-center justify-center transition-all border border-white/10"
                 >
                   <Facebook className="w-4 h-4" />
                 </a>
@@ -151,213 +173,156 @@ export default function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 title="WhatsApp"
-                className="w-8 h-8 rounded-lg bg-white/5 hover:bg-[#25D366] text-slate-300 hover:text-white flex items-center justify-center transition-all border border-white/10"
+                className="w-9 h-9 rounded-xl bg-white/5 hover:bg-[#25D366] text-slate-300 hover:text-white flex items-center justify-center transition-all border border-white/10"
               >
                 <MessageCircle className="w-4 h-4" />
               </a>
             </div>
           </div>
 
-          {/* Card 2: Contact Information */}
-          <div className="bg-white/[0.03] p-6 rounded-2xl border border-white/10 space-y-4 hover:border-amber-500/40 transition-all backdrop-blur-xl">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-emerald-400">الاتصال المباشر</span>
-              <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400">
-                <Phone className="w-4 h-4" />
-              </div>
-            </div>
-            <div>
-              <h4 className="text-sm font-bold text-white">مركز الاستفسارات</h4>
-              <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
-                استقبال حجز المواعيد والاستشارات الطبية.
-              </p>
-            </div>
-            <div className="space-y-1 pt-2 border-t border-white/10 text-xs font-bold text-slate-200">
-              <div className="flex items-center justify-between">
-                <span className="text-slate-400 font-medium">الهاتف:</span>
-                <span dir="ltr" className="text-amber-400 font-mono">{footerData.clinicPhone}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-400 font-medium">البريد:</span>
-                <span dir="ltr" className="text-slate-300 text-[11px] font-mono">{footerData.clinicEmail}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 3: Location & Maps */}
-          <div className="bg-white/[0.03] p-6 rounded-2xl border border-white/10 space-y-4 hover:border-amber-500/40 transition-all backdrop-blur-xl">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-blue-400">الموقع الجغرافي</span>
-              <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">
-                <MapPin className="w-4 h-4" />
-              </div>
-            </div>
-            <div>
-              <h4 className="text-sm font-bold text-white">فروع مسقط</h4>
-              <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
-                مواقع الفروع والخرائط التفاعلية.
-              </p>
-            </div>
-            <div className="pt-2 border-t border-white/10 flex items-center justify-between gap-2">
-              <button
-                onClick={() => setActiveBranchModal("azaiba")}
-                className="flex-1 py-1.5 px-2 bg-white/5 hover:bg-amber-500 hover:text-slate-950 text-white rounded-lg text-[11px] font-bold transition-all border border-white/10 flex items-center justify-center gap-1"
-              >
-                <Building2 className="w-3.5 h-3.5" />
-                <span>العذيبة</span>
-              </button>
-
-              <button
-                onClick={() => setActiveBranchModal("amerat")}
-                className="flex-1 py-1.5 px-2 bg-white/5 hover:bg-amber-500 hover:text-slate-950 text-white rounded-lg text-[11px] font-bold transition-all border border-white/10 flex items-center justify-center gap-1"
-              >
-                <Building2 className="w-3.5 h-3.5" />
-                <span>العامرات</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Card 4: Operating Hours */}
-          <div className="bg-white/[0.03] p-6 rounded-2xl border border-white/10 space-y-4 hover:border-amber-500/40 transition-all backdrop-blur-xl">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-purple-400">أوقات العمل</span>
-              <div className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400">
-                <Clock className="w-4 h-4" />
-              </div>
-            </div>
-            <div>
-              <h4 className="text-sm font-bold text-white">ساعات الاستقبال</h4>
-              <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
-                عيادات الاستقبال الخارجي والعمليات.
-              </p>
-            </div>
-            <div className="pt-2 border-t border-white/10 text-xs font-bold text-amber-300 flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
-              <span>{footerData.workingHours}</span>
-            </div>
-          </div>
-
-        </div>
-
-        {/* MAIN NAVIGATION GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-10 border-b border-white/10">
-          
-          {/* About */}
-          <div className="space-y-4">
-            <div className="bg-white/10 p-2.5 rounded-xl inline-block backdrop-blur-md border border-white/10">
-              <img
-                src="/wp-content/uploads/2026/02/apex_logo-apexmedicaloman_white-txt.png"
-                alt="Apex Medical Center"
-                className="h-10 object-contain"
-              />
-            </div>
-            <p className="text-slate-400 text-xs leading-relaxed font-normal">
-              {footerData.footerBio}
-            </p>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h5 className="text-xs font-extrabold uppercase tracking-wider text-amber-400 mb-4 border-r-2 border-amber-400 pr-2">
+          {/* COL 2: QUICK SITE LINKS */}
+          <div className="lg:col-span-2 space-y-4">
+            <h5 className="text-xs font-extrabold uppercase tracking-wider text-amber-400 border-r-2 border-amber-400 pr-2">
               أقسام الموقع
             </h5>
-            <ul className="space-y-2 text-xs text-slate-300">
+            <ul className="space-y-2.5 text-xs text-slate-300 font-bold">
               <li>
-                <Link href="/" className="hover:text-amber-400 flex items-center gap-1 transition-colors">
-                  <ChevronLeft className="w-3 h-3 text-amber-400" />
+                <Link href="/" className="hover:text-amber-400 flex items-center gap-1.5 transition-colors">
+                  <ChevronLeft className="w-3.5 h-3.5 text-amber-400" />
                   <span>الرئيسية</span>
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="hover:text-amber-400 flex items-center gap-1 transition-colors">
-                  <ChevronLeft className="w-3 h-3 text-amber-400" />
-                  <span>عن مجمع القمة</span>
+                <Link href="/about" className="hover:text-amber-400 flex items-center gap-1.5 transition-colors">
+                  <ChevronLeft className="w-3.5 h-3.5 text-amber-400" />
+                  <span>عن مجمع القمة الطبي</span>
                 </Link>
               </li>
               <li>
-                <Link href="/services" className="hover:text-amber-400 flex items-center gap-1 transition-colors">
-                  <ChevronLeft className="w-3 h-3 text-amber-400" />
+                <Link href="/services" className="hover:text-amber-400 flex items-center gap-1.5 transition-colors">
+                  <ChevronLeft className="w-3.5 h-3.5 text-amber-400" />
                   <span>التخصصات والعيادات</span>
                 </Link>
               </li>
               <li>
-                <Link href="/doctors" className="hover:text-amber-400 flex items-center gap-1 transition-colors">
-                  <ChevronLeft className="w-3 h-3 text-amber-400" />
+                <Link href="/doctors" className="hover:text-amber-400 flex items-center gap-1.5 transition-colors">
+                  <ChevronLeft className="w-3.5 h-3.5 text-amber-400" />
                   <span>الأطباء والاستشاريون</span>
                 </Link>
               </li>
-            </ul>
-          </div>
-
-          {/* Specialties */}
-          <div>
-            <h5 className="text-xs font-extrabold uppercase tracking-wider text-amber-400 mb-4 border-r-2 border-amber-400 pr-2">
-              الأقسام التخصصية
-            </h5>
-            <ul className="space-y-2 text-xs text-slate-300">
               <li>
-                <Link href="/services/dermatology-cosmetology" className="hover:text-amber-400 flex items-center gap-1 transition-colors">
-                  <ChevronLeft className="w-3 h-3 text-amber-400" />
-                  <span>الجلدية والتجميل</span>
+                <Link href="/gallery" className="hover:text-amber-400 flex items-center gap-1.5 transition-colors">
+                  <ChevronLeft className="w-3.5 h-3.5 text-amber-400" />
+                  <span>معرض الصور</span>
                 </Link>
               </li>
               <li>
-                <Link href="/services/plastic-surgery" className="hover:text-amber-400 flex items-center gap-1 transition-colors">
-                  <ChevronLeft className="w-3 h-3 text-amber-400" />
-                  <span>الجراحة التجميلية</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/services/cosmetic-dentistry-2" className="hover:text-amber-400 flex items-center gap-1 transition-colors">
-                  <ChevronLeft className="w-3 h-3 text-amber-400" />
-                  <span>طب وتجميل الأسنان</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/services/weight-management" className="hover:text-amber-400 flex items-center gap-1 transition-colors">
-                  <ChevronLeft className="w-3 h-3 text-amber-400" />
-                  <span>إدارة السمنة والوزن</span>
+                <Link href="/contact" className="hover:text-amber-400 flex items-center gap-1.5 transition-colors">
+                  <ChevronLeft className="w-3.5 h-3.5 text-amber-400" />
+                  <span>اتصل بنا والمواقع</span>
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Branch Modals Action Buttons */}
-          <div className="space-y-3">
-            <h5 className="text-xs font-extrabold uppercase tracking-wider text-amber-400 mb-4 border-r-2 border-amber-400 pr-2">
-              بطاقة معلومات الفروع
-            </h5>
+          {/* COL 3 & 4: ONLY TWO BRANCH CARDS FOR AL AZAIBA & AL AMERAT */}
+          <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
             
-            <div className="p-3 bg-white/[0.02] rounded-xl border border-white/10 space-y-2">
-              <div className="flex items-center justify-between text-xs font-bold text-white">
-                <span>فرع العذيبة</span>
-                <span className="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded">الرئيسي</span>
+            {/* CARD 1: AL AZAIBA BRANCH CARD */}
+            <div className="bg-white/[0.03] p-5 rounded-2xl border border-white/10 space-y-4 hover:border-amber-500/40 transition-all backdrop-blur-xl flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+                      <Building2 className="w-4 h-4" />
+                    </div>
+                    <h4 className="font-extrabold text-sm text-white">فرع العذيبة الرئيسي</h4>
+                  </div>
+                  <span className="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-extrabold border border-amber-500/30">
+                    الرئيسي
+                  </span>
+                </div>
+
+                <div className="space-y-1.5 text-xs text-slate-300">
+                  <div className="flex items-start gap-1.5">
+                    <MapPin className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+                    <span>{footerData.azaibaAddress}</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 font-normal">{footerData.azaibaDesc}</p>
+                </div>
               </div>
-              <button
-                onClick={() => setActiveBranchModal("azaiba")}
-                className="w-full py-1.5 bg-amber-500/10 hover:bg-amber-500 hover:text-slate-950 text-amber-300 rounded-lg font-bold text-[11px] transition-all border border-amber-500/30 flex items-center justify-center gap-1"
-              >
-                <span>تفاصيل الفرع الخرائط</span>
-              </button>
+
+              <div className="space-y-2 pt-3 border-t border-white/10">
+                <a
+                  href={footerData.azaibaMapUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl font-bold text-xs shadow-md transition-all flex items-center justify-center gap-1.5"
+                >
+                  <Navigation className="w-3.5 h-3.5 text-slate-950" />
+                  <span>موقع الفرع علي Google Maps 📍</span>
+                </a>
+
+                <button
+                  onClick={() => setActiveBranchModal("azaiba")}
+                  className="w-full py-2 bg-white/5 hover:bg-white/10 text-slate-200 rounded-xl font-bold text-xs transition-all border border-white/10 flex items-center justify-center gap-1.5"
+                >
+                  <Info className="w-3.5 h-3.5 text-amber-400" />
+                  <span>تفاصيل الفرع والعيادات العائمة</span>
+                </button>
+              </div>
             </div>
 
-            <div className="p-3 bg-white/[0.02] rounded-xl border border-white/10 space-y-2">
-              <div className="flex items-center justify-between text-xs font-bold text-white">
-                <span>فرع العامرات</span>
-                <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded">تخصصي</span>
+            {/* CARD 2: AL AMERAT BRANCH CARD */}
+            <div className="bg-white/[0.03] p-5 rounded-2xl border border-white/10 space-y-4 hover:border-amber-500/40 transition-all backdrop-blur-xl flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
+                      <Building2 className="w-4 h-4" />
+                    </div>
+                    <h4 className="font-extrabold text-sm text-white">فرع العامرات التخصصي</h4>
+                  </div>
+                  <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-extrabold border border-emerald-500/30">
+                    تخصصي
+                  </span>
+                </div>
+
+                <div className="space-y-1.5 text-xs text-slate-300">
+                  <div className="flex items-start gap-1.5">
+                    <MapPin className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                    <span>{footerData.ameratAddress}</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 font-normal">{footerData.ameratDesc}</p>
+                </div>
               </div>
-              <button
-                onClick={() => setActiveBranchModal("amerat")}
-                className="w-full py-1.5 bg-amber-500/10 hover:bg-amber-500 hover:text-slate-950 text-amber-300 rounded-lg font-bold text-[11px] transition-all border border-amber-500/30 flex items-center justify-center gap-1"
-              >
-                <span>تفاصيل الفرع الخرائط</span>
-              </button>
+
+              <div className="space-y-2 pt-3 border-t border-white/10">
+                <a
+                  href={footerData.ameratMapUrl || "https://maps.google.com"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 rounded-xl font-bold text-xs shadow-md transition-all flex items-center justify-center gap-1.5"
+                >
+                  <Navigation className="w-3.5 h-3.5 text-slate-950" />
+                  <span>موقع الفرع علي Google Maps 📍</span>
+                </a>
+
+                <button
+                  onClick={() => setActiveBranchModal("amerat")}
+                  className="w-full py-2 bg-white/5 hover:bg-white/10 text-slate-200 rounded-xl font-bold text-xs transition-all border border-white/10 flex items-center justify-center gap-1.5"
+                >
+                  <Info className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>تفاصيل الفرع والعيادات العائمة</span>
+                </button>
+              </div>
             </div>
+
           </div>
 
         </div>
 
-        {/* COPYRIGHT */}
+        {/* COPYRIGHT & DEVELOPER BAR */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
           <p>{footerData.copyrightText}</p>
           <p className="text-[11px]">
@@ -454,6 +419,17 @@ export default function Footer() {
                 <p className="text-white font-mono">{branchDetails[activeBranchModal].hours}</p>
               </div>
 
+              <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-2">
+                <span className="text-amber-400 text-[11px]">العيادات والتخصصات بالفرع:</span>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {branchDetails[activeBranchModal].specialties.map((spec, i) => (
+                    <span key={i} className="bg-amber-500/20 text-amber-300 px-3 py-1 rounded-xl border border-amber-500/30 text-[11px]">
+                      {spec}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
               <div className="flex items-center gap-3 pt-2">
                 <a
                   href={branchDetails[activeBranchModal].mapUrl}
@@ -462,7 +438,7 @@ export default function Footer() {
                   className="flex-1 py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2"
                 >
                   <Navigation className="w-4 h-4 text-slate-950" />
-                  <span>فتح الموقع في Google Maps</span>
+                  <span>فتح الموقع في Google Maps 📍</span>
                 </a>
                 
                 <a
