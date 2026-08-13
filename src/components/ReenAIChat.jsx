@@ -128,11 +128,11 @@ export default function ReenAIChat() {
   }, [messages, isOpen, isTyping]);
 
   const handleRegisterProfile = (e) => {
-    e.preventDefault();
-    if (!nameInput.trim()) return;
-
+    if (e && e.preventDefault) e.preventDefault();
+    
+    const finalName = nameInput.trim() || "زائر كريم";
     const profileObj = {
-      name: nameInput.trim(),
+      name: finalName,
       contact: contactInput.trim() || "غير محدد",
       registeredAt: new Date().toISOString(),
     };
@@ -143,7 +143,7 @@ export default function ReenAIChat() {
     const welcomeMsgObj = {
       id: Date.now(),
       sender: "bot",
-      text: `أهلاً وسهلاً بك أستاذ/أستاذة **${profileObj.name}** في مجمع القمة الطبي! ✨\n\nأنا **رين AI** المساعد الذكي المعتمد للمجمع. كيف يمكنني مساعدتك اليوم بكل احترافية ودقة؟`,
+      text: `أهلاً وسهلاً بك ${finalName !== "زائر كريم" ? `أستاذ/أستاذة **${finalName}**` : ""} في مجمع القمة الطبي! ✨\n\nأنا **رين AI** المساعد الذكي المعتمد للمجمع. كيف يمكنني مساعدتك اليوم بكل احترافية ودقة؟`,
       quickReplies: [
         { label: "📍 عيادات فرع العامرات", action: "amerat_services" },
         { label: "🏢 عيادات فرع العذيبة", action: "azaiba_services" },
@@ -433,16 +433,15 @@ export default function ReenAIChat() {
                 <form onSubmit={handleRegisterProfile} className="space-y-3.5 pt-2">
                   <div>
                     <label className="block text-[11px] font-bold text-slate-200 mb-1">
-                      الاسم الكريم <span className="text-apex-gold">*</span>
+                      الاسم الكريم <span className="text-slate-400 font-normal">(اختياري)</span>
                     </label>
                     <div className="relative">
                       <User className="w-4 h-4 text-slate-400 absolute right-3 top-3" />
                       <input
                         type="text"
-                        required
                         value={nameInput}
                         onChange={(e) => setNameInput(e.target.value)}
-                        placeholder="أدخل اسمك الكامل..."
+                        placeholder="أدخل اسمك الكامل (اختياري)..."
                         className="w-full pr-9 pl-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-xs outline-none focus:ring-2 focus:ring-apex-gold font-medium text-white placeholder-slate-400"
                       />
                     </div>

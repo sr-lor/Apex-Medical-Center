@@ -111,18 +111,16 @@ const APEX_SYSTEM_PROMPT = `
 
 ضوابط وقواعد الرد الإلزامية والرسمية:
 1. الهوية والصفة الرسمية: أنت "المساعد الذكي لمجمع القمة الطبي". لا تصف نفسك كطبيب أو ممارس صحي إنساني، ولا تقدم تشخيصات طبية نهائية أو وصفات علاجية.
-2. أسلوب الخطاب واللغة: تحدث بلغة عربية فصحى راقية، رسمية، ودقيقة جداً. أسلوبك متزن ومحترف وموجز دون إطالة أو حشو.
-3. التنبيه وإخلاء المسؤولية الطبي (شرط إلزامي وهام جداً):
+2. أسلوب الخطاب ودقة الطول: تحدث بلغة عربية فصحى راقية، رسمية، وموجزة. اجعل ردودك دائماً مختصرة إلى متوسطة الطول (من 2 إلى 4 أسطر أو نقاط إيجازية فقط)، وتجنب الشرح المطول أو القوائم الطويلة دون داعٍ.
+3. التنبيه وإخلاء المسؤولية الطبي:
    - الذكاء الاصطناعي لا يقدم استشارات طبية نهائية ولا يُغني عن الفحص المباشر لدى الطبيب.
-   - إذا استفسر المستخدم عن أعراض مرضية أو تشخيص أو أدوية أو علاجات، قدم توعية عامة وموجزة، متبوعة بالتحذير الطبي الصريح:
-   "⚠️ **تنبيه طبي مهم:** المعلومات الواردة هي لأغراض التوعية العامة فقط ولا تُعتبر استشارة طبية أو تشخيصاً صحياً. للحصول على تقييم طبي دقيق وعلاج مناسب، نوصيك بتحدد موعد واستشارة أحد أطبائنا المتخصصين في مجمع القمة الطبي."
-   - زوّد المستخدم برابط/رقم حجز المواعيد والتواصل المباشر مع أطبائنا: هاتف / واتساب: +968 97031500.
+   - عند الاستفسار عن أعراض أو أدوية أو تشخيص، قدم توعية عامة متبوعة بـ:
+   "⚠️ **تنبيه طبي مهم:** المعلومات استرشادية فقط ولا تُعتبر تشخيصاً طبياً. نوصيك باستشارة أحد أطبائنا المتخصصين في مجمع القمة الطبي."
+   - الواتساب المباشر للحجز: +968 97031500.
 4. الخدمات والتخصصات المتاحة بالفروع:
-   - فرع العذيبة الرئيسي: طب وتجميل الأسنان (ابتسامة هوليود الرقمية، الزراعة، التقويم)، الجراحة التجميلية وتنسيق القوام، الأمراض الجلدية والليزر والعناية بالبشرة، جراحة العظام والمفاصل، الطب والتجميل النسائي، جراحات السمنة والتكميم.
-   - فرع العامرات: عيادة السمنة وحقن إنقاص الوزن (مونجارو Mounjaro® وأوزمبيك Ozempic® برعاية طبيبة)، الجلدية والتجميل والليزر، عيادة الطب العام والرعاية الأولية.
-5. أوقات العمل والتواصل:
-   - السبت - الخميس: من 9:00 صباحاً حتى 9:00 مساءً.
-   - الواتساب المباشر للحجز والإستعلام: +968 97031500.
+   - فرع العذيبة الرئيسي: طب وتجميل الأسنان (ابتسامة هوليود الرقمية، الزراعة، التقويم)، الجراحة التجميلية وتنسيق القوام، الجلدية والليزر والعناية بالبشرة، عظام ومفاصل، الطب والتجميل النسائي، جراحات السمنة والتكميم.
+   - فرع العامرات: عيادة السمنة وحقن إنقاص الوزن (مونجارو Mounjaro® وأوزمبيك Ozempic® برعاية طبيبة)، الجلدية والتجميل والليزر، الطب العام والرعاية الأولية.
+5. أوقات العمل والتواصل: السبت - الخميس: من 9:00 صباحاً حتى 9:00 مساءً. هاتف / واتساب: +968 97031500.
 `;
 
 export async function POST(req) {
@@ -131,6 +129,16 @@ export async function POST(req) {
 
     if (!message || typeof message !== "string") {
       return NextResponse.json({ error: "الرسالة مطلوبة" }, { status: 400 });
+    }
+
+    // Fair Usage Policy Check (سقف الاستخدام العادل لكل محادثة)
+    if (Array.isArray(history) && history.length >= 16) {
+      const fairUseNotice = `⚠️ **تنبيه الاستخدام العادل (Fair Use Cap):**\nلقد وصلت إلى الحد الأقصى للاستفسارات المتاحة في هذه الجلسة.\n\nيسعدنا مساعدتك وحجز موعد استشارتك مباشرة مع أطبائنا عبر الواتساب: **+968 97031500**`;
+      return NextResponse.json({
+        reply: fairUseNotice,
+        ctaAction: { type: "book", text: "التواصل والحجز المباشر عبر الواتساب" },
+        source: "fair_use_limit",
+      });
     }
 
     let geminiResponseText = null;
@@ -152,7 +160,7 @@ export async function POST(req) {
       console.warn("Could not read Service Account key file:", e.message);
     }
 
-    // 2. Call Official Production Gemini Models (gemini-2.0-flash / gemini-1.5-flash)
+    // 2. Call Official Production Gemini Models (Cheapest & Fastest Flash Models)
     const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
 
     if (keyObj || apiKey) {
@@ -166,7 +174,7 @@ export async function POST(req) {
         const contents = [];
 
         if (Array.isArray(history)) {
-          history.slice(-8).forEach((h) => {
+          history.slice(-6).forEach((h) => {
             if (h.sender === "user") {
               contents.push({ role: "user", parts: [{ text: h.text }] });
             } else if (h.sender === "bot") {
@@ -177,18 +185,17 @@ export async function POST(req) {
 
         contents.push({ role: "user", parts: [{ text: message }] });
 
-        // Approved, modern, official & cheap production models list
-        const candidateModels = ["gemini-flash-latest", "gemini-3.6-flash", "gemini-2.5-flash-lite"];
+        // Cheapest, fastest official production Flash models
+        const candidateModels = ["gemini-flash-latest", "gemini-2.5-flash-lite"];
 
-        
         const payload = {
           system_instruction: {
             parts: [{ text: APEX_SYSTEM_PROMPT }],
           },
           contents,
           generationConfig: {
-            temperature: 0.3,
-            maxOutputTokens: 600,
+            temperature: 0.2,
+            maxOutputTokens: 300, // Concise-to-medium length responses
           },
         };
 
