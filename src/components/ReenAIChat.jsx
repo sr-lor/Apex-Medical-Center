@@ -1,31 +1,121 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Sparkles, MessageSquare, X, Send, User, Bot, CheckCircle2, Calendar, MapPin, Phone, ArrowLeft, RefreshCw } from "lucide-react";
+import {
+  Sparkles,
+  X,
+  Send,
+  Bot,
+  Phone,
+  ArrowLeft,
+  ShieldAlert,
+  User,
+  Mail,
+  RefreshCw,
+  AlertTriangle,
+  CheckCircle2,
+  Lock,
+  Stethoscope,
+  Info,
+  ExternalLink,
+  MessageSquareHeart,
+  ChevronLeft
+} from "lucide-react";
 import Link from "next/link";
 
 export default function ReenAIChat() {
   const [isOpen, setIsOpen] = useState(false);
   const [inputMsg, setInputMsg] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
   const messagesEndRef = useRef(null);
 
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      sender: "bot",
-      text: "أهلاً بك في مجمع القمة الطبي! 👋\nأنا **رين AI**، مساعدك الطبي الذكي. يسعدني إجابة استفساراتك حول الفروع (العذيبة والعامرات)، الخدمات الطبية والتجميلية، وحجز المواعيد.",
-      quickReplies: [
-        { label: "📍 عيادات فرع العامرات", action: "amerat_services" },
-        { label: "🏢 عيادات فرع العذيبة", action: "azaiba_services" },
-        { label: "📅 حجز موعد استشارة", action: "book_now" },
-        { label: "💉 حقن إنقاص الوزن والتخسيس", action: "weight_injections" },
-        { label: "🦷 زراعة وابتسامة الأسنان", action: "dentistry_info" },
-        { label: "📞 أوقات العمل ورقم التواصل", action: "contact_info" },
-      ],
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    },
-  ]);
+  // User Lead Profile (stored in localStorage)
+  const [userProfile, setUserProfile] = useState(null);
+  const [nameInput, setNameInput] = useState("");
+  const [contactInput, setContactInput] = useState("");
+  const [sessionId, setSessionId] = useState("");
+
+  const [messages, setMessages] = useState([]);
+
+  // Listen for global custom events to open Reen AI with prefilled prompt
+  useEffect(() => {
+    const handleOpenReenChat = (e) => {
+      setIsOpen(true);
+      if (e.detail?.prompt) {
+        setInputMsg(e.detail.prompt);
+      }
+    };
+
+    window.addEventListener("open_reen_chat", handleOpenReenChat);
+    return () => window.removeEventListener("open_reen_chat", handleOpenReenChat);
+  }, []);
+
+  // Load profile & messages from localStorage on mount
+  useEffect(() => {
+    try {
+      const savedProfile = localStorage.getItem("apex_reen_user_profile");
+      if (savedProfile) {
+        setUserProfile(JSON.parse(savedProfile));
+      }
+
+      let savedSessionId = localStorage.getItem("apex_reen_session_id");
+      if (!savedSessionId) {
+        savedSessionId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+        localStorage.setItem("apex_reen_session_id", savedSessionId);
+      }
+      setSessionId(savedSessionId);
+
+      const savedMsgs = localStorage.getItem("apex_reen_chat_messages");
+      if (savedMsgs) {
+        setMessages(JSON.parse(savedMsgs));
+      } else {
+        const initText = savedProfile
+          ? `أهلاً وسهلاً بك الفضل أستاذ/أستاذة **${JSON.parse(savedProfile).name}** في مجمع القمة الطبي. 🏛️\n\nأنا **رين AI**، المساعد الذكي المعتمد لإجابة جميع استفساراتك حول خدماتنا وفروعنا (العذيبة والعامرات) وتسهيل حجز الاستشارات المباشرة.`
+          : "أهلاً وسهلاً بك في **مجمع القمة الطبي** 🏛️\n\nأنا **رين AI**، المساعد الذكي المعتمد للمجمع. يسعدني إجابة استفساراتك حول خدماتنا التخصصية وحجز المواعيد الطبية.";
+
+        setMessages([
+          {
+            id: 1,
+            sender: "bot",
+            text: initText,
+            isNotice: true,
+            quickReplies: [
+              { label: "📍 عيادات فرع العامرات", action: "amerat_services" },
+              { label: "🏢 عيادات فرع العذيبة", action: "azaiba_services" },
+              { label: "💉 حقن إنقاص الوزن والتخسيس", action: "weight_injections" },
+              { label: "🦷 زراعة وتجميل الأسنان", action: "dentistry_info" },
+              { label: "🩺 حجز استشارة طبيب متخصص", action: "doctor_consultation" }
+            ],
+            timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          },
+        ]);
+      }
+    } catch (e) {
+      console.warn("LocalStorage access warning:", e);
+    }
+  }, []);
+
+  // Save messages to localStorage and sync to admin endpoint
+  const saveAndSyncChat = (updatedMsgs, currentProfile = userProfile) => {
+    try {
+      localStorage.setItem("apex_reen_chat_messages", JSON.stringify(updatedMsgs));
+
+      if (sessionId && currentProfile) {
+        fetch("/api/admin/chats", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sessionId,
+            userProfile: currentProfile,
+            messages: updatedMsgs,
+          }),
+        }).catch((err) => console.warn("Sync to admin failed:", err));
+      }
+    } catch (e) {
+      console.warn("Storage sync error:", e);
+    }
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -37,97 +127,193 @@ export default function ReenAIChat() {
     }
   }, [messages, isOpen, isTyping]);
 
-  const handleSend = (customText = null, actionKey = null) => {
-    const query = (customText || inputMsg).trim();
-    if (!query && !actionKey) return;
+  const handleRegisterProfile = (e) => {
+    e.preventDefault();
+    if (!nameInput.trim()) return;
 
-    // Add user message
-    const userMsgObj = {
+    const profileObj = {
+      name: nameInput.trim(),
+      contact: contactInput.trim() || "غير محدد",
+      registeredAt: new Date().toISOString(),
+    };
+
+    setUserProfile(profileObj);
+    localStorage.setItem("apex_reen_user_profile", JSON.stringify(profileObj));
+
+    const welcomeMsgObj = {
       id: Date.now(),
-      sender: "user",
-      text: query || (actionKey === "amerat_services" ? "ما هي خدمات فرع العامرات؟" : "استفسار"),
+      sender: "bot",
+      text: `أهلاً وسهلاً بك أستاذ/أستاذة **${profileObj.name}** في مجمع القمة الطبي! ✨\n\nأنا **رين AI** المساعد الذكي المعتمد للمجمع. كيف يمكنني مساعدتك اليوم بكل احترافية ودقة؟`,
+      quickReplies: [
+        { label: "📍 عيادات فرع العامرات", action: "amerat_services" },
+        { label: "🏢 عيادات فرع العذيبة", action: "azaiba_services" },
+        { label: "💉 حقن إنقاص الوزن", action: "weight_injections" },
+        { label: "🦷 تجميل وزراعة الأسنان", action: "dentistry_info" },
+        { label: "🩺 حجز استشارة طبيب متخصص", action: "doctor_consultation" }
+      ],
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     };
 
-    setMessages((prev) => [...prev, userMsgObj]);
+    const newMsgs = [welcomeMsgObj];
+    setMessages(newMsgs);
+    saveAndSyncChat(newMsgs, profileObj);
+  };
+
+  const handleClearChat = () => {
+    try {
+      localStorage.removeItem("apex_reen_chat_messages");
+      const resetMsg = [
+        {
+          id: Date.now(),
+          sender: "bot",
+          text: `تم بدء محادثة رسمية جديدة مع **رين AI** ✨\nيسعدني استقبال استفساراتك الخدمية والطبيّة العامة.`,
+          quickReplies: [
+            { label: "📍 خدمات فرع العامرات", action: "amerat_services" },
+            { label: "🏢 خدمات فرع العذيبة", action: "azaiba_services" },
+            { label: "💉 عيادة التخسيس", action: "weight_injections" },
+            { label: "📞 التواصل وحجز المواعيد", action: "contact_info" },
+          ],
+          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        },
+      ];
+      setMessages(resetMsg);
+      saveAndSyncChat(resetMsg);
+    } catch (e) {
+      console.warn("Error clearing chat:", e);
+    }
+  };
+
+  const handleSend = async (customText = null, actionKey = null) => {
+    const query = (customText || inputMsg).trim();
+    if (!query && !actionKey) return;
+
+    const userText = query || (
+      actionKey === "amerat_services" ? "ما هي خدمات والتخصصات المتاحة بفرع العامرات؟" :
+      actionKey === "azaiba_services" ? "ما هي الخدمات والتخصصات المتاحة بفرع العذيبة الرئيسي؟" :
+      actionKey === "weight_injections" ? "تفاصيل ومعلومات حقن إنقاص الوزن ومونجارو" :
+      actionKey === "dentistry_info" ? "خدمات طب وزراعة وتجميل الأسنان" :
+      actionKey === "doctor_consultation" ? "أود طلب حجز موعد واستشارة طبيب متخصص" :
+      actionKey === "contact_info" ? "ما هي أوقات العمل ورقم التواصل والحجز المباشر؟" : "استفسار"
+    );
+
+    const userMsgObj = {
+      id: Date.now(),
+      sender: "user",
+      text: userText,
+      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    };
+
+    const updatedMessages = [...messages, userMsgObj];
+    setMessages(updatedMessages);
     if (!customText) setInputMsg("");
     setIsTyping(true);
 
-    // AI Response generation delay
-    setTimeout(() => {
-      let botResponse = generateAIResponse(query, actionKey);
-      setMessages((prev) => [...prev, botResponse]);
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: userText,
+          history: updatedMessages.slice(-6).map((m) => ({ sender: m.sender, text: m.text })),
+          userProfile,
+          sessionId,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const botMsgObj = {
+          id: Date.now() + 1,
+          sender: "bot",
+          text: data.reply || "شكراً لتواصلك مع رين AI المساعد الذكي لمجمع القمة الطبي.",
+          ctaAction: data.ctaAction || null,
+          quickReplies: data.quickReplies || [
+            { label: "📍 خدمات فرع العامرات", action: "amerat_services" },
+            { label: "🏢 خدمات فرع العذيبة", action: "azaiba_services" },
+            { label: "🩺 حجز طبيب", action: "doctor_consultation" },
+          ],
+          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        };
+        const finalMsgs = [...updatedMessages, botMsgObj];
+        setMessages(finalMsgs);
+        saveAndSyncChat(finalMsgs);
+      } else {
+        throw new Error("فشل الاتصال بمركز الذكاء الاصطناعي");
+      }
+    } catch (err) {
+      console.warn("Falling back to fallback engine:", err);
+      let botResponse = generateAIResponse(userText, actionKey);
+      const finalMsgs = [...updatedMessages, botResponse];
+      setMessages(finalMsgs);
+      saveAndSyncChat(finalMsgs);
+    } finally {
       setIsTyping(false);
-    }, 600);
+    }
   };
 
   const generateAIResponse = (text, actionKey) => {
     const q = text.toLowerCase();
-
     let responseText = "";
     let ctaAction = null;
     let quickReplies = [
-      { label: "📅 حجز موعد أونلاين", action: "book_now" },
-      { label: "📍 استكشاف فرع العامرات", action: "amerat_services" },
-      { label: "📞 أرقام التواصل", action: "contact_info" },
+      { label: "📍 خدمات العامرات", action: "amerat_services" },
+      { label: "🏢 خدمات العذيبة", action: "azaiba_services" },
+      { label: "🩺 استشارة طبيب", action: "doctor_consultation" },
     ];
 
-    if (actionKey === "amerat_services" || q.includes("عامرات") || q.includes("العامرات")) {
+    const isMedicalQuery =
+      q.includes("ألم") || q.includes("الم") || q.includes("وجع") || q.includes("صداع") ||
+      q.includes("علاج") || q.includes("دواء") || q.includes("أعراض") || q.includes("اعراض") ||
+      q.includes("استشارة") || q.includes("تشخيص") || q.includes("أعاني") || q.includes("اعاني");
+
+    if (isMedicalQuery) {
+      responseText = `أهلاً بك. حرصاً منا على صحتك وسلامتك:\n\n• نقدم لك إرشادات أولية عامة لتوعيتك.\n• يُحظر تناول أي عقاقير طبية دون فحص إكلينيكي معلوم.\n\n⚠️ **تنبيه طبي هام جداً:**\nالمعلومات المقدمة من الذكاء الاصطناعي هي للتوعية العامة فقط ولا تُعتبر تشخيصاً طبياً أو استشارة صحية نهائية. لا بد من معاينة حالتك مباشرة من قِبل **طبيب حقيقي متخصص** في مجمع القمة الطبي.\n\n📞 **لطلب كشف طبي مباشر واستشارة أطبائنا:**\n• هاتف / واتساب المجمع: **+968 97031500**`;
+      ctaAction = { type: "book", text: "التواصل والحجز مع طبيب متخصص عبر الواتساب" };
+    } else if (actionKey === "amerat_services" || q.includes("عامرات") || q.includes("العامرات")) {
       responseText =
-        "✨ **خدمات وعيادات فرع العامرات لمجمع القمة الطبي:**\n\n" +
-        "1. **عيادة سمنة (إدارة الوزن):** حلول متقدمة لتخسيس الوزن، متابعة التغذية، وحقن التخسيس المعتمدة (مونجارو وأوزمبيك).\n" +
-        "2. **عيادة ليزر والبشرة:** أحدث جلسات إزالة الشعر بالليزر المزدوج وتجديد نضارة البشرة.\n" +
-        "3. **عيادة طب عام:** فحوصات روتينية، تشخيص دقيق، ورعاية متكاملة لجميع الفئات العمرية.\n\n" +
-        "💡 *تنويه: كادر الأطباء بفرع العامرات قيد التحديث وسيتم إضافتهم قريباً جداً إلى المنصة.*";
+        "✨ **خدمات فرع العامرات الرسمية:**\n\n" +
+        "• **قسم السمنة وحقن إنقاص الوزن:** برامج مونجارو (Mounjaro®) وأوزمبيك برعاية طبيبة.\n" +
+        "• **الجلدية والليزر:** إزالة الشعر وتجديد نضارة البشرة.\n" +
+        "• **الطب العام:** فحوصات شاملة ورعاية صحية أولية.\n\n" +
+        "📍 العنوان: العامرات - الشارع العام الرئيسي.";
       ctaAction = { type: "branch_link", href: "/services?branch=amerat", text: "تصفح خدمات فرع العامرات" };
-    } else if (actionKey === "azaiba_services" || q.includes("عذيبة") || q.includes("العذيبة") || q.includes("الرئيسي")) {
+    } else if (actionKey === "azaiba_services" || q.includes("عذيبة") || q.includes("العذيبة")) {
       responseText =
-        "🏢 **خدمات فرع العذيبة:**\n\n" +
-        "يضم فرع العذيبة جميع التخصصات الاستشارية:\n" +
-        "• طب وتجميل الأسنان وابتسامة هوليود الرقمية\n" +
-        "• الجراحة التجميلية وتنسيق القوام بالفيزر\n" +
-        "• طب الأمراض الجلدية والعناية بالبشرة\n" +
-        "• جراحة العظام والمفاصل والمناظير\n" +
-        "• الطب والتجميل النسائي والرعاية الخاصة\n" +
-        "• جراحات وتكميم المعدة والتخسيس";
+        "🏢 **خدمات فرع العذيبة الرئيسي:**\n\n" +
+        "• **طب وتجميل الأسنان:** ابتسامة هوليود الرقمية، الزراعة، والتقويم.\n" +
+        "• **الجراحة التجميلية:** تنسيق القوام ونحت الجسم.\n" +
+        "• **الأمراض الجلدية:** الفحوصات والعلاج بالليزر.\n" +
+        "• **جراحة العظام والمفاصل:** الفحص والمناظير.\n" +
+        "• **الطب والتجميل النسائي**.\n" +
+        "• **جراحات وتكميم المعدة والتخسيس**.\n\n" +
+        "📍 العنوان: العذيبة - شارع السلطان قابوس.";
       ctaAction = { type: "branch_link", href: "/services?branch=azaiba", text: "تصفح خدمات فرع العذيبة" };
-    } else if (actionKey === "weight_injections" || q.includes("سمنة") || q.includes("حقن") || q.includes("مونجارو") || q.includes("اوزمبيك") || q.includes("تخسيس")) {
+    } else if (actionKey === "weight_injections" || q.includes("سمنة") || q.includes("حقن") || q.includes("مونجارو") || q.includes("تخسيس")) {
       responseText =
-        "💉 **قسم إدارة السمنة وحقن إنقاص الوزن الطبية:**\n\n" +
-        "نوفر في مجمع القمة الطبي برامج متكاملة لإنقاص الوزن تحت إشراف أطباء واستشاريين متخصصين:\n" +
-        "• حقن **Mounjaro® (مونجارو)** المعتمدة عالمياً\n" +
-        "• حقن **Ozempic® (أوزمبيك)** و **Saxenda®**\n" +
-        "• تقييم طبي كامل ومتابعة غذائية دورية مع أخصائي التغذية\n" +
-        "• إجراءات بالون المعدة وتكميم المعدة بالمنظار";
-      ctaAction = { type: "book", text: "حجز استشارة عيادة السمنة" };
-    } else if (actionKey === "dentistry_info" || q.includes("اسنان") || q.includes("أسنان") || q.includes("هوليود") || q.includes("زراعة") || q.includes("تقويم")) {
+        "💉 **عيادة السمنة وحقن إنقاص الوزن:**\n\n" +
+        "• علاج وتخسيس باستخدام **Mounjaro®** و **Ozempic®** ببروتوكول طبي آمن.\n" +
+        "• متابعة المؤشرات الحيوية والتغذية.\n" +
+        "• بالون وتكميم المعدة بالمنظار.\n\n" +
+        "⚠️ ينبغي الخضوع لتقييم الطبيب قبل البدء بأي برنامج.";
+      ctaAction = { type: "book", text: "حجز موعد بعيادة السمنة والتخسيس" };
+    } else if (actionKey === "dentistry_info" || q.includes("اسنان") || q.includes("أسنان") || q.includes("هوليود")) {
       responseText =
-        "🦷 **قسم طب وتجميل الأسنان بمجمع القمة الطبي:**\n\n" +
-        "• تصميم ابتسامة هوليود الرقمية (Veneers & E-max)\n" +
-        "• زراعة الأسنان الفورية بأحدث التقنيات الرقمية الموجهة\n" +
-        "• التقويم الشفاف غير المرئي (Clear Aligners)\n" +
-        "• سحب وعلاج العصب تحت المجهر في جلسة واحدة بدون ألم\n" +
-        "• تبييض الأسنان بالليزر الآمن والفعال";
-      ctaAction = { type: "book", text: "حجز موعد عيادة الأسنان" };
-    } else if (actionKey === "contact_info" || q.includes("تواصل") || q.includes("رقم") || q.includes("وقت") || q.includes("عنوان") || q.includes("موقع")) {
+        "🦷 **قسم طب وتجميل الأسنان المتقدم:**\n\n" +
+        "• تصميم ابتسامة هوليود الرقمية (Veneers / E-max)\n" +
+        "• زراعة الأسنان الفورية وتغطية الفراغات\n" +
+        "• التقويم الشفاف غير المرئي\n" +
+        "• علاج العصب والجذور بالليزر";
+      ctaAction = { type: "book", text: "حجز موعد بعيادة الأسنان" };
+    } else if (actionKey === "doctor_consultation" || q.includes("طبيب") || q.includes("حجز") || q.includes("دكتور")) {
       responseText =
-        "📞 **معلومات التواصل وأوقات العمل بمجمع القمة الطبي:**\n\n" +
-        "• **الهاتف والواتساب المباشر:** `+968 97031500`\n" +
-        "• **البريد الإلكتروني:** `info@apexmedicaloman.com`\n" +
-        "• **ساعات العمل:** من السبت إلى الخميس: 09:00 صباحاً - 09:00 مساءً (الجمعة عطلة أسبوعية)\n" +
-        "• **فرع العذيبة:** مسقط - العذيبة - شارع السلطان قابوس\n" +
-        "• **فرع العامرات:** مسقط - العامرات - الشارع العام";
-      ctaAction = { type: "link", href: "/contact", text: "الانتقال لصفحة اتصل بنا ومواقع الفروع" };
-    } else if (actionKey === "book_now" || q.includes("حجز") || q.includes("موعد") || q.includes("استشارة")) {
-      responseText =
-        "📅 **حجز موعد أونلاين في مجمع القمة الطبي:**\n\n" +
-        "يمكنك اختيار الفرع والتخصص والتاريخ المناسب لزيارتك بسهولة. اضغط على الزر أدناه للبدء بالحجز المباشر فوراً.";
-      ctaAction = { type: "book", text: "فتح نافذة الحجز المباشر الآن ⚡" };
+        "🩺 **حجز استشارة مع طبيب متخصص:**\n\n" +
+        "لضمان تشخيص دقيق وخطة علاجية آمنة، نرحب بك بالحجز المباشر لدى كادرنا الطبي في مجمع القمة الطبي.\n\n" +
+        "📞 **للتواصل وحجز الموعد مباشرة:**\n" +
+        "• هاتف / واتساب المجمع: **+968 97031500**";
+      ctaAction = { type: "book", text: "حجز موعدك الآن مع الطبيب عبر الواتساب" };
     } else {
       responseText =
-        "شكراً لتواصلك مع **رين AI**! 🌟\n" +
-        "نحن يسعدنا تقديم أفضل رعاية طبية وتجميلية في سلطنة عمان. يمكنك اختيار أحد الاستفسارات الشائعة أدناه أو تحديد الفرع والتخصص المطلوب حجز موعد فيه.";
-      ctaAction = { type: "book", text: "حجز موعد استشارة فورية" };
+        `أهلاً وسهلاً بك في **مجمع القمة الطبي**! 🌟\n\nيسعدني إجابة استفساراتك الرسمية عن الفروع والخدمات الطبية والتجميلية، وحجز المواعيد المباشرة.`;
     }
 
     return {
@@ -141,180 +327,375 @@ export default function ReenAIChat() {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-40 text-right font-sans">
-      {/* Floating Trigger Button */}
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[9999] text-right font-sans pointer-events-auto select-none">
+      {/* Floating Trigger Badge Button */}
       {!isOpen && (
-        <div className="relative group">
+        <div className="relative group flex items-center justify-end">
           <button
-            onClick={() => setIsOpen(true)}
-            className="w-12 h-12 rounded-full bg-[#151112] hover:bg-slate-900 text-white shadow-2xl transition-transform duration-300 hover:scale-110 flex items-center justify-center border-2 border-apex-gold/40 relative overflow-hidden"
-            aria-label="تحدث مع رين AI"
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsOpen(true);
+            }}
+            className="h-14 px-5 rounded-full bg-[#151112] hover:bg-slate-900 text-white shadow-[0_10px_35px_rgba(212,175,55,0.3)] transition-all duration-300 hover:scale-105 flex items-center gap-3 border-2 border-apex-gold/70 cursor-pointer relative overflow-hidden group"
+            aria-label="محادثة رين AI المساعد الذكي"
           >
-            {/* Glowing Aura Ring */}
             <div className="absolute inset-0 bg-gradient-to-r from-apex-gold/20 via-amber-500/20 to-apex-gold/20 animate-pulse pointer-events-none"></div>
 
-            {/* Status Indicator */}
-            <span className="absolute top-1 right-1 flex h-2.5 w-2.5 z-10">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-            </span>
-
-            <Sparkles className="w-5 h-5 text-apex-gold animate-spin-slow" />
-          </button>
-
-          {/* Tooltip on Hover */}
-          <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block bg-[#151112] text-white text-[11px] font-bold px-3 py-1.5 rounded-xl shadow-xl whitespace-nowrap border border-apex-gold/30 pointer-events-none">
-            رين AI - المساعد الطبي الذكي ✨
-          </div>
-        </div>
-      )}
-
-      {/* Reen AI Floating Chat Window */}
-      {isOpen && (
-        <div className="w-[360px] sm:w-[410px] h-[580px] max-h-[85vh] bg-white rounded-3xl shadow-2xl border border-apex-gold/30 flex flex-col overflow-hidden animate-fade-in text-right">
-          
-          {/* Header */}
-          <div className="bg-[#151112] text-white p-4 flex items-center justify-between border-b border-apex-gold/30">
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-apex-gold to-apex-gold-dark text-slate-950 flex items-center justify-center font-extrabold shadow-md border border-apex-gold/40">
-                  <Bot className="w-6 h-6 text-slate-950" />
-                </div>
-                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-[#151112]"></span>
-              </div>
-              <div>
-                <div className="flex items-center gap-1.5">
-                  <h3 className="font-extrabold text-sm text-white">رين AI</h3>
-                  <span className="bg-apex-gold/20 text-apex-gold text-[10px] px-2 py-0.5 rounded-full border border-apex-gold/30 font-bold">
-                    ذكاء طبي
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-300">مجمع القمة الطبي (العذيبة & العامرات)</p>
+            <div className="relative flex items-center justify-center">
+              <span className="animate-ping absolute inline-flex h-4 w-4 rounded-full bg-emerald-400 opacity-75"></span>
+              <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-apex-gold via-amber-300 to-amber-500 text-slate-950 flex items-center justify-center font-black shadow-md border border-white/20">
+                <Bot className="w-5 h-5 text-slate-950" />
               </div>
             </div>
 
-            <button
-              onClick={() => setIsOpen(false)}
-              className="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded-full transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
+            <div className="flex flex-col text-right">
+              <span className="text-xs font-black text-apex-gold leading-tight flex items-center gap-1.5">
+                رين AI <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-spin-slow inline-block" />
+              </span>
+              <span className="text-[10px] text-slate-300 font-medium">المساعد الذكي (متصل الآن)</span>
+            </div>
+          </button>
+        </div>
+      )}
+
+      {/* Floating Modern Luxury Chat Window */}
+      {isOpen && (
+        <div className="fixed inset-x-2 bottom-2 sm:bottom-6 sm:right-6 sm:left-auto w-auto sm:w-[420px] h-[85vh] sm:h-[630px] max-h-[92vh] bg-slate-900/98 backdrop-blur-xl rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.7)] border-2 border-apex-gold/60 flex flex-col overflow-hidden animate-fade-in text-right transition-all z-[99999]">
+          
+          {/* Top Luxury Header Bar */}
+          <div className="bg-[#120F10] text-white px-4 py-3.5 flex items-center justify-between border-b border-apex-gold/30 shrink-0">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-apex-gold via-amber-400 to-apex-gold-dark text-slate-950 flex items-center justify-center font-extrabold shadow-md border border-apex-gold/50">
+                  <Bot className="w-6 h-6 text-slate-950" />
+                </div>
+                <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-[#120F10]"></span>
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-black text-sm text-white tracking-wide">رين AI</h3>
+                  <span className="bg-emerald-500/20 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full border border-emerald-500/40 font-bold flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    ذكاء اصطناعي طبي
+                  </span>
+                </div>
+                <p className="text-[10px] text-amber-200/80">مجمع القمة الطبي • سلطنة عمان</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => setShowTermsModal(true)}
+                title="شروط الاستخدام والتنبيه الطبي"
+                className="p-2 text-slate-400 hover:text-apex-gold hover:bg-white/10 rounded-full transition-colors cursor-pointer"
+              >
+                <Info className="w-4 h-4" />
+              </button>
+
+              <button
+                type="button"
+                onClick={handleClearChat}
+                title="بدء محادثة جديدة"
+                className="p-2 text-slate-400 hover:text-apex-gold hover:bg-white/10 rounded-full transition-colors cursor-pointer"
+              >
+                <RefreshCw className="w-4 h-4" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-full transition-colors cursor-pointer"
+                aria-label="إغلاق المحادثة"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
           </div>
 
-          {/* Messages Area */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50/60 text-xs">
-            {messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`flex flex-col ${msg.sender === "user" ? "items-end" : "items-start"}`}
-              >
-                <div className="flex items-end gap-2 max-w-[88%]">
-                  {msg.sender === "bot" && (
-                    <div className="w-7 h-7 rounded-xl bg-apex-navy text-apex-gold flex items-center justify-center flex-shrink-0 border border-apex-gold/30 mb-1">
-                      <Sparkles className="w-3.5 h-3.5 text-apex-gold" />
+          {/* Body Area: Registration Form OR Active Chat */}
+          {!userProfile ? (
+            /* Lead Registration Form */
+            <div className="flex-1 p-6 bg-gradient-to-b from-[#181415] to-[#110D0E] flex flex-col justify-between overflow-y-auto text-white">
+              <div className="space-y-4 my-auto">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-apex-gold/20 via-amber-400/20 to-transparent text-apex-gold flex items-center justify-center border border-apex-gold/40 mx-auto shadow-inner">
+                  <Sparkles className="w-7 h-7 text-apex-gold" />
+                </div>
+                <div className="text-center space-y-1.5">
+                  <h4 className="font-black text-white text-base">مرحباً بك في رين AI ✨</h4>
+                  <p className="text-xs text-slate-300 leading-relaxed max-w-xs mx-auto font-light">
+                    المساعد الذكي الافتراضي المعتمد لمجمع القمة الطبي. يرجى إدخال معلوماتك البسيطة لبدء الاستفسارات وحجز المواعيد.
+                  </p>
+                </div>
+
+                <form onSubmit={handleRegisterProfile} className="space-y-3.5 pt-2">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-200 mb-1">
+                      الاسم الكريم <span className="text-apex-gold">*</span>
+                    </label>
+                    <div className="relative">
+                      <User className="w-4 h-4 text-slate-400 absolute right-3 top-3" />
+                      <input
+                        type="text"
+                        required
+                        value={nameInput}
+                        onChange={(e) => setNameInput(e.target.value)}
+                        placeholder="أدخل اسمك الكامل..."
+                        className="w-full pr-9 pl-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-xs outline-none focus:ring-2 focus:ring-apex-gold font-medium text-white placeholder-slate-400"
+                      />
                     </div>
-                  )}
+                  </div>
 
-                  <div
-                    className={`p-3.5 rounded-2xl leading-relaxed whitespace-pre-line shadow-sm border ${
-                      msg.sender === "user"
-                        ? "bg-apex-navy text-white rounded-br-none border-apex-navy"
-                        : "bg-white text-slate-800 rounded-bl-none border-slate-200/80 font-medium"
-                    }`}
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-200 mb-1">
+                      رقم الواتساب أو البريد الإلكتروني <span className="text-slate-400 font-normal">(اختياري)</span>
+                    </label>
+                    <div className="relative">
+                      <Mail className="w-4 h-4 text-slate-400 absolute right-3 top-3" />
+                      <input
+                        type="text"
+                        value={contactInput}
+                        onChange={(e) => setContactInput(e.target.value)}
+                        placeholder="رقم التواصل للحجز..."
+                        className="w-full pr-9 pl-3 py-2.5 bg-white/10 border border-white/20 rounded-xl text-xs outline-none focus:ring-2 focus:ring-apex-gold font-medium text-white placeholder-slate-400"
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full py-3 bg-gradient-to-r from-apex-gold via-amber-400 to-apex-gold-dark text-slate-950 font-black text-xs rounded-xl transition-all shadow-xl hover:shadow-2xl flex items-center justify-center gap-2 border border-apex-gold cursor-pointer"
                   >
-                    {msg.text}
+                    <span>بدء المحادثة الرسمية</span>
+                    <ArrowLeft className="w-4 h-4 text-slate-950" />
+                  </button>
+                </form>
+              </div>
 
-                    {/* CTA inside Bot message */}
-                    {msg.ctaAction && (
-                      <div className="mt-3 pt-2.5 border-t border-slate-100">
-                        {msg.ctaAction.type === "book" ? (
-                          <a
-                            href="https://wa.me/96897031500?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%85%D8%AC%D9%85%D8%B9%20%D8%A7%D9%84%D9%82%D9%85%D8%A9%20%D8%A7%D9%84%D8%B7%D8%A8%D9%8A"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => setIsOpen(false)}
-                            className="w-full py-2 px-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-extrabold text-xs shadow-sm hover:shadow transition-all flex items-center justify-center gap-1.5"
-                          >
-                            <Phone className="w-3.5 h-3.5" />
-                            <span>تواصل معنا عبر الواتساب المباشر</span>
-                          </a>
-                        ) : (
-                          <Link
-                            href={msg.ctaAction.href}
-                            onClick={() => setIsOpen(false)}
-                            className="w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 text-apex-navy rounded-xl font-bold text-xs transition-colors flex items-center justify-center gap-1.5 border border-slate-200"
-                          >
-                            <span>{msg.ctaAction.text}</span>
-                            <ArrowLeft className="w-3.5 h-3.5" />
-                          </Link>
+              {/* Privacy Footer Disclaimer */}
+              <div className="pt-3 border-t border-white/10 text-center text-[10px] text-slate-400 leading-normal shrink-0">
+                <p>🔒 المحادثات مخصصة للتوجيه الخدمي والتنظيمي العام.</p>
+                <button
+                  type="button"
+                  onClick={() => setShowTermsModal(true)}
+                  className="text-apex-gold font-bold underline hover:text-amber-300 mt-1 inline-block cursor-pointer"
+                >
+                  شروط الاستخدام والتنبيه الطبي
+                </button>
+              </div>
+            </div>
+          ) : (
+            /* Active Chat Messages Screen */
+            <div className="flex-1 flex flex-col min-h-0 bg-[#161214]">
+              {/* Message List */}
+              <div className="flex-1 p-4 overflow-y-auto space-y-4 text-xs">
+                {messages.map((msg) => (
+                  <div
+                    key={msg.id}
+                    className={`flex flex-col ${msg.sender === "user" ? "items-end" : "items-start"}`}
+                  >
+                    <div className="flex items-end gap-2 max-w-[92%]">
+                      {msg.sender === "bot" && (
+                        <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-apex-gold to-amber-400 text-slate-950 flex items-center justify-center flex-shrink-0 border border-amber-300 mb-1 shadow-md">
+                          <Bot className="w-4.5 h-4.5 text-slate-950" />
+                        </div>
+                      )}
+
+                      <div
+                        className={`p-3.5 rounded-2xl leading-relaxed whitespace-pre-line shadow-md border ${
+                          msg.sender === "user"
+                            ? "bg-gradient-to-r from-apex-gold via-amber-400 to-amber-500 text-slate-950 font-bold rounded-br-none border-apex-gold"
+                            : "bg-[#211B1D] text-slate-100 rounded-bl-none border-white/10 font-normal"
+                        }`}
+                      >
+                        {msg.text}
+
+                        {/* Direct CTA Action Button */}
+                        {msg.ctaAction && (
+                          <div className="mt-3 pt-2.5 border-t border-white/15">
+                            {msg.ctaAction.type === "book" ? (
+                              <a
+                                href="https://wa.me/96897031500?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%85%D8%AC%D9%85%D8%B9%20%D8%A7%D9%84%D9%82%D9%85%D8%A9%20%D8%A7%D9%84%D8%B7%D8%A8%D9%8A"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full py-2.5 px-3.5 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-xl font-extrabold text-xs shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 border border-emerald-400/40"
+                              >
+                                <Phone className="w-4 h-4" />
+                                <span>{msg.ctaAction.text || "حجز استشارة مع طبيب عبر الواتساب (+968 97031500)"}</span>
+                              </a>
+                            ) : (
+                              <Link
+                                href={msg.ctaAction.href}
+                                onClick={() => setIsOpen(false)}
+                                className="w-full py-2 px-3 bg-white/10 hover:bg-white/20 text-apex-gold rounded-xl font-bold text-xs transition-colors flex items-center justify-center gap-1.5 border border-apex-gold/40"
+                              >
+                                <span>{msg.ctaAction.text}</span>
+                                <ArrowLeft className="w-3.5 h-3.5" />
+                              </Link>
+                            )}
+                          </div>
                         )}
+                      </div>
+                    </div>
+
+                    <span className="text-[10px] text-slate-400 mt-1 px-1">{msg.timestamp}</span>
+
+                    {/* Quick Reply Action Buttons */}
+                    {msg.quickReplies && (
+                      <div className="flex items-center gap-1.5 flex-wrap mt-2.5 max-w-[98%]">
+                        {msg.quickReplies.map((qr, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => handleSend(qr.label, qr.action)}
+                            className="bg-[#261F22] hover:bg-apex-gold hover:text-slate-950 text-slate-200 border border-apex-gold/40 text-[11px] font-bold px-3 py-1.5 rounded-xl transition-all shadow-xs cursor-pointer flex items-center gap-1"
+                          >
+                            <span>{qr.label}</span>
+                            <ChevronLeft className="w-3 h-3 opacity-60" />
+                          </button>
+                        ))}
                       </div>
                     )}
                   </div>
-                </div>
+                ))}
 
-                <span className="text-[10px] text-slate-400 mt-1 px-1">{msg.timestamp}</span>
-
-                {/* Quick Reply Chips below bot message if available */}
-                {msg.quickReplies && (
-                  <div className="flex items-center gap-1.5 flex-wrap mt-3 max-w-[95%]">
-                    {msg.quickReplies.map((qr, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => handleSend(qr.label, qr.action)}
-                        className="bg-white hover:bg-apex-gold-light/60 hover:border-apex-gold/50 text-slate-700 hover:text-slate-900 border border-slate-200 text-[11px] font-bold px-3 py-1.5 rounded-xl transition-all shadow-2xs"
-                      >
-                        {qr.label}
-                      </button>
-                    ))}
+                {/* Animated Typing Indicator */}
+                {isTyping && (
+                  <div className="flex items-center gap-2 text-amber-200 text-xs font-semibold pt-1">
+                    <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-apex-gold to-amber-400 text-slate-950 flex items-center justify-center flex-shrink-0 border border-amber-300">
+                      <Sparkles className="w-4 h-4 text-slate-950 animate-spin-slow" />
+                    </div>
+                    <div className="bg-[#211B1D] px-4 py-2.5 rounded-2xl border border-white/10 shadow-sm flex items-center gap-1 text-slate-200">
+                      <span>رين AI يحلل ويكتب الاستجابة الرسمية</span>
+                      <span className="animate-bounce font-bold text-apex-gold">.</span>
+                      <span className="animate-bounce delay-100 font-bold text-apex-gold">.</span>
+                      <span className="animate-bounce delay-200 font-bold text-apex-gold">.</span>
+                    </div>
                   </div>
                 )}
-              </div>
-            ))}
 
-            {/* Typing Indicator */}
-            {isTyping && (
-              <div className="flex items-center gap-2 text-slate-400 text-xs font-semibold pt-1">
-                <div className="w-7 h-7 rounded-xl bg-apex-navy text-apex-gold flex items-center justify-center flex-shrink-0 border border-apex-gold/30">
-                  <Sparkles className="w-3.5 h-3.5 text-apex-gold animate-spin-slow" />
-                </div>
-                <div className="bg-white px-4 py-2.5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-1">
-                  <span>رين AI يكتب الآن</span>
-                  <span className="animate-bounce font-bold text-apex-gold">.</span>
-                  <span className="animate-bounce delay-100 font-bold text-apex-gold">.</span>
-                  <span className="animate-bounce delay-200 font-bold text-apex-gold">.</span>
+                <div ref={messagesEndRef} />
+              </div>
+
+              {/* Message Input Form */}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSend();
+                }}
+                className="p-3 bg-[#181415] border-t border-apex-gold/30 flex items-center gap-2 shrink-0"
+              >
+                <input
+                  type="text"
+                  value={inputMsg}
+                  onChange={(e) => setInputMsg(e.target.value)}
+                  placeholder="اكتب استفسارك الرسمي لـ رين AI هنا..."
+                  className="flex-1 px-3.5 py-2.5 bg-white/10 border border-white/20 rounded-xl text-xs focus:ring-2 focus:ring-apex-gold focus:bg-white/15 outline-none font-medium text-white placeholder-slate-400"
+                />
+                <button
+                  type="submit"
+                  disabled={!inputMsg.trim()}
+                  className="p-2.5 bg-gradient-to-r from-apex-gold to-amber-400 hover:from-amber-400 hover:to-apex-gold text-slate-950 rounded-xl transition-all disabled:opacity-40 flex-shrink-0 border border-amber-300 cursor-pointer shadow-md font-bold"
+                  aria-label="إرسال الرسالة"
+                >
+                  <Send className="w-4 h-4 text-slate-950" />
+                </button>
+              </form>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Terms of Use & Strict Medical Disclaimer Modal */}
+      {showTermsModal && (
+        <div className="fixed inset-0 z-[10000] bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 text-right">
+          <div className="bg-[#181415] text-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border-2 border-apex-gold/50 space-y-4 max-h-[88vh] overflow-y-auto">
+            
+            {/* Modal Header */}
+            <div className="flex items-center justify-between border-b border-white/15 pb-3">
+              <div className="flex items-center gap-2.5 text-apex-gold">
+                <ShieldAlert className="w-6 h-6 text-apex-gold" />
+                <div>
+                  <h3 className="font-extrabold text-sm text-white">شروط الاستخدام والتنبيه الطبي القانوني</h3>
+                  <p className="text-[10px] text-slate-400">المساعد الذكي (رين AI) - مجمع القمة الطبي</p>
                 </div>
               </div>
-            )}
+              <button
+                onClick={() => setShowTermsModal(false)}
+                className="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded-full cursor-pointer transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-            <div ref={messagesEndRef} />
+            {/* Modal Detailed Content */}
+            <div className="space-y-4 text-xs text-slate-300 leading-relaxed">
+              
+              {/* Highlighted Warning Box */}
+              <div className="bg-amber-500/15 border-2 border-amber-500/40 p-4 rounded-2xl text-amber-200 text-xs font-medium space-y-1.5 shadow-inner">
+                <div className="flex items-center gap-2 font-black text-amber-300 text-xs">
+                  <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />
+                  <span>تنبيه طبي صارم وإخلاء مسؤولية قانوني:</span>
+                </div>
+                <p className="leading-relaxed text-[11.5px]">
+                  نظام **رين AI** أداة مساعدة قائمة على الذكاء الاصطناعي مخصصة فقط لتوفير المعلومات الخدمية، التنظيمية، والمواعيد بمجمع القمة الطبي. **الذكاء الاصطناعي لا يقدم استشارات طبية ولا يُعد بديلاً عن الطبيب البشري المعتمد.**
+                </p>
+              </div>
+
+              {/* Detailed Points */}
+              <div className="space-y-3 pt-1">
+                <div className="bg-white/5 p-3 rounded-xl border border-white/10 space-y-1">
+                  <h4 className="font-bold text-apex-gold text-xs flex items-center gap-1.5">
+                    <Stethoscope className="w-4 h-4 text-apex-gold" /> 1. ضرورة التواصل والفحص لدى طبيب حقيقي
+                  </h4>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    أي تقييم للأعراض، الأمراض، أو الخطط العلاجية يستدعي إجراء فحص سريري مباشر واختبارات معملية تحت إشراف أطبائنا المتخصصين المعتمدين في مجمع القمة الطبي. لا تعتمد مطلقاً على إجابات الذكاء الاصطناعي للتشخيص أو صرف العلاج.
+                  </p>
+                </div>
+
+                <div className="bg-white/5 p-3 rounded-xl border border-white/10 space-y-1">
+                  <h4 className="font-bold text-apex-gold text-xs flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-apex-gold" /> 2. إرشادات وتوعية صحية عامة فقط
+                  </h4>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    الإجابات الصادرة حول التخصصات أو الجراحات التجميلية أو عيادات الأسنان وحقن التخسيس هي لأغراض التوعية العامة فقط، ولا تُعتبر توصية طبية ملزمة أو خطة علاجية مخصصة لواقعك الصحي.
+                  </p>
+                </div>
+
+                <div className="bg-white/5 p-3 rounded-xl border border-white/10 space-y-1">
+                  <h4 className="font-bold text-amber-400 text-xs flex items-center gap-1.5">
+                    <AlertTriangle className="w-4 h-4 text-amber-400" /> 3. حالات الطوارئ والحالات الحادة
+                  </h4>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    في حال مواجهة آلام حادة، أعراض طارئة، أو نزيف، يُحظر استخدام المساعد الافتراضي، ويجب التوجه فوراً لأقرب قسم طوارئ في مستشفى حكومي أو الاتصال بالإسعاف.
+                  </p>
+                </div>
+
+                <div className="bg-white/5 p-3 rounded-xl border border-white/10 space-y-1">
+                  <h4 className="font-bold text-apex-gold text-xs flex items-center gap-1.5">
+                    <Phone className="w-4 h-4 text-apex-gold" /> 4. التواصل الهاتفي وحجز الاستشارات المباشرة
+                  </h4>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    لحجز موعد استشارة طبية مع أطبائنا في فرعي العذيبة والعامرات، يسعدنا تواصلكم الهاتفي أو عبر الواتساب المباشر: **+968 97031500**.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Accept Button */}
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => setShowTermsModal(false)}
+                className="w-full py-3 bg-gradient-to-r from-apex-gold via-amber-400 to-apex-gold-dark text-slate-950 font-black text-xs rounded-xl shadow-xl hover:shadow-2xl cursor-pointer border border-amber-300"
+              >
+                قرأت الشروط والتعليمات وأوافق عليها
+              </button>
+            </div>
+
           </div>
-
-          {/* Footer Input Form */}
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSend();
-            }}
-            className="p-3 bg-white border-t border-slate-200 flex items-center gap-2"
-          >
-            <input
-              type="text"
-              value={inputMsg}
-              onChange={(e) => setInputMsg(e.target.value)}
-              placeholder="اكتب استفسارك لـ رين AI هنا..."
-              className="flex-1 px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-apex-navy focus:bg-white outline-none font-medium text-slate-800"
-            />
-            <button
-              type="submit"
-              disabled={!inputMsg.trim()}
-              className="p-2.5 bg-apex-navy hover:bg-slate-900 text-apex-gold rounded-xl transition-all disabled:opacity-50 flex-shrink-0 border border-apex-gold/30"
-              aria-label="إرسال"
-            >
-              <Send className="w-4 h-4 text-apex-gold" />
-            </button>
-          </form>
-
         </div>
       )}
     </div>

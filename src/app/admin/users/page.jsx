@@ -4,399 +4,731 @@ import { useState, useEffect } from "react";
 import AdminLayout from "@/components/AdminLayout";
 import { 
   Users, UserPlus, Shield, ShieldCheck, CheckCircle2, AlertCircle, Trash2, 
-  Edit3, Key, Lock, Unlock, Check, X, Award, Stethoscope, UserCheck, Image, CreditCard
+  Edit3, Key, Lock, Unlock, Check, X, Award, Stethoscope, UserCheck, Image, CreditCard,
+  MessageSquare, SlidersHorizontal, MapPin, RefreshCw, Search, Eye, EyeOff, Sparkles, Building2, UserX
 } from "lucide-react";
 
+const MODULE_DEFINITIONS = [
+  { id: "doctors", label: "إدارة الأطباء والكادر الطبي", icon: UserCheck, color: "text-blue-600 bg-blue-50 border-blue-200" },
+  { id: "services", label: "إدارة التخصصات والعيادات", icon: Stethoscope, color: "text-purple-600 bg-purple-50 border-purple-200" },
+  { id: "footer", label: "إدارة تذييل الموقع والبيانات", icon: SlidersHorizontal, color: "text-amber-600 bg-amber-50 border-amber-200" },
+  { id: "chats", label: "سجلات محادثات رين AI", icon: MessageSquare, color: "text-emerald-600 bg-emerald-50 border-emerald-200" },
+  { id: "media", label: "مكتبة الوسائط والصور", icon: Image, color: "text-indigo-600 bg-indigo-50 border-indigo-200" },
+  { id: "subscription", label: "إدارة الاشتراك والترخيص والبطاقات", icon: CreditCard, color: "text-rose-600 bg-rose-50 border-rose-200" },
+  { id: "users", label: "إدارة الموظفين والصلاحيات (RBAC)", icon: Users, color: "text-slate-800 bg-slate-100 border-slate-300" },
+];
+
+const ROLE_TEMPLATES = [
+  {
+    key: "master_owner",
+    label: "مدير النظام الرئيسي (Master)",
+    description: "صلاحية الوصول والتحكم المطلق بكافة الأقسام والاشتراكات",
+    permissions: { doctors: true, services: true, footer: true, chats: true, media: true, subscription: true, users: true },
+  },
+  {
+    key: "medical_supervisor",
+    label: "مشرف عيادات وأطباء",
+    description: "صلاحية إدارة الأطباء، العيادات، وسجلات محادثات المرضى",
+    permissions: { doctors: true, services: true, footer: false, chats: true, media: true, subscription: false, users: false },
+  },
+  {
+    key: "content_editor",
+    label: "محرر محتوى ووسائط",
+    description: "صلاحية إدارة الصور والتذييل والمحتوى الإعلامي للموقع",
+    permissions: { doctors: false, services: false, footer: true, chats: false, media: true, subscription: false, users: false },
+  },
+  {
+    key: "reception_staff",
+    label: "موظف استقبال ومتابعة",
+    description: "صلاحية متابعة وسجلات محادثات رين AI وحجوزات المواعيد",
+    permissions: { doctors: true, services: false, footer: false, chats: true, media: false, subscription: false, users: false },
+  },
+  {
+    key: "custom",
+    label: "موظف مخصص الصلاحيات",
+    description: "تحديد الصلاحيات بشكل يدوي مفتاحاً بمفتاح حسب الحاجة",
+    permissions: { doctors: false, services: false, footer: false, chats: true, media: false, subscription: false, users: false },
+  },
+];
+
 export default function AdminUsersPage() {
-  const [employees, setEmployees] = useState([
-    {
-      id: "EMP-101",
-      name: "حسام هابل (المدير العام)",
-      email: "admin@srlor.com",
-      role: "master_owner",
-      roleLabel: "مدير النظام الرئيسي (Master)",
-      permissions: { doctors: true, services: true, media: true, subscription: true, users: true },
-      status: "active",
-      createdAt: "2026-01-10",
-    },
-    {
-      id: "EMP-102",
-      name: "د. سارة البوسعيدي",
-      email: "sara@apexmedicaloman.com",
-      role: "medical_admin",
-      roleLabel: "مشرف عيادات وأطباء",
-      permissions: { doctors: true, services: true, media: true, subscription: false, users: false },
-      status: "active",
-      createdAt: "2026-02-01",
-    },
-    {
-      id: "EMP-103",
-      name: "أحمد الريامي",
-      email: "ahmed@apexmedicaloman.com",
-      role: "content_editor",
-      roleLabel: "محرر محتوى ووسائط",
-      permissions: { doctors: false, services: false, media: true, subscription: false, users: false },
-      status: "active",
-      createdAt: "2026-02-15",
-    },
-  ]);
+  const [employees, setEmployees] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedBranchFilter, setSelectedBranchFilter] = useState("all");
 
   const [showModal, setShowModal] = useState(false);
+  const [editingEmp, setEditingEmp] = useState(null);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    roleLabel: "موظف مخصص",
-    permissions: { doctors: true, services: true, media: true, subscription: false },
+    role: "custom",
+    roleLabel: "موظف مخصص الصلاحيات",
+    branch: "all",
+    branchLabel: "جميع الفروع (العذيبة & العامرات)",
+    passkey: "",
+    permissions: { doctors: true, services: true, footer: false, chats: true, media: true, subscription: false, users: false },
   });
 
+  const [showPasskeyMap, setShowPasskeyMap] = useState({});
   const [msg, setMsg] = useState({ type: "", text: "" });
 
-  const handleAddEmployee = (e) => {
+  const fetchEmployees = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/admin/users");
+      if (res.ok) {
+        const data = await res.json();
+        setEmployees(data.employees || []);
+      }
+    } catch (err) {
+      console.error("Error fetching employees:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
+
+  const generatePasskey = () => {
+    const randomPass = `apex-${Math.floor(1000 + Math.random() * 9000)}`;
+    setFormData((prev) => ({ ...prev, passkey: randomPass }));
+  };
+
+  const handleOpenAddModal = () => {
+    setEditingEmp(null);
+    setFormData({
+      name: "",
+      email: "",
+      role: "custom",
+      roleLabel: "موظف مخصص الصلاحيات",
+      branch: "all",
+      branchLabel: "جميع الفروع (العذيبة & العامرات)",
+      passkey: `apex-${Math.floor(1000 + Math.random() * 9000)}`,
+      permissions: { doctors: true, services: true, footer: false, chats: true, media: true, subscription: false, users: false },
+    });
+    setShowModal(true);
+  };
+
+  const handleOpenEditModal = (emp) => {
+    setEditingEmp(emp);
+    setFormData({
+      name: emp.name,
+      email: emp.email,
+      role: emp.role || "custom",
+      roleLabel: emp.roleLabel || "موظف مخصص",
+      branch: emp.branch || "all",
+      branchLabel: emp.branchLabel || "جميع الفروع",
+      passkey: emp.passkey || `apex-${Math.floor(1000 + Math.random() * 9000)}`,
+      permissions: { ...emp.permissions },
+    });
+    setShowModal(true);
+  };
+
+  const handleSelectRoleTemplate = (templateKey) => {
+    const tmpl = ROLE_TEMPLATES.find((t) => t.key === templateKey);
+    if (tmpl) {
+      setFormData((prev) => ({
+        ...prev,
+        role: tmpl.key,
+        roleLabel: tmpl.label,
+        permissions: { ...tmpl.permissions },
+      }));
+    }
+  };
+
+  const handleSaveEmployee = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.email) {
       setMsg({ type: "error", text: "يرجى إدخال اسم الموظف والبريد الإلكتروني." });
       return;
     }
 
-    const newEmp = {
-      id: `EMP-${Math.floor(100 + Math.random() * 900)}`,
-      name: formData.name,
-      email: formData.email,
-      role: "custom_staff",
-      roleLabel: formData.roleLabel,
-      permissions: formData.permissions,
-      status: "active",
-      createdAt: new Date().toISOString().split("T")[0],
+    const branchLabel =
+      formData.branch === "azaiba"
+        ? "فرع العذيبة الرئيسي"
+        : formData.branch === "amerat"
+        ? "فرع العامرات"
+        : "جميع الفروع (العذيبة & العامرات)";
+
+    const payload = {
+      action: editingEmp ? "update" : "create",
+      employee: {
+        id: editingEmp?.id,
+        name: formData.name,
+        email: formData.email,
+        role: formData.role,
+        roleLabel: formData.roleLabel,
+        branch: formData.branch,
+        branchLabel,
+        passkey: formData.passkey,
+        permissions: formData.permissions,
+      },
     };
 
-    setEmployees([...employees, newEmp]);
-    setShowModal(false);
-    setFormData({ name: "", email: "", roleLabel: "موظف مخصص", permissions: { doctors: true, services: true, media: true, subscription: false } });
-    setMsg({ type: "success", text: `تمت إضافة الموظف (${newEmp.name}) وتحديد صلاحياته بنجاح!` });
-  };
+    try {
+      const res = await fetch("/api/admin/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-  const handleTogglePermission = (empId, key) => {
-    setEmployees(employees.map(emp => {
-      if (emp.id === empId) {
-        if (emp.role === "master_owner" && key === "subscription") {
-          alert("لا يمكن إلغاء صلاحية الاشتراك لمدير النظام الرئيسي.");
-          return emp;
-        }
-        return {
-          ...emp,
-          permissions: {
-            ...emp.permissions,
-            [key]: !emp.permissions[key],
-          },
-        };
+      if (res.ok) {
+        const data = await res.json();
+        setMsg({ type: "success", text: data.message || "تم حفظ بيانات الموظف بنجاح!" });
+        setShowModal(false);
+        fetchEmployees();
+      } else {
+        const errData = await res.json();
+        setMsg({ type: "error", text: errData.error || "حدث خطأ أثناء حفظ البيانات." });
       }
-      return emp;
-    }));
+    } catch (err) {
+      console.error("Save employee error:", err);
+      setMsg({ type: "error", text: "فشل الاتصال بالخادم." });
+    }
   };
 
-  const handleDeleteEmployee = (empId) => {
-    const emp = employees.find(e => e.id === empId);
+  const handleToggleStatus = async (emp) => {
+    if (emp.role === "master_owner") {
+      alert("لا يمكن تعليق حساب مدير النظام الرئيسي (Master Owner).");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/admin/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "toggle_status", employee: { id: emp.id } }),
+      });
+
+      if (res.ok) {
+        fetchEmployees();
+      } else {
+        const errData = await res.json();
+        alert(errData.error || "فشل تغيير حالة الحساب");
+      }
+    } catch (err) {
+      console.error("Status error:", err);
+    }
+  };
+
+  const handleTogglePermissionInline = async (empId, permKey) => {
+    const emp = employees.find((e) => e.id === empId);
+    if (!emp) return;
+
+    if (emp.role === "master_owner" && permKey === "subscription") {
+      alert("لا يمكن إلغاء صلاحية الاشتراك لمدير النظام الرئيسي.");
+      return;
+    }
+
+    const updatedPermissions = {
+      ...emp.permissions,
+      [permKey]: !emp.permissions[permKey],
+    };
+
+    try {
+      const res = await fetch("/api/admin/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "update",
+          employee: { id: empId, permissions: updatedPermissions },
+        }),
+      });
+
+      if (res.ok) {
+        setEmployees(
+          employees.map((e) => (e.id === empId ? { ...e, permissions: updatedPermissions } : e))
+        );
+      }
+    } catch (err) {
+      console.error("Inline perm toggle error:", err);
+    }
+  };
+
+  const handleDeleteEmployee = async (empId) => {
+    const emp = employees.find((e) => e.id === empId);
     if (emp?.role === "master_owner") {
       alert("لا يمكن حذف حساب مدير النظام الرئيسي (Master Owner).");
       return;
     }
-    if (confirm(`هل أنت تأكد من رغبتك في حذف الموظف (${emp?.name})؟`)) {
-      setEmployees(employees.filter(e => e.id !== empId));
-      setMsg({ type: "success", text: "تم حذف الموظف من المنظومة بنجاح." });
+
+    if (!confirm(`هل أنت تأكد من رغبتك في حذف حساب الموظف (${emp?.name}) نهائياً؟`)) return;
+
+    try {
+      const res = await fetch(`/api/admin/users?id=${empId}`, { method: "DELETE" });
+      if (res.ok) {
+        setEmployees(employees.filter((e) => e.id !== empId));
+        setMsg({ type: "success", text: "تم حذف حساب الموظف بنجاح." });
+      } else {
+        const errData = await res.json();
+        alert(errData.error || "فشل حذف الموظف");
+      }
+    } catch (err) {
+      console.error("Delete error:", err);
     }
   };
 
+  const filteredEmployees = employees.filter((emp) => {
+    const term = searchTerm.toLowerCase();
+    const matchesTerm =
+      emp.name?.toLowerCase().includes(term) ||
+      emp.email?.toLowerCase().includes(term) ||
+      emp.id?.toLowerCase().includes(term) ||
+      emp.roleLabel?.toLowerCase().includes(term);
+
+    const matchesBranch =
+      selectedBranchFilter === "all" || emp.branch === "all" || emp.branch === selectedBranchFilter;
+
+    return matchesTerm && matchesBranch;
+  });
+
+  const activeEmployeesCount = employees.filter((e) => e.status === "active").length;
+  const suspendedEmployeesCount = employees.filter((e) => e.status === "suspended").length;
+
   return (
     <AdminLayout>
-      <div className="space-y-8 text-slate-900">
-        
-        {/* Header Bar */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+      <div className="space-y-6">
+        {/* Page Header */}
+        <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-extrabold text-slate-900 flex items-center gap-2">
-              <Users className="w-6 h-6 text-amber-500" />
-              <span>إدارة الموظفين وتحديد صلاحيات الأقسام</span>
-            </h1>
-            <p className="text-xs text-slate-500 font-semibold mt-1">
-              إضافة وتعيين صلاحيات الموظفين على أجزاء لوحة التحكم مع تقييد خيار الدفع والبطاقات للمدير فقط.
-            </p>
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-2xl bg-apex-navy text-apex-gold flex items-center justify-center font-extrabold shadow-sm border border-apex-gold/30">
+                <ShieldCheck className="w-5 h-5 text-apex-gold" />
+              </div>
+              <div>
+                <h1 className="font-black text-xl text-slate-900">إدارة الموظفين وتحديد صلاحيات الأقسام (RBAC)</h1>
+                <p className="text-xs text-slate-500">نظام إدارة الأدوار وتراخيص الوصول لأقسام لوحة التحكم بحسب الفروع والمسمى الوظيفي</p>
+              </div>
+            </div>
           </div>
 
-          <button
-            onClick={() => setShowModal(true)}
-            className="px-5 py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs rounded-2xl shadow-md transition-all hover:scale-105 flex items-center gap-2 self-start md:self-auto"
-          >
-            <UserPlus className="w-4 h-4 text-slate-950" />
-            <span>إضافة موظف جديد وتحديد صلاحياته</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleOpenAddModal}
+              className="px-5 py-2.5 bg-apex-navy hover:bg-slate-900 text-apex-gold rounded-xl font-bold text-xs transition-colors flex items-center gap-2 border border-apex-gold/30 cursor-pointer shadow-md"
+            >
+              <UserPlus className="w-4 h-4 text-apex-gold" />
+              <span>إضافة موظف جديد وتحديد صلاحياته</span>
+            </button>
+
+            <button
+              onClick={fetchEmployees}
+              className="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold text-xs transition-colors border border-slate-200 cursor-pointer"
+              title="تحديث البيانات"
+            >
+              <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
+            </button>
+          </div>
         </div>
 
-        {/* Feedback Message */}
+        {/* System Messages */}
         {msg.text && (
           <div
-            className={`p-4 rounded-2xl text-xs font-extrabold flex items-center gap-2 ${
+            className={`p-4 rounded-2xl border text-xs font-bold flex items-center justify-between ${
               msg.type === "success"
-                ? "bg-emerald-50 text-emerald-900 border border-emerald-300"
-                : "bg-rose-50 text-rose-900 border border-rose-300"
+                ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                : "bg-red-50 text-red-800 border-red-200"
             }`}
           >
-            {msg.type === "success" ? (
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-            ) : (
-              <AlertCircle className="w-5 h-5 text-rose-600 flex-shrink-0" />
-            )}
-            <span>{msg.text}</span>
+            <div className="flex items-center gap-2">
+              {msg.type === "success" ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <AlertCircle className="w-4 h-4 text-red-600" />}
+              <span>{msg.text}</span>
+            </div>
+            <button onClick={() => setMsg({ type: "", text: "" })} className="text-slate-400 hover:text-slate-600">
+              <X className="w-4 h-4" />
+            </button>
           </div>
         )}
 
-        {/* Security Rule Notice */}
-        <div className="bg-slate-900 text-white p-5 rounded-3xl border border-amber-500/40 space-y-2 flex items-start gap-4">
-          <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-400/30 flex items-center justify-center flex-shrink-0 mt-0.5">
-            <Lock className="w-5 h-5 text-amber-400" />
+        {/* Analytics Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
+            <div>
+              <p className="text-xs text-slate-500 font-medium mb-1">إجمالي الموظفين</p>
+              <h3 className="text-2xl font-black text-slate-900">{employees.length} موظف</h3>
+            </div>
+            <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-200">
+              <Users className="w-6 h-6" />
+            </div>
           </div>
-          <div className="text-xs space-y-1">
-            <h3 className="font-extrabold text-amber-400 text-sm">قانون حماية مفتاح المرور والدفع (Master Passkey Access)</h3>
-            <p className="text-slate-300 leading-relaxed font-semibold">
-              يستطيع الموظفون الدخول للوحة التحكم وتعديل الأطباء والخدمات والوسائط وفق الصلاحيات المحددة، بينما تظل **خانة الدفع والبطاقات مقفلة ومحمية حصرياً بمفتاح المدير الرئيسي عبر بصمة الإصبع/الوجه (Passkey)**.
-            </p>
+
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
+            <div>
+              <p className="text-xs text-slate-500 font-medium mb-1">الحسابات النشطة</p>
+              <h3 className="text-2xl font-black text-emerald-600">{activeEmployeesCount} مفعل</h3>
+            </div>
+            <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200">
+              <CheckCircle2 className="w-6 h-6" />
+            </div>
+          </div>
+
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
+            <div>
+              <p className="text-xs text-slate-500 font-medium mb-1">الحسابات المجمدة</p>
+              <h3 className="text-2xl font-black text-amber-600">{suspendedEmployeesCount} معلق</h3>
+            </div>
+            <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-200">
+              <UserX className="w-6 h-6" />
+            </div>
+          </div>
+
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
+            <div>
+              <p className="text-xs text-slate-500 font-medium mb-1">مديرو النظام (Master)</p>
+              <h3 className="text-2xl font-black text-apex-navy">
+                {employees.filter((e) => e.role === "master_owner").length} مدير
+              </h3>
+            </div>
+            <div className="w-12 h-12 rounded-2xl bg-apex-gold/20 text-apex-gold flex items-center justify-center border border-apex-gold/40">
+              <Shield className="w-6 h-6 text-slate-900" />
+            </div>
           </div>
         </div>
 
-        {/* Employees Table */}
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden p-6 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-200 pb-4">
-            <h2 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-amber-500" />
-              <span>قائمة الموظفين ومصفوفة الصلاحيات</span>
-            </h2>
-            <span className="text-xs font-bold text-slate-600 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">
-              إجمالي الموظفين: {employees.length}
-            </span>
+        {/* Filter and Search Bar */}
+        <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="relative flex-1">
+            <Search className="w-4 h-4 text-slate-400 absolute right-3.5 top-3" />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="البحث باسم الموظف، البريد، الرقم الوظيفي، أو المسمى..."
+              className="w-full pr-10 pl-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-apex-navy font-medium"
+            />
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-right text-xs">
-              <thead className="bg-slate-50 text-slate-800 border-b border-slate-200 font-extrabold">
-                <tr>
-                  <th className="p-3.5">الموظف والبريد</th>
-                  <th className="p-3.5">المسمى الوظيفي</th>
-                  <th className="p-3.5 text-center">🩺 الأطباء</th>
-                  <th className="p-3.5 text-center">🏢 العيادات</th>
-                  <th className="p-3.5 text-center">🖼️ الوسائط</th>
-                  <th className="p-3.5 text-center">💳 الدفع والبطاقات</th>
-                  <th className="p-3.5 text-center">الإجراءات</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 font-bold text-slate-900">
-                {employees.map((emp) => (
-                  <tr key={emp.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="p-3.5 space-y-0.5">
-                      <div className="font-extrabold text-slate-900 text-sm">{emp.name}</div>
-                      <div className="text-slate-500 font-mono text-[11px] dir-ltr text-right">{emp.email}</div>
-                    </td>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-slate-600 whitespace-nowrap">تصفية الفرع:</span>
+            <select
+              value={selectedBranchFilter}
+              onChange={(e) => setSelectedBranchFilter(e.target.value)}
+              className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 outline-none focus:ring-2 focus:ring-apex-navy"
+            >
+              <option value="all">جميع الفروع</option>
+              <option value="azaiba">فرع العذيبة الرئيسي</option>
+              <option value="amerat">فرع العامرات</option>
+            </select>
+          </div>
+        </div>
 
-                    <td className="p-3.5">
-                      <span className={`inline-block px-3 py-1 text-[11px] font-extrabold rounded-lg ${
-                        emp.role === "master_owner" 
-                          ? "bg-amber-100 text-amber-900 border border-amber-300"
-                          : "bg-slate-100 text-slate-800 border border-slate-200"
-                      }`}>
-                        {emp.roleLabel}
-                      </span>
-                    </td>
-
-                    <td className="p-3.5 text-center">
-                      <button
-                        onClick={() => handleTogglePermission(emp.id, "doctors")}
-                        className={`p-1.5 rounded-lg border transition-all ${
-                          emp.permissions.doctors
-                            ? "bg-emerald-50 text-emerald-700 border-emerald-300"
-                            : "bg-rose-50 text-rose-600 border-rose-200"
-                        }`}
-                      >
-                        {emp.permissions.doctors ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
-                      </button>
-                    </td>
-
-                    <td className="p-3.5 text-center">
-                      <button
-                        onClick={() => handleTogglePermission(emp.id, "services")}
-                        className={`p-1.5 rounded-lg border transition-all ${
-                          emp.permissions.services
-                            ? "bg-emerald-50 text-emerald-700 border-emerald-300"
-                            : "bg-rose-50 text-rose-600 border-rose-200"
-                        }`}
-                      >
-                        {emp.permissions.services ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
-                      </button>
-                    </td>
-
-                    <td className="p-3.5 text-center">
-                      <button
-                        onClick={() => handleTogglePermission(emp.id, "media")}
-                        className={`p-1.5 rounded-lg border transition-all ${
-                          emp.permissions.media
-                            ? "bg-emerald-50 text-emerald-700 border-emerald-300"
-                            : "bg-rose-50 text-rose-600 border-rose-200"
-                        }`}
-                      >
-                        {emp.permissions.media ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
-                      </button>
-                    </td>
-
-                    <td className="p-3.5 text-center">
-                      <button
-                        onClick={() => handleTogglePermission(emp.id, "subscription")}
-                        className={`p-1.5 rounded-lg border transition-all ${
-                          emp.permissions.subscription
-                            ? "bg-emerald-50 text-emerald-700 border-emerald-300"
-                            : "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed"
-                        }`}
-                      >
-                        {emp.permissions.subscription ? <Check className="w-4 h-4" /> : <Lock className="w-4 h-4 text-slate-400" />}
-                      </button>
-                    </td>
-
-                    <td className="p-3.5 text-center">
-                      {emp.role !== "master_owner" ? (
-                        <button
-                          onClick={() => handleDeleteEmployee(emp.id)}
-                          className="p-1.5 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg border border-rose-200 transition-colors"
-                          title="حذف الموظف"
+        {/* Staff Table / Cards */}
+        {loading ? (
+          <div className="bg-white p-12 rounded-3xl text-center text-slate-500 border border-slate-200">
+            <RefreshCw className="w-8 h-8 text-apex-gold animate-spin mx-auto mb-3" />
+            <p className="text-sm font-bold">جاري تحميل بيانات الموظفين والصلاحيات...</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {filteredEmployees.map((emp) => (
+              <div
+                key={emp.id}
+                className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs hover:shadow-md transition-all space-y-4"
+              >
+                {/* Employee Top Header */}
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-12 h-12 rounded-2xl bg-apex-navy text-apex-gold flex items-center justify-center font-black text-base shadow-sm border border-apex-gold/30">
+                      {emp.role === "master_owner" ? <Shield className="w-6 h-6 text-apex-gold" /> : <UserCheck className="w-6 h-6 text-apex-gold" />}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="font-extrabold text-base text-slate-900">{emp.name}</h3>
+                        <span className="text-[11px] font-bold text-slate-400 dir-ltr">({emp.id})</span>
+                        
+                        <span
+                          className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold border ${
+                            emp.status === "active"
+                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                              : "bg-amber-50 text-amber-700 border-amber-200"
+                          }`}
                         >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      ) : (
-                        <span className="text-[10px] text-amber-700 font-bold bg-amber-50 px-2 py-1 rounded border border-amber-200">
-                          مدير النظام 👑
+                          {emp.status === "active" ? "حساب مُفعّل" : "حساب معلّق"}
                         </span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+                      </div>
 
-        {/* Add Employee Modal */}
+                      <div className="flex items-center gap-3 text-xs text-slate-500 mt-1 flex-wrap font-medium">
+                        <span>{emp.email}</span>
+                        <span>•</span>
+                        <span className="flex items-center gap-1 text-apex-navy font-bold">
+                          <Building2 className="w-3.5 h-3.5" />
+                          <span>{emp.branchLabel || emp.branch}</span>
+                        </span>
+                        <span>•</span>
+                        <span>تاريخ الإضافة: {emp.createdAt}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actions & Passkey Toggle */}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {/* Passkey Reveal */}
+                    <div className="bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200 flex items-center gap-2 text-xs">
+                      <Key className="w-3.5 h-3.5 text-slate-400" />
+                      <span className="font-mono text-slate-700 font-bold dir-ltr">
+                        {showPasskeyMap[emp.id] ? emp.passkey || "غير محدد" : "••••••••"}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setShowPasskeyMap((prev) => ({ ...prev, [emp.id]: !prev[emp.id] }))
+                        }
+                        className="text-slate-400 hover:text-slate-700"
+                        title="إظهار/إخفاء رمز الدخول"
+                      >
+                        {showPasskeyMap[emp.id] ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                      </button>
+                    </div>
+
+                    <button
+                      onClick={() => handleToggleStatus(emp)}
+                      disabled={emp.role === "master_owner"}
+                      className={`px-3 py-1.5 rounded-xl font-bold text-xs border transition-colors cursor-pointer ${
+                        emp.status === "active"
+                          ? "bg-amber-50 hover:bg-amber-100 text-amber-700 border-amber-200"
+                          : "bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border-emerald-200"
+                      } disabled:opacity-40`}
+                    >
+                      {emp.status === "active" ? "تجميد الحساب" : "إعادة التفعيل"}
+                    </button>
+
+                    <button
+                      onClick={() => handleOpenEditModal(emp)}
+                      className="p-2 text-slate-600 hover:text-apex-navy hover:bg-slate-100 rounded-xl transition-colors cursor-pointer border border-slate-200"
+                      title="تعديل الموظف والصلاحيات"
+                    >
+                      <Edit3 className="w-4 h-4" />
+                    </button>
+
+                    {emp.role !== "master_owner" && (
+                      <button
+                        onClick={() => handleDeleteEmployee(emp.id)}
+                        className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors cursor-pointer border border-slate-200"
+                        title="حذف حساب الموظف"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Permissions Matrix Bar */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-bold text-slate-700">مصفوفة صلاحيات الوصول لأقسام لوحة التحكم:</span>
+                    <span className="text-[11px] text-slate-400 font-medium">انقر على أي شارة لتمكين/إلغاء الصلاحية المباشرة</span>
+                  </div>
+
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {MODULE_DEFINITIONS.map((mod) => {
+                      const isAllowed = emp.permissions?.[mod.id];
+                      const IconComp = mod.icon;
+                      return (
+                        <button
+                          key={mod.id}
+                          type="button"
+                          onClick={() => handleTogglePermissionInline(emp.id, mod.id)}
+                          className={`px-3 py-1.5 rounded-xl font-bold text-xs border transition-all flex items-center gap-1.5 cursor-pointer ${
+                            isAllowed
+                              ? mod.color
+                              : "bg-slate-50 text-slate-400 border-slate-200 line-through opacity-60 hover:opacity-100"
+                          }`}
+                        >
+                          <IconComp className="w-3.5 h-3.5" />
+                          <span>{mod.label}</span>
+                          {isAllowed ? <Check className="w-3 h-3 text-emerald-600" /> : <X className="w-3 h-3 text-slate-400" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Create / Edit Employee Modal */}
         {showModal && (
-          <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-lg w-full p-6 space-y-5 text-right">
-              <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-                <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
-                  <UserPlus className="w-5 h-5 text-amber-500" />
-                  <span>إضافة موظف جديد وتخصيص الصلاحيات</span>
-                </h3>
-                <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600">
+          <div className="fixed inset-0 z-[10000] bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4 text-right">
+            <div className="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 space-y-5 max-h-[90vh] overflow-y-auto">
+              {/* Modal Header */}
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-10 h-10 rounded-2xl bg-apex-navy text-apex-gold flex items-center justify-center font-bold">
+                    <UserPlus className="w-5 h-5 text-apex-gold" />
+                  </div>
+                  <div>
+                    <h3 className="font-extrabold text-base text-slate-900">
+                      {editingEmp ? `تعديل بيانات الموظف (${editingEmp.name})` : "إضافة موظف جديد وتحديد الصلاحيات"}
+                    </h3>
+                    <p className="text-xs text-slate-500">تخصيص معلومات الدخول والأدوار الوظيفية ومستويات الترخيص</p>
+                  </div>
+                </div>
+
+                <button onClick={() => setShowModal(false)} className="p-1.5 text-slate-400 hover:text-slate-700 rounded-full">
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <form onSubmit={handleAddEmployee} className="space-y-4">
-                <div>
-                  <label className="block text-xs font-extrabold text-slate-700 mb-1">اسم الموظف *</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="مثال: د. محمد الخروصي"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-extrabold text-slate-700 mb-1">البريد الإلكتروني للموظف *</label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="employee@apexmedicaloman.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 text-left placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                    dir="ltr"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-extrabold text-slate-700 mb-1">المسمى الوظيفي</label>
-                  <input
-                    type="text"
-                    placeholder="مثال: مشرف قسم الأسنان والعيادات"
-                    value={formData.roleLabel}
-                    onChange={(e) => setFormData({ ...formData, roleLabel: e.target.value })}
-                    className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  />
-                </div>
-
-                {/* Permissions Toggles */}
-                <div className="space-y-2 pt-2 border-t border-slate-200">
-                  <span className="text-xs font-black text-slate-900 block">تحديد أقسام لوحة التحكم المتاحة للموظف:</span>
-                  
-                  <div className="grid grid-cols-2 gap-2 text-xs font-bold">
-                    <label className="flex items-center gap-2 p-2.5 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
-                      <input
-                        type="checkbox"
-                        checked={formData.permissions.doctors}
-                        onChange={(e) => setFormData({ ...formData, permissions: { ...formData.permissions, doctors: e.target.checked } })}
-                        className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500"
-                      />
-                      <span>🩺 إدارة الأطباء</span>
+              <form onSubmit={handleSaveEmployee} className="space-y-5">
+                {/* 1. Basic Info */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-extrabold text-slate-900 mb-1">
+                      اسم الموظف الكامل <span className="text-red-600">*</span>
                     </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      placeholder="مثال: د. أحمد البوسعيدي"
+                      className="w-full px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 border-2 border-slate-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-apex-navy font-bold"
+                    />
+                  </div>
 
-                    <label className="flex items-center gap-2 p-2.5 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
-                      <input
-                        type="checkbox"
-                        checked={formData.permissions.services}
-                        onChange={(e) => setFormData({ ...formData, permissions: { ...formData.permissions, services: e.target.checked } })}
-                        className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500"
-                      />
-                      <span>🏢 إدارة العيادات</span>
+                  <div>
+                    <label className="block text-xs font-extrabold text-slate-900 mb-1">
+                      البريد الإلكتروني المهني <span className="text-red-600">*</span>
                     </label>
-
-                    <label className="flex items-center gap-2 p-2.5 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
-                      <input
-                        type="checkbox"
-                        checked={formData.permissions.media}
-                        onChange={(e) => setFormData({ ...formData, permissions: { ...formData.permissions, media: e.target.checked } })}
-                        className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500"
-                      />
-                      <span>🖼️ مكتبة الوسائط</span>
-                    </label>
-
-                    <label className="flex items-center gap-2 p-2.5 bg-slate-100 rounded-xl border border-slate-300 text-slate-400 cursor-not-allowed opacity-60">
-                      <input
-                        type="checkbox"
-                        disabled
-                        checked={false}
-                        className="w-4 h-4 rounded text-slate-400"
-                      />
-                      <span>🔒 الدفع (حُصري للمدير)</span>
-                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      placeholder="employee@apexmedicaloman.com"
+                      className="w-full px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 border-2 border-slate-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-apex-navy font-bold dir-ltr text-right"
+                    />
                   </div>
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200">
+                {/* 2. Branch & Passkey */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-extrabold text-slate-900 mb-1">الفرع المسؤول عنه الموظف:</label>
+                    <select
+                      value={formData.branch}
+                      onChange={(e) => setFormData({ ...formData, branch: e.target.value })}
+                      className="w-full px-3.5 py-2.5 bg-white text-slate-900 border-2 border-slate-300 rounded-xl text-xs font-extrabold outline-none focus:ring-2 focus:ring-apex-navy cursor-pointer"
+                    >
+                      <option value="all" className="bg-white text-slate-900 font-bold py-2">جميع الفروع (العذيبة & العامرات)</option>
+                      <option value="azaiba" className="bg-white text-slate-900 font-bold py-2">فرع العذيبة الرئيسي</option>
+                      <option value="amerat" className="bg-white text-slate-900 font-bold py-2">فرع العامرات</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-extrabold text-slate-900 mb-1">رمز الدخول والسر (Employee Passkey):</label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={formData.passkey}
+                        onChange={(e) => setFormData({ ...formData, passkey: e.target.value })}
+                        placeholder="رمز الدخول السري..."
+                        className="flex-1 px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 border-2 border-slate-300 rounded-xl text-xs font-mono font-bold outline-none focus:ring-2 focus:ring-apex-navy text-left dir-ltr"
+                      />
+                      <button
+                        type="button"
+                        onClick={generatePasskey}
+                        className="px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-xl text-xs font-bold border border-slate-300 whitespace-nowrap cursor-pointer"
+                      >
+                        توليد تلقائي
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. Role Templates Selection */}
+                <div className="space-y-2">
+                  <label className="block text-xs font-bold text-slate-700">اختر قالب الدور الوظيفي (Pre-defined Role Template):</label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {ROLE_TEMPLATES.map((tmpl) => (
+                      <button
+                        key={tmpl.key}
+                        type="button"
+                        onClick={() => handleSelectRoleTemplate(tmpl.key)}
+                        className={`p-3 rounded-2xl border text-right transition-all cursor-pointer ${
+                          formData.role === tmpl.key
+                            ? "bg-apex-navy text-white border-apex-navy shadow-sm"
+                            : "bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200"
+                        }`}
+                      >
+                        <div className="font-bold text-xs mb-0.5">{tmpl.label}</div>
+                        <div className={`text-[10px] ${formData.role === tmpl.key ? "text-slate-300" : "text-slate-500"}`}>
+                          {tmpl.description}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 4. Granular Permissions Toggles */}
+                <div className="space-y-3 border-t border-slate-100 pt-3">
+                  <label className="block text-xs font-bold text-slate-800">
+                    تخصيص مفاتيح الصلاحيات يدوياً لأقسام لوحة التحكم (Granular Permissions):
+                  </label>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {MODULE_DEFINITIONS.map((mod) => {
+                      const isAllowed = formData.permissions[mod.id];
+                      const IconComp = mod.icon;
+                      return (
+                        <label
+                          key={mod.id}
+                          className={`p-3 rounded-2xl border flex items-center justify-between cursor-pointer transition-colors ${
+                            isAllowed ? "bg-emerald-50/60 border-emerald-300 text-emerald-950" : "bg-slate-50 border-slate-200 text-slate-600"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2">
+                            <IconComp className={`w-4 h-4 ${isAllowed ? "text-emerald-600" : "text-slate-400"}`} />
+                            <span className="text-xs font-bold">{mod.label}</span>
+                          </div>
+
+                          <input
+                            type="checkbox"
+                            checked={isAllowed}
+                            onChange={() =>
+                              setFormData({
+                                ...formData,
+                                permissions: {
+                                  ...formData.permissions,
+                                  [mod.id]: !formData.permissions[mod.id],
+                                },
+                              })
+                            }
+                            className="w-4 h-4 accent-apex-navy rounded cursor-pointer"
+                          />
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Submit Action */}
+                <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-4">
                   <button
                     type="button"
                     onClick={() => setShowModal(false)}
-                    className="px-4 py-2.5 bg-slate-200 text-slate-700 rounded-xl font-bold text-xs hover:bg-slate-300"
+                    className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl cursor-pointer"
                   >
                     إلغاء
                   </button>
+
                   <button
                     type="submit"
-                    className="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl font-black text-xs shadow-md"
+                    className="px-6 py-2.5 bg-apex-navy hover:bg-slate-900 text-apex-gold font-bold text-xs rounded-xl shadow-md cursor-pointer border border-apex-gold/30"
                   >
-                    حفظ وإضافة الموظف
+                    {editingEmp ? "حفظ التغييرات التحديثات" : "إضافة الموظف واعتماد الصلاحيات"}
                   </button>
                 </div>
               </form>
             </div>
           </div>
         )}
-
       </div>
     </AdminLayout>
   );

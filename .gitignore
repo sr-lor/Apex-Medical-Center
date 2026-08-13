@@ -34,3 +34,8 @@ next-env.d.ts
 *.pem
 .idea
 .vscode
+
+# Service Account Keys
+src/apex-medical-key.json
+*.key.json
+

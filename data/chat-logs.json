@@ -1,0 +1,203 @@
+[
+  {
+    "sessionId": "session_1786549260804_yd4ur",
+    "userProfile": {
+      "name": "S",
+      "contact": "غير محدد",
+      "registeredAt": "2026-08-13T04:33:03.029Z"
+    },
+    "messages": [
+      {
+        "id": 1786595583029,
+        "sender": "bot",
+        "text": "أهلاً وسهلاً بك أستاذ/أستاذة **S** في مجمع القمة الطبي! ✨\n\nأنا **رين AI** المساعد الذكي المعتمد للمجمع. كيف يمكنني مساعدتك اليوم بكل احترافية ودقة؟",
+        "quickReplies": [
+          {
+            "label": "📍 عيادات فرع العامرات",
+            "action": "amerat_services"
+          },
+          {
+            "label": "🏢 عيادات فرع العذيبة",
+            "action": "azaiba_services"
+          },
+          {
+            "label": "💉 حقن إنقاص الوزن",
+            "action": "weight_injections"
+          },
+          {
+            "label": "🦷 تجميل وزراعة الأسنان",
+            "action": "dentistry_info"
+          },
+          {
+            "label": "🩺 حجز استشارة طبيب متخصص",
+            "action": "doctor_consultation"
+          }
+        ],
+        "timestamp": "07:33 ص"
+      },
+      {
+        "id": 1786595723922,
+        "sender": "user",
+        "text": "رين",
+        "timestamp": "07:35 ص"
+      },
+      {
+        "id": 1786595724193,
+        "sender": "bot",
+        "text": "أهلاً بك S في **مجمع القمة الطبي**! 🌟\nيسعدني إجابة استفساراتك حول الفروع (العذيبة والعامرات) والخدمات الطبية والتجميلية المتاحة.",
+        "ctaAction": null,
+        "quickReplies": [
+          {
+            "label": "📍 فرع العامرات",
+            "action": "amerat_services"
+          },
+          {
+            "label": "🏢 فرع العذيبة",
+            "action": "azaiba_services"
+          },
+          {
+            "label": "💉 حقن إنقاص الوزن",
+            "action": "weight_injections"
+          },
+          {
+            "label": "🦷 زراعة وابتسامة الأسنان",
+            "action": "dentistry_info"
+          }
+        ],
+        "timestamp": "07:35 ص"
+      },
+      {
+        "id": 1786595733635,
+        "sender": "user",
+        "text": "كيفك",
+        "timestamp": "07:35 ص"
+      },
+      {
+        "id": 1786595733656,
+        "sender": "bot",
+        "text": "أهلاً بك S! 😊 أنا بخير، وسعيدة بالتحدث معك.\nكيف أستطيع مساعدتك اليوم في مجمع القمة الطبي؟",
+        "ctaAction": null,
+        "quickReplies": [
+          {
+            "label": "🏢 فرع العذيبة",
+            "action": "azaiba_services"
+          },
+          {
+            "label": "📍 فرع العامرات",
+            "action": "amerat_services"
+          },
+          {
+            "label": "💉 حقن إنقاص الوزن",
+            "action": "weight_injections"
+          }
+        ],
+        "timestamp": "07:35 ص"
+      },
+      {
+        "id": 1786595752199,
+        "sender": "user",
+        "text": "ماشاء الله تردي بسرعه خارقة",
+        "timestamp": "07:35 ص"
+      },
+      {
+        "id": 1786595752216,
+        "sender": "bot",
+        "text": "أهلاً بك S في **مجمع القمة الطبي**! 🌟\nيسعدني إجابة استفساراتك حول الفروع (العذيبة والعامرات) والخدمات الطبية والتجميلية المتاحة.",
+        "ctaAction": null,
+        "quickReplies": [
+          {
+            "label": "📍 فرع العامرات",
+            "action": "amerat_services"
+          },
+          {
+            "label": "🏢 فرع العذيبة",
+            "action": "azaiba_services"
+          },
+          {
+            "label": "💉 حقن إنقاص الوزن",
+            "action": "weight_injections"
+          },
+          {
+            "label": "🦷 زراعة وابتسامة الأسنان",
+            "action": "dentistry_info"
+          }
+        ],
+        "timestamp": "07:35 ص"
+      }
+    ],
+    "updatedAt": "2026-08-13T04:35:52.227Z",
+    "createdAt": "2026-08-13T04:33:03.159Z"
+  },
+  {
+    "sessionId": "session_1786594545951_jmu4t",
+    "userProfile": {
+      "name": "لور2",
+      "contact": "غير محدد",
+      "registeredAt": "2026-08-13T04:16:50.941Z"
+    },
+    "messages": [
+      {
+        "id": 1786594721417,
+        "sender": "bot",
+        "text": "تم بدء محادثة جديدة مع **رين AI** ✨. كيف أستطيع مساعدتك اليوم؟",
+        "quickReplies": [
+          {
+            "label": "📍 خدمات فرع العامرات",
+            "action": "amerat_services"
+          },
+          {
+            "label": "🏢 خدمات فرع العذيبة",
+            "action": "azaiba_services"
+          },
+          {
+            "label": "💉 عيادة التخسيس",
+            "action": "weight_injections"
+          },
+          {
+            "label": "📞 التواصل مع الفرع",
+            "action": "contact_info"
+          }
+        ],
+        "timestamp": "07:18 ص"
+      }
+    ],
+    "updatedAt": "2026-08-13T04:18:41.429Z",
+    "createdAt": "2026-08-13T04:16:51.144Z"
+  },
+  {
+    "sessionId": "session_1786549583080_sm9se",
+    "userProfile": {
+      "name": "لور",
+      "contact": "غير محدد",
+      "registeredAt": "2026-08-12T15:50:00.381Z"
+    },
+    "messages": [
+      {
+        "id": 1786549800381,
+        "sender": "bot",
+        "text": "أهلاً وسهلاً بك أستاذ/أستاذة **لور** في مجمع القمة الطبي! ✨\nأنا **رين AI**، المساعد الذكي للمجمع. كيف يمكنني إجابة استفساراتك اليوم؟",
+        "quickReplies": [
+          {
+            "label": "📍 عيادات فرع العامرات",
+            "action": "amerat_services"
+          },
+          {
+            "label": "🏢 عيادات فرع العذيبة",
+            "action": "azaiba_services"
+          },
+          {
+            "label": "💉 حقن إنقاص الوزن",
+            "action": "weight_injections"
+          },
+          {
+            "label": "🦷 زراعة وابتسامة الأسنان",
+            "action": "dentistry_info"
+          }
+        ],
+        "timestamp": "06:50 م"
+      }
+    ],
+    "updatedAt": "2026-08-12T15:50:01.105Z",
+    "createdAt": "2026-08-12T15:50:01.105Z"
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "id": "EMP-101",
+    "name": "حسام هابل (المدير العام)",
+    "email": "admin@srlor.com",
+    "role": "master_owner",
+    "roleLabel": "مدير النظام الرئيسي (Master)",
+    "branch": "all",
+    "branchLabel": "جميع الفروع (العذيبة & العامرات)",
+    "passkey": "apex-master-2026",
+    "permissions": {
+      "doctors": true,
+      "services": true,
+      "footer": true,
+      "chats": true,
+      "media": true,
+      "subscription": true,
+      "users": true
+    },
+    "status": "active",
+    "lastActive": "الآن",
+    "createdAt": "2026-01-10"
+  }
+]

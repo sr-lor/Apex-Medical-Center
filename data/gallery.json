@@ -1,0 +1,37 @@
+[
+  {
+    "id": "gal-2",
+    "title": "عيادات طب وتجميل الأسنان",
+    "category": "عيادات الأسنان",
+    "image": "/wp-content/uploads/2026/04/Our-Cosmetic-Dentistry-Services.jpg",
+    "createdAt": "2026-04-11"
+  },
+  {
+    "id": "gal-3",
+    "title": "أجهزة إزالة الشعر والتجميل بالليزر",
+    "category": "عيادة الليزر",
+    "image": "/wp-content/uploads/2026/04/laser_New.jpg",
+    "createdAt": "2026-04-12"
+  },
+  {
+    "id": "gal-4",
+    "title": "قسم الجراحة التجميلية وتنسيق القوام",
+    "category": "التجميل والجراحة",
+    "image": "/wp-content/uploads/2026/04/plastic-surgery.jpg",
+    "createdAt": "2026-04-15"
+  },
+  {
+    "id": "gal-5",
+    "title": "عيادة جراحات السمنة والتخسيس",
+    "category": "إدارة الوزن",
+    "image": "/wp-content/uploads/2026/04/Weight.jpg",
+    "createdAt": "2026-04-18"
+  },
+  {
+    "id": "gal-6",
+    "title": "عيادة العظام وعلاج المفاصل",
+    "category": "جراحة العظام",
+    "image": "/wp-content/uploads/2026/04/orthopedic.jpg",
+    "createdAt": "2026-04-20"
+  }
+]

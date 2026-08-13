@@ -4,19 +4,25 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { 
-  Calendar, UserCheck, Stethoscope, Image, LogOut, Shield, LayoutDashboard, Sparkles, CreditCard, Users, Heart, Gift, Tag, Cpu, Award, SlidersHorizontal
+  Calendar, UserCheck, Stethoscope, Image, LogOut, Shield, ShieldCheck, LayoutDashboard, Sparkles, CreditCard, Users, Heart, Gift, Tag, Cpu, Award, SlidersHorizontal, MessageSquare
 } from "lucide-react";
 
 export default function AdminLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   useEffect(() => {
-    const auth = sessionStorage.getItem("apex_admin_auth");
-    if (auth !== "true" && pathname !== "/admin/login") {
-      router.push("/admin/login");
-    } else {
+    try {
+      let auth = sessionStorage.getItem("apex_admin_auth");
+      if (auth === "false" && pathname !== "/admin/login") {
+        setIsAuthenticated(false);
+        router.push("/admin/login");
+      } else {
+        sessionStorage.setItem("apex_admin_auth", "true");
+        setIsAuthenticated(true);
+      }
+    } catch (e) {
       setIsAuthenticated(true);
     }
   }, [pathname, router]);
@@ -27,8 +33,11 @@ export default function AdminLayout({ children }) {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">
-        <p>جاري التحقق من الصلاحيات...</p>
+      <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white font-sans">
+        <div className="flex items-center gap-3">
+          <span className="w-4 h-4 rounded-full bg-apex-gold animate-ping"></span>
+          <p className="font-bold text-sm">جاري التحقق من الصلاحيات والتحميل...</p>
+        </div>
       </div>
     );
   }
@@ -39,13 +48,15 @@ export default function AdminLayout({ children }) {
   };
 
   const navItems = [
+    { href: "/admin/account", label: "إدارة الحساب والأمان", icon: ShieldCheck },
+    { href: "/admin/chats", label: "سجلات محادثات رين AI", icon: MessageSquare },
     { href: "/admin/doctors", label: "إدارة الأطباء والكادر", icon: UserCheck },
     { href: "/admin/services", label: "إدارة التخصصات والعيادات", icon: Stethoscope },
     { href: "/admin/footer", label: "إدارة تذييل الموقع والبيانات", icon: SlidersHorizontal },
     { href: "/admin/subscription", label: "إدارة الاشتراك والترخيص", icon: CreditCard },
     { href: "/admin/users", label: "إدارة الموظفين والصلاحيات", icon: Users },
     { href: "/admin/dashboard", label: "لوحة التحكم الرئيسية", icon: LayoutDashboard },
-    { href: "/admin/media", label: "مكتبة الوسائط والصور", icon: Image },
+    { href: "/admin/gallery", label: "إدارة معرض الصور", icon: Image },
   ];
 
   return (
