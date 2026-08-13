@@ -323,19 +323,12 @@ export default function Footer() {
         </div>
 
         {/* COPYRIGHT & DEVELOPER BAR */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400 border-t border-white/10 pt-6 mt-8">
           <p>{footerData.copyrightText}</p>
-          <p className="text-[11px]">
-            {footerData.developerText}{" "}
-            <a
-              href="https://srlor.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-bold text-slate-200 hover:text-amber-400 underline transition-colors"
-            >
-              SR LOR, LLC
-            </a>
-          </p>
+          <div className="text-[11px] text-center md:text-left space-y-0.5 font-sans">
+            <p className="text-slate-300 font-medium">تطوير وبرمجة • <span className="text-amber-400 font-bold">رفاه عبد القادر</span> • Founder & VP</p>
+            <p className="text-amber-400/90 font-extrabold tracking-wide">SR LOR, LLC © 2026</p>
+          </div>
         </div>
 
       </div>

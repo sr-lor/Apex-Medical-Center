@@ -106,9 +106,10 @@ export default function AdminLayout({ children }) {
           </button>
 
           {/* SR LOR Company Rights Footer */}
-          <div className="text-center pt-1 text-[10.5px] text-slate-400 font-medium border-t border-white/5 space-y-0.5">
-            <p className="text-[10px] text-slate-400">تطوير وبرمجة • SR LOR, LLC</p>
-            <p className="text-apex-gold font-bold text-[10px]">شركة لور لتطوير الأنظمة © 2026</p>
+          <div className="text-center pt-2 text-[10.5px] text-slate-300 font-medium border-t border-white/10 space-y-0.5">
+            <p className="text-[11px] text-white font-bold">تطوير وبرمجة • رفاه عبد القادر</p>
+            <p className="text-[10px] text-slate-300">Founder & VP</p>
+            <p className="text-apex-gold font-extrabold text-[11px] tracking-wide">SR LOR, LLC © 2026</p>
           </div>
         </div>
       </aside>

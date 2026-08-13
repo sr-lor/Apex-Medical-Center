@@ -350,8 +350,8 @@ export default function AdminFooterSettingsPage() {
                   type="text"
                   readOnly
                   disabled
-                  value="تطوير وتصميم • شركة لور (SR LOR, LLC) © 2026"
-                  className="w-full p-2.5 bg-slate-100 border border-slate-300 rounded-xl text-xs font-bold text-slate-600 cursor-not-allowed select-none"
+                  value="تطوير وبرمجة • رفاه عبد القادر • Founder & VP | SR LOR, LLC © 2026"
+                  className="w-full p-2.5 bg-slate-100 border border-slate-300 rounded-xl text-xs font-bold text-slate-700 cursor-not-allowed select-none"
                 />
               </div>
             </div>
