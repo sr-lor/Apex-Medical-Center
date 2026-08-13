@@ -1,27 +1,15 @@
-"use client";
-
-import { useState, useRef, useEffect } from "react";
-import {
-  Sparkles,
-  X,
-  Send,
-  Bot,
-  Phone,
-  ArrowLeft,
-  ShieldAlert,
-  User,
-  Mail,
-  RefreshCw,
-  AlertTriangle,
-  CheckCircle2,
-  Lock,
-  Stethoscope,
-  Info,
-  ExternalLink,
-  MessageSquareHeart,
-  ChevronLeft
-} from "lucide-react";
-import Link from "next/link";
+// Helper function to render text nicely without raw ** markdown symbols
+function renderFormattedText(text) {
+  if (!text) return null;
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      const innerText = part.slice(2, -2);
+      return <strong key={index} className="font-extrabold text-amber-200">{innerText}</strong>;
+    }
+    return part;
+  });
+}
 
 export default function ReenAIChat() {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,8 +59,8 @@ export default function ReenAIChat() {
         setMessages(JSON.parse(savedMsgs));
       } else {
         const initText = savedProfile
-          ? `أهلاً وسهلاً بك الفضل أستاذ/أستاذة **${JSON.parse(savedProfile).name}** في مجمع القمة الطبي. 🏛️\n\nأنا **رين AI**، المساعد الذكي المعتمد لإجابة جميع استفساراتك حول خدماتنا وفروعنا (العذيبة والعامرات) وتسهيل حجز الاستشارات المباشرة.`
-          : "أهلاً وسهلاً بك في **مجمع القمة الطبي** 🏛️\n\nأنا **رين AI**، المساعد الذكي المعتمد للمجمع. يسعدني إجابة استفساراتك حول خدماتنا التخصصية وحجز المواعيد الطبية.";
+          ? `أهلاً وسهلاً بك في مجمع القمة الطبي. 🏛️\n\nأنا **رين AI**، المساعد الذكي المعتمد لإجابة جميع استفساراتك حول خدماتنا وفروعنا (العذيبة والعامرات).`
+          : "أهلاً وسهلاً بك في **مجمع القمة الطبي** 🏛️\n\nأنا **رين AI**، المساعد الذكي المعتمد للمجمع. يسعدني إجابة استفساراتك حول خدماتنا التخصصية.";
 
         setMessages([
           {
@@ -80,13 +68,6 @@ export default function ReenAIChat() {
             sender: "bot",
             text: initText,
             isNotice: true,
-            quickReplies: [
-              { label: "📍 عيادات فرع العامرات", action: "amerat_services" },
-              { label: "🏢 عيادات فرع العذيبة", action: "azaiba_services" },
-              { label: "💉 حقن إنقاص الوزن والتخسيس", action: "weight_injections" },
-              { label: "🦷 زراعة وتجميل الأسنان", action: "dentistry_info" },
-              { label: "🩺 حجز استشارة طبيب متخصص", action: "doctor_consultation" }
-            ],
             timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
           },
         ]);
@@ -143,14 +124,7 @@ export default function ReenAIChat() {
     const welcomeMsgObj = {
       id: Date.now(),
       sender: "bot",
-      text: `أهلاً وسهلاً بك ${finalName !== "زائر كريم" ? `أستاذ/أستاذة **${finalName}**` : ""} في مجمع القمة الطبي! ✨\n\nأنا **رين AI** المساعد الذكي المعتمد للمجمع. كيف يمكنني مساعدتك اليوم بكل احترافية ودقة؟`,
-      quickReplies: [
-        { label: "📍 عيادات فرع العامرات", action: "amerat_services" },
-        { label: "🏢 عيادات فرع العذيبة", action: "azaiba_services" },
-        { label: "💉 حقن إنقاص الوزن", action: "weight_injections" },
-        { label: "🦷 تجميل وزراعة الأسنان", action: "dentistry_info" },
-        { label: "🩺 حجز استشارة طبيب متخصص", action: "doctor_consultation" }
-      ],
+      text: `أهلاً وسهلاً بك ${finalName !== "زائر كريم" ? `أستاذ/أستاذة **${finalName}**` : ""} في مجمع القمة الطبي! ✨\n\nأنا **رين AI** المساعد الذكي المعتمد للمجمع. كيف يمكنني مساعدتك اليوم؟`,
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     };
 
@@ -167,12 +141,6 @@ export default function ReenAIChat() {
           id: Date.now(),
           sender: "bot",
           text: `تم بدء محادثة رسمية جديدة مع **رين AI** ✨\nيسعدني استقبال استفساراتك الخدمية والطبيّة العامة.`,
-          quickReplies: [
-            { label: "📍 خدمات فرع العامرات", action: "amerat_services" },
-            { label: "🏢 خدمات فرع العذيبة", action: "azaiba_services" },
-            { label: "💉 عيادة التخسيس", action: "weight_injections" },
-            { label: "📞 التواصل وحجز المواعيد", action: "contact_info" },
-          ],
           timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
       ];
@@ -183,23 +151,14 @@ export default function ReenAIChat() {
     }
   };
 
-  const handleSend = async (customText = null, actionKey = null) => {
+  const handleSend = async (customText = null) => {
     const query = (customText || inputMsg).trim();
-    if (!query && !actionKey) return;
-
-    const userText = query || (
-      actionKey === "amerat_services" ? "ما هي خدمات والتخصصات المتاحة بفرع العامرات؟" :
-      actionKey === "azaiba_services" ? "ما هي الخدمات والتخصصات المتاحة بفرع العذيبة الرئيسي؟" :
-      actionKey === "weight_injections" ? "تفاصيل ومعلومات حقن إنقاص الوزن ومونجارو" :
-      actionKey === "dentistry_info" ? "خدمات طب وزراعة وتجميل الأسنان" :
-      actionKey === "doctor_consultation" ? "أود طلب حجز موعد واستشارة طبيب متخصص" :
-      actionKey === "contact_info" ? "ما هي أوقات العمل ورقم التواصل والحجز المباشر؟" : "استفسار"
-    );
+    if (!query) return;
 
     const userMsgObj = {
       id: Date.now(),
       sender: "user",
-      text: userText,
+      text: query,
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     };
 
@@ -213,7 +172,7 @@ export default function ReenAIChat() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          message: userText,
+          message: query,
           history: updatedMessages.slice(-6).map((m) => ({ sender: m.sender, text: m.text })),
           userProfile,
           sessionId,
@@ -227,11 +186,6 @@ export default function ReenAIChat() {
           sender: "bot",
           text: data.reply || "شكراً لتواصلك مع رين AI المساعد الذكي لمجمع القمة الطبي.",
           ctaAction: data.ctaAction || null,
-          quickReplies: data.quickReplies || [
-            { label: "📍 خدمات فرع العامرات", action: "amerat_services" },
-            { label: "🏢 خدمات فرع العذيبة", action: "azaiba_services" },
-            { label: "🩺 حجز طبيب", action: "doctor_consultation" },
-          ],
           timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         };
         const finalMsgs = [...updatedMessages, botMsgObj];
@@ -242,7 +196,7 @@ export default function ReenAIChat() {
       }
     } catch (err) {
       console.warn("Falling back to fallback engine:", err);
-      let botResponse = generateAIResponse(userText, actionKey);
+      let botResponse = generateAIResponse(query);
       const finalMsgs = [...updatedMessages, botResponse];
       setMessages(finalMsgs);
       saveAndSyncChat(finalMsgs);
@@ -251,15 +205,10 @@ export default function ReenAIChat() {
     }
   };
 
-  const generateAIResponse = (text, actionKey) => {
+  const generateAIResponse = (text) => {
     const q = text.toLowerCase();
     let responseText = "";
     let ctaAction = null;
-    let quickReplies = [
-      { label: "📍 خدمات العامرات", action: "amerat_services" },
-      { label: "🏢 خدمات العذيبة", action: "azaiba_services" },
-      { label: "🩺 استشارة طبيب", action: "doctor_consultation" },
-    ];
 
     const isMedicalQuery =
       q.includes("ألم") || q.includes("الم") || q.includes("وجع") || q.includes("صداع") ||
@@ -269,7 +218,7 @@ export default function ReenAIChat() {
     if (isMedicalQuery) {
       responseText = `أهلاً بك. حرصاً منا على صحتك وسلامتك:\n\n• نقدم لك إرشادات أولية عامة لتوعيتك.\n• يُحظر تناول أي عقاقير طبية دون فحص إكلينيكي معلوم.\n\n⚠️ **تنبيه طبي هام جداً:**\nالمعلومات المقدمة من الذكاء الاصطناعي هي للتوعية العامة فقط ولا تُعتبر تشخيصاً طبياً أو استشارة صحية نهائية. لا بد من معاينة حالتك مباشرة من قِبل **طبيب حقيقي متخصص** في مجمع القمة الطبي.\n\n📞 **لطلب كشف طبي مباشر واستشارة أطبائنا:**\n• هاتف / واتساب المجمع: **+968 97031500**`;
       ctaAction = { type: "book", text: "التواصل والحجز مع طبيب متخصص عبر الواتساب" };
-    } else if (actionKey === "amerat_services" || q.includes("عامرات") || q.includes("العامرات")) {
+    } else if (q.includes("عامرات") || q.includes("العامرات")) {
       responseText =
         "✨ **خدمات فرع العامرات الرسمية:**\n\n" +
         "• **قسم السمنة وحقن إنقاص الوزن:** برامج مونجارو (Mounjaro®) وأوزمبيك برعاية طبيبة.\n" +
@@ -277,7 +226,7 @@ export default function ReenAIChat() {
         "• **الطب العام:** فحوصات شاملة ورعاية صحية أولية.\n\n" +
         "📍 العنوان: العامرات - الشارع العام الرئيسي.";
       ctaAction = { type: "branch_link", href: "/services?branch=amerat", text: "تصفح خدمات فرع العامرات" };
-    } else if (actionKey === "azaiba_services" || q.includes("عذيبة") || q.includes("العذيبة")) {
+    } else if (q.includes("عذيبة") || q.includes("العذيبة")) {
       responseText =
         "🏢 **خدمات فرع العذيبة الرئيسي:**\n\n" +
         "• **طب وتجميل الأسنان:** ابتسامة هوليود الرقمية، الزراعة، والتقويم.\n" +
@@ -288,7 +237,7 @@ export default function ReenAIChat() {
         "• **جراحات وتكميم المعدة والتخسيس**.\n\n" +
         "📍 العنوان: العذيبة - شارع السلطان قابوس.";
       ctaAction = { type: "branch_link", href: "/services?branch=azaiba", text: "تصفح خدمات فرع العذيبة" };
-    } else if (actionKey === "weight_injections" || q.includes("سمنة") || q.includes("حقن") || q.includes("مونجارو") || q.includes("تخسيس")) {
+    } else if (q.includes("سمنة") || q.includes("حقن") || q.includes("مونجارو") || q.includes("تخسيس")) {
       responseText =
         "💉 **عيادة السمنة وحقن إنقاص الوزن:**\n\n" +
         "• علاج وتخسيس باستخدام **Mounjaro®** و **Ozempic®** ببروتوكول طبي آمن.\n" +
@@ -296,7 +245,7 @@ export default function ReenAIChat() {
         "• بالون وتكميم المعدة بالمنظار.\n\n" +
         "⚠️ ينبغي الخضوع لتقييم الطبيب قبل البدء بأي برنامج.";
       ctaAction = { type: "book", text: "حجز موعد بعيادة السمنة والتخسيس" };
-    } else if (actionKey === "dentistry_info" || q.includes("اسنان") || q.includes("أسنان") || q.includes("هوليود")) {
+    } else if (q.includes("اسنان") || q.includes("أسنان") || q.includes("هوليود")) {
       responseText =
         "🦷 **قسم طب وتجميل الأسنان المتقدم:**\n\n" +
         "• تصميم ابتسامة هوليود الرقمية (Veneers / E-max)\n" +
@@ -304,7 +253,7 @@ export default function ReenAIChat() {
         "• التقويم الشفاف غير المرئي\n" +
         "• علاج العصب والجذور بالليزر";
       ctaAction = { type: "book", text: "حجز موعد بعيادة الأسنان" };
-    } else if (actionKey === "doctor_consultation" || q.includes("طبيب") || q.includes("حجز") || q.includes("دكتور")) {
+    } else if (q.includes("طبيب") || q.includes("حجز") || q.includes("دكتور")) {
       responseText =
         "🩺 **حجز استشارة مع طبيب متخصص:**\n\n" +
         "لضمان تشخيص دقيق وخطة علاجية آمنة، نرحب بك بالحجز المباشر لدى كادرنا الطبي في مجمع القمة الطبي.\n\n" +
@@ -313,7 +262,7 @@ export default function ReenAIChat() {
       ctaAction = { type: "book", text: "حجز موعدك الآن مع الطبيب عبر الواتساب" };
     } else {
       responseText =
-        `أهلاً وسهلاً بك في **مجمع القمة الطبي**! 🌟\n\nيسعدني إجابة استفساراتك الرسمية عن الفروع والخدمات الطبية والتجميلية، وحجز المواعيد المباشرة.`;
+        `أهلاً وسهلاً بك في **مجمع القمة الطبي**! 🌟\n\nيسعدني إجابة استفساراتك الرسمية عن الفروع والخدمات الطبية والتجميلية.`;
     }
 
     return {
@@ -321,7 +270,6 @@ export default function ReenAIChat() {
       sender: "bot",
       text: responseText,
       ctaAction,
-      quickReplies,
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     };
   };
@@ -376,10 +324,6 @@ export default function ReenAIChat() {
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="font-black text-sm text-white tracking-wide">رين AI</h3>
-                  <span className="bg-emerald-500/20 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full border border-emerald-500/40 font-bold flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                    ذكاء اصطناعي طبي
-                  </span>
                 </div>
                 <p className="text-[10px] text-amber-200/80">مجمع القمة الطبي • سلطنة عمان</p>
               </div>
@@ -509,7 +453,7 @@ export default function ReenAIChat() {
                             : "bg-[#211B1D] text-slate-100 rounded-bl-none border-white/10 font-normal"
                         }`}
                       >
-                        {msg.text}
+                        {renderFormattedText(msg.text)}
 
                         {/* Direct CTA Action Button */}
                         {msg.ctaAction && (
@@ -540,22 +484,6 @@ export default function ReenAIChat() {
                     </div>
 
                     <span className="text-[10px] text-slate-400 mt-1 px-1">{msg.timestamp}</span>
-
-                    {/* Quick Reply Action Buttons */}
-                    {msg.quickReplies && (
-                      <div className="flex items-center gap-1.5 flex-wrap mt-2.5 max-w-[98%]">
-                        {msg.quickReplies.map((qr, idx) => (
-                          <button
-                            key={idx}
-                            onClick={() => handleSend(qr.label, qr.action)}
-                            className="bg-[#261F22] hover:bg-apex-gold hover:text-slate-950 text-slate-200 border border-apex-gold/40 text-[11px] font-bold px-3 py-1.5 rounded-xl transition-all shadow-xs cursor-pointer flex items-center gap-1"
-                          >
-                            <span>{qr.label}</span>
-                            <ChevronLeft className="w-3 h-3 opacity-60" />
-                          </button>
-                        ))}
-                      </div>
-                    )}
                   </div>
                 ))}
 

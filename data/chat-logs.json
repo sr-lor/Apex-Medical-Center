@@ -195,9 +195,63 @@
           }
         ],
         "timestamp": "06:50 م"
+      },
+      {
+        "id": 1786597485469,
+        "sender": "user",
+        "text": "رين",
+        "timestamp": "08:04 ص"
+      },
+      {
+        "id": 1786597490642,
+        "sender": "bot",
+        "text": "أهلاً بك! نعم، معك **رين",
+        "ctaAction": null,
+        "quickReplies": [
+          {
+            "label": "📍 خدمات فرع العامرات",
+            "action": "amerat_services"
+          },
+          {
+            "label": "🏢 خدمات فرع العذيبة",
+            "action": "azaiba_services"
+          },
+          {
+            "label": "🩺 حجز طبيب",
+            "action": "doctor_consultation"
+          }
+        ],
+        "timestamp": "08:04 ص"
+      },
+      {
+        "id": 1786597579379,
+        "sender": "user",
+        "text": "🏢 عيادات فرع العذيبة",
+        "timestamp": "08:06 ص"
+      },
+      {
+        "id": 1786597583567,
+        "sender": "bot",
+        "text": "Orthopedics & Joints - عظام ومفا",
+        "ctaAction": null,
+        "quickReplies": [
+          {
+            "label": "📍 خدمات فرع العامرات",
+            "action": "amerat_services"
+          },
+          {
+            "label": "🏢 خدمات فرع العذيبة",
+            "action": "azaiba_services"
+          },
+          {
+            "label": "🩺 حجز طبيب",
+            "action": "doctor_consultation"
+          }
+        ],
+        "timestamp": "08:06 ص"
       }
     ],
-    "updatedAt": "2026-08-12T15:50:01.105Z",
+    "updatedAt": "2026-08-13T05:06:23.575Z",
     "createdAt": "2026-08-12T15:50:01.105Z"
   }
 ]
