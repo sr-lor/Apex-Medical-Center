@@ -510,11 +510,10 @@ export default function ReenAIChat() {
                     <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-apex-gold to-amber-400 text-slate-950 flex items-center justify-center flex-shrink-0 border border-amber-300">
                       <Sparkles className="w-4 h-4 text-slate-950 animate-spin-slow" />
                     </div>
-                    <div className="bg-[#211B1D] px-4 py-2.5 rounded-2xl border border-white/10 shadow-sm flex items-center gap-1 text-slate-200">
-                      <span>رين AI يحلل ويكتب الاستجابة الرسمية</span>
-                      <span className="animate-bounce font-bold text-apex-gold">.</span>
-                      <span className="animate-bounce delay-100 font-bold text-apex-gold">.</span>
-                      <span className="animate-bounce delay-200 font-bold text-apex-gold">.</span>
+                    <div className="bg-[#211B1D] px-4 py-2 rounded-2xl border border-white/10 shadow-sm flex items-center gap-1.5 text-slate-200">
+                      <span className="animate-bounce font-black text-apex-gold text-base leading-none">.</span>
+                      <span className="animate-bounce delay-100 font-black text-apex-gold text-base leading-none">.</span>
+                      <span className="animate-bounce delay-200 font-black text-apex-gold text-base leading-none">.</span>
                     </div>
                   </div>
                 )}
