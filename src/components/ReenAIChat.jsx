@@ -1,3 +1,20 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+import {
+  Sparkles,
+  X,
+  Send,
+  Bot,
+  Phone,
+  ArrowLeft,
+  User,
+  Mail,
+  RefreshCw,
+  Info
+} from "lucide-react";
+import Link from "next/link";
+
 // Helper function to render text nicely without raw ** markdown symbols
 function renderFormattedText(text) {
   if (!text) return null;
