@@ -142,7 +142,7 @@ export default function AdminChatsPage() {
               <p className="text-xs text-slate-500 font-medium mb-1">حالة نموذج AI</p>
               <h3 className="text-sm font-bold text-emerald-600 flex items-center gap-1.5 mt-1">
                 <span className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span>
-                <span>Gemini 3.5 Flash Lite (مُفعّل)</span>
+                <span>رين برو (مُفعّل)</span>
               </h3>
             </div>
             <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200">

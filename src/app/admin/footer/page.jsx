@@ -342,12 +342,16 @@ export default function AdminFooterSettingsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">نص حقوق التطوير (SR LOR)</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+                  <span>نص حقوق التطوير (SR LOR)</span>
+                  <span className="text-[10px] text-amber-600 font-extrabold bg-amber-50 px-2 py-0.5 rounded border border-amber-200">🔒 محمي وغير قابل للتعديل</span>
+                </label>
                 <input
                   type="text"
-                  value={footerSettings.developerText}
-                  onChange={(e) => setFooterSettings({ ...footerSettings, developerText: e.target.value })}
-                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900"
+                  readOnly
+                  disabled
+                  value="تطوير وتصميم • شركة لور (SR LOR, LLC) © 2026"
+                  className="w-full p-2.5 bg-slate-100 border border-slate-300 rounded-xl text-xs font-bold text-slate-600 cursor-not-allowed select-none"
                 />
               </div>
             </div>

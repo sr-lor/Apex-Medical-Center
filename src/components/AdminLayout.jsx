@@ -48,15 +48,15 @@ export default function AdminLayout({ children }) {
   };
 
   const navItems = [
-    { href: "/admin/account", label: "إدارة الحساب والأمان", icon: ShieldCheck },
+    { href: "/admin/dashboard", label: "لوحة التحكم الرئيسية", icon: LayoutDashboard },
     { href: "/admin/chats", label: "سجلات محادثات رين AI", icon: MessageSquare },
     { href: "/admin/doctors", label: "إدارة الأطباء والكادر", icon: UserCheck },
     { href: "/admin/services", label: "إدارة التخصصات والعيادات", icon: Stethoscope },
+    { href: "/admin/gallery", label: "إدارة معرض الصور", icon: Image },
     { href: "/admin/footer", label: "إدارة تذييل الموقع والبيانات", icon: SlidersHorizontal },
     { href: "/admin/subscription", label: "إدارة الاشتراك والترخيص", icon: CreditCard },
     { href: "/admin/users", label: "إدارة الموظفين والصلاحيات", icon: Users },
-    { href: "/admin/dashboard", label: "لوحة التحكم الرئيسية", icon: LayoutDashboard },
-    { href: "/admin/gallery", label: "إدارة معرض الصور", icon: Image },
+    { href: "/admin/account", label: "إدارة الحساب والأمان", icon: ShieldCheck },
   ];
 
   return (
@@ -96,7 +96,7 @@ export default function AdminLayout({ children }) {
           </nav>
         </div>
 
-        <div className="pt-4 border-t border-white/10 space-y-2">
+        <div className="pt-4 border-t border-white/10 space-y-3">
           <button
             onClick={handleLogout}
             className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 transition-colors"
@@ -104,6 +104,12 @@ export default function AdminLayout({ children }) {
             <LogOut className="w-4 h-4" />
             <span>تسجيل الخروج الأمني</span>
           </button>
+
+          {/* SR LOR Company Rights Footer */}
+          <div className="text-center pt-1 text-[10.5px] text-slate-400 font-medium border-t border-white/5 space-y-0.5">
+            <p className="text-[10px] text-slate-400">تطوير وبرمجة • SR LOR, LLC</p>
+            <p className="text-apex-gold font-bold text-[10px]">شركة لور لتطوير الأنظمة © 2026</p>
+          </div>
         </div>
       </aside>
 
